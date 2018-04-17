@@ -1,0 +1,24 @@
+{
+  "name": "provide-js",
+  "version": "1.0.0",
+  "description": "Provide javascript client library",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/provideservices/provide-js.git"
+  },
+  "keywords": [
+    "provide",
+    "provide.network",
+    "prvd"
+  ],
+  "author": "Kyle Thomas",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/provideservices/provide-js/issues"
+  },
+  "homepage": "https://github.com/provideservices/provide-js#readme"
+}
