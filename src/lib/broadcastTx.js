@@ -1,5 +1,9 @@
+import apiClient from './apiClient';
+
 export default function broadcastTx(token, params) {
-  console.log(token);
-  console.log(params);
-  console.log('broadcastTx() not implemented');
+  const client = apiClient(token);
+  client.post('transactions', params).on('response', (response) => {
+    console.log(response.statusCode);
+    console.log(response.headers['content-type']);
+  });
 }

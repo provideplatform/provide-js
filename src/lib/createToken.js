@@ -1,5 +1,9 @@
+import apiClient from './apiClient';
+
 export default function createToken(token, params) {
-  console.log(token);
-  console.log(params);
-  console.log('createToken() not implemented');
+  const client = apiClient(token);
+  client.post('tokens', params).on('response', (response) => {
+    console.log(response.statusCode);
+    console.log(response.headers['content-type']);
+  });
 }
