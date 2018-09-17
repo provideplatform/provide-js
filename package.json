@@ -1,5 +1,5 @@
 {
-  "name": "provide",
+  "name": "provide-js",
   "version": "0.0.1",
   "description": "Provide javascript client library",
   "main": "./lib/index.js",
