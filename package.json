@@ -1,6 +1,6 @@
 {
   "name": "provide",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Provide javascript client library",
   "main": "./lib/index.js",
   "scripts": {
@@ -27,12 +27,12 @@
     "provide.network",
     "provide"
   ],
-  "author": "Kyle Thomas <k.thomas@unmarkedconsulting.com>",
+  "author": "Kyle Thomas <kyle@provide.services>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/provideservices/provide/issues"
+    "url": "https://github.com/provideservices/provide-js/issues"
   },
-  "homepage": "https://github.com/provideservices/provide#readme",
+  "homepage": "https://github.com/provideservices/provide-js#readme",
   "dependencies": {
     "request": "2.85.0"
   },
