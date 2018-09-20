@@ -1,9 +1,11 @@
-import executeTx from './lib/executeTx';
-import createApplication from './lib/createApplication';
-import createToken from './lib/createToken';
-import createWallet from './lib/createWallet';
+import ApiClient from './lib/apiClient';
 
-export { broadcastTx };
+import createApplication from './lib/ident';
+
+import createToken from './lib/goldmine';
+import createWallet from './lib/goldmine';
+
+export { apiClient };
 export { createApplication };
 export { createToken };
 export { createWallet };

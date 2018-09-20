@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 
-import broadcastTx from '../src/lib/executeTx';
+import executeTx from '../src/lib/executeTx';
 import createApplication from '../src/lib/createApplication';
 import createToken from '../src/lib/createToken';
 import createWallet from '../src/lib/createWallet';
@@ -17,6 +17,6 @@ createWallet('token', {
   // BlockchainService.create_wallet(jwt, {application_id: app_id, network_id: network_id})
 });
 
-broadcastTx('token', {
+executeTx('token', {
   // BlockchainService.create_transaction(jwt, {application_id: app_id, network_id: network_id, wallet_id: wallet_id, to: to, value: value, data: data, params: args})
 });
