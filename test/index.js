@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 
-import broadcastTx from '../src/lib/broadcastTx';
+import broadcastTx from '../src/lib/executeTx';
 import createApplication from '../src/lib/createApplication';
 import createToken from '../src/lib/createToken';
 import createWallet from '../src/lib/createWallet';
