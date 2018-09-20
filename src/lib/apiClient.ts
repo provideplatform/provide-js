@@ -4,7 +4,7 @@ const request = require('request');
 // const host = process.env.API_HOST || 'provide.services';
 // const path = process.env.API_PATH || 'api/';
 
-class ApiClient {
+export class ApiClient {
   baseUrl: string;
   public client: Request;
   token: string;
@@ -17,8 +17,19 @@ class ApiClient {
     });
   }
 
-  public get(uri, params) { this.get(`${this.baseUrl}/${uri}`, { qs: params }) }
-  public post(uri, params) { this.post(`${this.baseUrl}/${uri}`, { body: JSON.stringify(params) }) }
-  public put(uri, params) { this.put(`${this.baseUrl}/${uri}`, { body: JSON.stringify(params) }) }
-  public delete(uri) { this.delete(`${this.baseUrl}/${uri}`) }
+  public get(uri, params) {
+    this.client.get(`${this.baseUrl}/${uri}`, { qs: params });
+  }
+
+  public post(uri, params) {
+    this.client.post(`${this.baseUrl}/${uri}`, { body: JSON.stringify(params) });
+  }
+
+  public put(uri, params) {
+    this.client.put(`${this.baseUrl}/${uri}`, { body: JSON.stringify(params) });
+  }
+
+  public delete(uri) {
+    this.client.delete(`${this.baseUrl}/${uri}`);
+  }
 }
