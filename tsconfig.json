@@ -1,8 +1,9 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist",
+    "outDir": "dist",
+    "strict": true,
+    "esModuleInterop": true,
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": true,
@@ -12,7 +13,7 @@
     "noImplicitThis": true,
     "suppressImplicitAnyIndexErrors": true,
     "declaration": true,
-    "module": "es2015",
+    "module": "commonjs",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -22,11 +23,17 @@
     ],
     "lib": [
       "es2017",
+      "es7",
+      "es6",
       "dom"
     ]
   },
   "formatCodeOptions": {
     "indentSize": 2,
     "tabSize": 2
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
