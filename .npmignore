@@ -20,6 +20,7 @@ src
 test
 examples
 CHANGELOG.md
+tsconfig.json
 .travis.yml
 .editorconfig
 .eslintignore
