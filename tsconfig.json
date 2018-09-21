@@ -32,6 +32,9 @@
     "indentSize": 2,
     "tabSize": 2
   },
+  "include": [
+    "src"
+  ],
   "exclude": [
     "node_modules",
     "dist"
