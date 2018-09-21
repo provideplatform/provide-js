@@ -1,24 +1,64 @@
-const request = require('request');
+import { RequestAPI } from "request";
 
-// const scheme = process.env.API_SCHEME || 'https';
-// const host = process.env.API_HOST || 'provide.services';
-// const path = process.env.API_PATH || 'api/';
+export class ApiClient {
 
-class ApiClient {
-  baseUrl: string;
-  public client: Request;
-  token: string;
+  private static readonly DEFAULT_SCHEME = 'https';
+  private static readonly DEFAULT_HOST = 'provide.services';
+  private static readonly DEFAULT_PATH = 'api';
 
-  constructor(scheme: string, host: string, path: string, token: string) {
-    this.baseUrl = `${scheme}//${host}/${path}`;
-    this.client = request.defaults({
+  public baseUrl: string;
+  public headers: object;
+  public requestAPI: RequestAPI<any, any, any> = require('request-promise-native');
+
+  constructor(token: string, scheme?: string, host?: string, path?: string) {
+    if (!scheme) scheme = ApiClient.DEFAULT_SCHEME;
+    if (!host) host = ApiClient.DEFAULT_HOST;
+    if (!path) path = ApiClient.DEFAULT_PATH;
+
+    this.baseUrl = `${scheme}://${host}/${path}/`;
+    this.headers = {
       'user-agent': 'provide-js client',
-      authorization: `bearer ${token}`
-    });
+      'authorization': `bearer ${token}`,
+    };
   }
 
-  public get(uri, params) { this.get(`${this.baseUrl}/${uri}`, { qs: params }) }
-  public post(uri, params) { this.post(`${this.baseUrl}/${uri}`, { body: JSON.stringify(params) }) }
-  public put(uri, params) { this.put(`${this.baseUrl}/${uri}`, { body: JSON.stringify(params) }) }
-  public delete(uri) { this.delete(`${this.baseUrl}/${uri}`) }
+  public get(uri: string, params: object): Promise<any> {
+    const options = {
+      headers: this.headers,
+      qs: params,
+      json: true,
+    };
+
+    return this.requestAPI.get(uri, options);
+  }
+
+  public post(uri: string, params: object): Promise<any> {
+    const options = {
+      headers: this.headers,
+      body: params,
+      json: true,
+    };
+
+    return this.requestAPI.post(uri, options);
+  }
+
+  public put(uri: string, params: object): Promise<any> {
+    const options = {
+      headers: this.headers,
+      body: params,
+      json: true,
+    };
+
+    return this.requestAPI.put(uri, options);
+  }
+
+  public delete(uri: string): Promise<any> {
+    const options = {
+      headers: this.headers,
+      json: true,
+    };
+
+    return this.requestAPI.delete(uri, options);
+  }
+
 }
