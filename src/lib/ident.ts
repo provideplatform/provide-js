@@ -7,13 +7,11 @@ import { ApiClient } from './apiClient';
 export class Ident {
 
   private static readonly DEFAULT_HOST = 'ident.provide.services';
-  private static readonly DEFAULT_PATH = 'api/';
 
   private readonly client: ApiClient;
 
   constructor(token: string, host?: string, path?: string, scheme?: string) {
     if (!host) host = Ident.DEFAULT_HOST;
-    if (!path) path = Ident.DEFAULT_PATH;
     this.client = new ApiClient(scheme, host, path, token);
   }
 

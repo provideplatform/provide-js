@@ -1,35 +1,66 @@
-const request = require('request');
-
-// const scheme = process.env.API_SCHEME || 'https';
-// const host = process.env.API_HOST || 'provide.services';
-// const path = process.env.API_PATH || 'api/';
-
 export class ApiClient {
-  baseUrl: string;
-  public client: Request;
-  token: string;
 
-  constructor(scheme: string, host: string, path: string, token: string) {
-    this.baseUrl = `${scheme}//${host}/${path}`;
-    this.client = request.defaults({
+  private static readonly DEFAULT_SCHEME = 'https';
+  private static readonly DEFAULT_HOST = 'provide.services';
+  private static readonly DEFAULT_PATH = 'api';
+
+  public baseUrl: string;
+  public headers: object;
+  public rp = require('request-promise');
+
+  constructor(token: string, scheme: string, host: string, path: string) {
+    if (!scheme) scheme = ApiClient.DEFAULT_SCHEME;
+    if (!host) host = ApiClient.DEFAULT_HOST;
+    if (!path) path = ApiClient.DEFAULT_PATH;
+
+    this.baseUrl = `${scheme}://${host}/${path}/`;
+    this.headers = {
       'user-agent': 'provide-js client',
-      authorization: `bearer ${token}`
-    });
+      'authorization': `bearer ${token}`,
+    };
   }
 
-  public get(uri, params) {
-    this.client.get(`${this.baseUrl}/${uri}`, { qs: params });
+  public get(uri, params): Promise<any> {
+    const options = {
+      uri: `${this.baseUrl}/${uri}`,
+      qs: params,
+      headers: this.headers,
+      json: true,
+    };
+    // return this.client.get(`${this.baseUrl}/${uri}`, { qs: params });
+    return this.rp(options);
   }
 
-  public post(uri, params) {
-    this.client.post(`${this.baseUrl}/${uri}`, { body: JSON.stringify(params) });
+  public post(uri, params): Promise<any> {
+    const options = {
+      method: 'POST',
+      uri: `${this.baseUrl}/${uri}`,
+      body: params,
+      json: true,
+    };
+
+    return this.rp(options);
   }
 
-  public put(uri, params) {
-    this.client.put(`${this.baseUrl}/${uri}`, { body: JSON.stringify(params) });
+  public put(uri, params): Promise<any> {
+    const options = {
+      method: 'PUT',
+      uri: `${this.baseUrl}/${uri}`,
+      body: params,
+      json: true,
+    };
+
+    return this.rp(options);
   }
 
-  public delete(uri) {
-    this.client.delete(`${this.baseUrl}/${uri}`);
+  public delete(uri): Promise<any> {
+    const options = {
+      method: 'DELETE',
+      uri: `${this.baseUrl}/${uri}`,
+      json: true,
+    };
+
+    return this.rp(options);
   }
+
 }

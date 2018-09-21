@@ -34,9 +34,12 @@
   },
   "homepage": "https://github.com/provideservices/provide-js#readme",
   "dependencies": {
-    "request": "2.85.0"
+    "ipfs": "^0.32.2",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.5"
   },
   "devDependencies": {
+    "@types/request-promise-native": "^1.0.15",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.2.1",
     "babel-plugin-add-module-exports": "^0.2.1",

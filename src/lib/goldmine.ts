@@ -7,13 +7,11 @@ import { ApiClient } from './apiClient';
 export class Goldmine {
 
   private static readonly DEFAULT_HOST = 'goldmine.provide.services';
-  private static readonly DEFAULT_PATH = 'api/';
 
   private client: ApiClient;
 
   constructor(token: string, host?: string, path?: string, scheme?: string) {
     if (!host) host = Goldmine.DEFAULT_HOST;
-    if (!path) path = Goldmine.DEFAULT_PATH;
     this.client = new ApiClient(scheme, host, path, token);
   }
 
