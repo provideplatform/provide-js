@@ -1,3 +1,5 @@
+import { RequestAPI } from "request";
+
 export class ApiClient {
 
   private static readonly DEFAULT_SCHEME = 'https';
@@ -6,7 +8,7 @@ export class ApiClient {
 
   public baseUrl: string;
   public headers: object;
-  public rp = require('request-promise');
+  public requestAPI: RequestAPI<any, any, any> = require('request-promise-native');
 
   constructor(token: string, scheme?: string, host?: string, path?: string) {
     if (!scheme) scheme = ApiClient.DEFAULT_SCHEME;
@@ -22,45 +24,41 @@ export class ApiClient {
 
   public get(uri: string, params: object): Promise<any> {
     const options = {
-      uri: `${this.baseUrl}/${uri}`,
-      qs: params,
       headers: this.headers,
+      qs: params,
       json: true,
     };
 
-    return this.rp(options);
+    return this.requestAPI.get(uri, options);
   }
 
   public post(uri: string, params: object): Promise<any> {
     const options = {
-      method: 'POST',
-      uri: `${this.baseUrl}/${uri}`,
+      headers: this.headers,
       body: params,
       json: true,
     };
 
-    return this.rp(options);
+    return this.requestAPI.post(uri, options);
   }
 
   public put(uri: string, params: object): Promise<any> {
     const options = {
-      method: 'PUT',
-      uri: `${this.baseUrl}/${uri}`,
+      headers: this.headers,
       body: params,
       json: true,
     };
 
-    return this.rp(options);
+    return this.requestAPI.put(uri, options);
   }
 
   public delete(uri: string): Promise<any> {
     const options = {
-      method: 'DELETE',
-      uri: `${this.baseUrl}/${uri}`,
+      headers: this.headers,
       json: true,
     };
 
-    return this.rp(options);
+    return this.requestAPI.delete(uri, options);
   }
 
 }
