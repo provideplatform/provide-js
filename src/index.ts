@@ -1,6 +1,6 @@
-import { ApiClient } from "./lib/apiClient";
-import { Goldmine } from "./lib/goldmine";
-import { Ident } from "./lib/ident";
+import { ApiClient } from "./apiClient";
+import { Goldmine } from "./goldmine";
+import { Ident } from "./ident";
 
 export { ApiClient };
 export { Goldmine };
