@@ -40,6 +40,7 @@
     "request-promise-native": "^1.0.5"
   },
   "devDependencies": {
+    "@types/node": "^10.10.1",
     "@types/request-promise-native": "^1.0.15",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.2.1",
