@@ -10,48 +10,48 @@ export class Ident {
 
   private readonly client: ApiClient;
 
-  constructor(token: string, host?: string, path?: string, scheme?: string) {
+  constructor(token: string, scheme?: string, host?: string, path?: string) {
     if (!host) host = Ident.DEFAULT_HOST;
-    this.client = new ApiClient(scheme, host, path, token);
+    this.client = new ApiClient(token, scheme, host, path);
   }
 
-  public createApplication(params) {
+  public createApplication(params: object) {
     return this.client.post('applications', params);
   }
 
-  public updateApplication(application_id, params) {
-    return this.client.put(`applications/${application_id}`, params);
+  public updateApplication(app_id: string, params: object) {
+    return this.client.put(`applications/${app_id}`, params);
   }
 
-  public fetchApplications(params) {
+  public fetchApplications(params: object) {
     return this.client.get('applications', params);
   }
 
-  public fetchApplicationDetails(app_id) {
+  public fetchApplicationDetails(app_id: string) {
     return this.client.get(`applications/${app_id}`, { });
   }
 
-  public fetchApplicationTokens(app_id) {
+  public fetchApplicationTokens(app_id: string) {
     return this.client.get(`applications/${app_id}/tokens`, { });
   }
 
-  public authenticate(params) {
+  public authenticate(params: object) {
     return this.client.post('authenticate', params);
   }
 
-  public fetchTokens(params) {
+  public fetchTokens(params: object) {
     return this.client.get('tokens', params);
   }
 
-  public fetchTokenDetails(token_id) {
+  public fetchTokenDetails(token_id: string) {
     return this.client.get(`tokens/${token_id}`, { });
   }
 
-  public deleteToken(token_id) {
+  public deleteToken(token_id: string) {
     return this.client.delete(`tokens/${token_id}`);
   }
 
-  public createUser(params) {
+  public createUser(params: object) {
     return this.client.post('users', params);
   }
 
@@ -59,11 +59,11 @@ export class Ident {
     return this.client.get('users', { });
   }
 
-  public fetchUserDetails(user_id) {
+  public fetchUserDetails(user_id: string) {
     return this.client.get(`users/${user_id}`, { });
   }
 
-  public updateUser(user_id, params) {
+  public updateUser(user_id: string, params: object) {
     return this.client.put(`users/${user_id}`, params);
   }
 }

@@ -8,7 +8,7 @@ export class ApiClient {
   public headers: object;
   public rp = require('request-promise');
 
-  constructor(token: string, scheme: string, host: string, path: string) {
+  constructor(token: string, scheme?: string, host?: string, path?: string) {
     if (!scheme) scheme = ApiClient.DEFAULT_SCHEME;
     if (!host) host = ApiClient.DEFAULT_HOST;
     if (!path) path = ApiClient.DEFAULT_PATH;
@@ -20,18 +20,18 @@ export class ApiClient {
     };
   }
 
-  public get(uri, params): Promise<any> {
+  public get(uri: string, params: object): Promise<any> {
     const options = {
       uri: `${this.baseUrl}/${uri}`,
       qs: params,
       headers: this.headers,
       json: true,
     };
-    // return this.client.get(`${this.baseUrl}/${uri}`, { qs: params });
+
     return this.rp(options);
   }
 
-  public post(uri, params): Promise<any> {
+  public post(uri: string, params: object): Promise<any> {
     const options = {
       method: 'POST',
       uri: `${this.baseUrl}/${uri}`,
@@ -42,7 +42,7 @@ export class ApiClient {
     return this.rp(options);
   }
 
-  public put(uri, params): Promise<any> {
+  public put(uri: string, params: object): Promise<any> {
     const options = {
       method: 'PUT',
       uri: `${this.baseUrl}/${uri}`,
@@ -53,7 +53,7 @@ export class ApiClient {
     return this.rp(options);
   }
 
-  public delete(uri): Promise<any> {
+  public delete(uri: string): Promise<any> {
     const options = {
       method: 'DELETE',
       uri: `${this.baseUrl}/${uri}`,
