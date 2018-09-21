@@ -1,8 +1,8 @@
 {
   "name": "provide-js",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Provide javascript client library",
-  "main": "dist/index.js",
+  "main": "dist/index.ts",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc"
