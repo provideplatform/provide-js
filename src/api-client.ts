@@ -5,7 +5,7 @@ export class ApiClient {
   private static readonly DEFAULT_PATH = 'api';
 
   public baseUrl: string;
-  public headersInit: HeadersInit;
+  public headers: Headers;
 
   constructor(token: string, scheme?: string, host?: string, path?: string) {
     if (!scheme) scheme = ApiClient.DEFAULT_SCHEME;
@@ -13,11 +13,11 @@ export class ApiClient {
     if (!path) path = ApiClient.DEFAULT_PATH;
 
     this.baseUrl = `${scheme}://${host}/${path}/`;
-    this.headersInit = {
-      "Content-Type": "application/json; charset=utf-8",
-      'User-Agent': 'provide-js client',
-      'Authorization': `bearer ${token}`,
-    };
+
+    this.headers = new Headers();
+    this.headers.append('Content-Type', 'application/json; charset=utf-8');
+    this.headers.append('User-Agent', 'provide-js client');
+    this.headers.append('Authorization', `bearer ${token}`);
   }
 
   private static toQuery(params: object): string {
@@ -36,41 +36,49 @@ export class ApiClient {
   public get(uri: string, params: object): Promise<any> {
     const requestInit: RequestInit = {
       method: 'GET',
-      headers: this.headersInit,
+      headers: this.headers,
     };
 
     const uriWithQuery = uri + ApiClient.toQuery(params);
 
-    return fetch(this.baseUrl + uriWithQuery, requestInit).then(response => response.json());
+    const request = new Request(this.baseUrl + uriWithQuery);
+
+    return fetch(request, requestInit).then(response => response.json());
   }
 
   public post(uri: string, params: object): Promise<any> {
     const requestInit: RequestInit = {
       method: 'POST',
-      headers: this.headersInit,
+      headers: this.headers,
       body: JSON.stringify(params),
     };
 
-    return fetch(this.baseUrl + uri, requestInit).then(response => response.json());
+    const request = new Request(this.baseUrl + uri);
+
+    return fetch(request, requestInit).then(response => response.json());
   }
 
   public put(uri: string, params: object): Promise<any> {
     const requestInit: RequestInit = {
       method: 'PUT',
-      headers: this.headersInit,
+      headers: this.headers,
       body: JSON.stringify(params),
     };
 
-    return fetch(this.baseUrl + uri, requestInit).then(response => response.json());
+    const request = new Request(this.baseUrl + uri);
+
+    return fetch(request, requestInit).then(response => response.json());
   }
 
   public delete(uri: string): Promise<any> {
     const requestInit: RequestInit = {
-      method: 'POST',
-      headers: this.headersInit,
+      method: 'DELETE',
+      headers: this.headers,
     };
 
-    return fetch(this.baseUrl + uri, requestInit).then(response => response.json());
+    const request = new Request(this.baseUrl + uri);
+
+    return fetch(request, requestInit).then(response => response.json());
   }
 
 }
