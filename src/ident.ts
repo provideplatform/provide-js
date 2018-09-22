@@ -1,4 +1,4 @@
-import { ApiClient } from './apiClient';
+import { ApiClient } from './api-client';
 
 /*
  * Ident microservice; provides access to functionality

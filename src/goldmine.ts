@@ -1,4 +1,4 @@
-import { ApiClient } from './apiClient';
+import { ApiClient } from './api-client';
 
 /*
  * Goldmine microservice; provides access to functionality
