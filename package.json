@@ -2,8 +2,7 @@
   "name": "provide-js",
   "version": "0.0.9",
   "description": "Provide javascript client library",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc"
   },
@@ -16,7 +15,7 @@
     "provide.network",
     "provide"
   ],
-  "author": "Kyle Thomas <kyle@provide.services>",
+  "author": "Philip Keiter <philip@provide.services>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/provideservices/provide-js/issues"
@@ -27,6 +26,7 @@
     "@types/request-promise-native": "latest",
     "request": "latest",
     "request-promise-native": "latest",
+    "tslib": "latest",
     "typescript": "latest"
   },
   "devDependencies": {

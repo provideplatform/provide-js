@@ -1,15 +1,27 @@
 {
-  "compileOnSave": false,
   "compilerOptions": {
     "declaration": true,
-    "module": "System",
-    "target": "es6",
-    "outFile": "./dist/index.js",
-    "strict": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "strictFunctionTypes": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "suppressImplicitAnyIndexErrors": true
+    "suppressImplicitAnyIndexErrors": true,
+    "moduleResolution": "node",
+    "stripInternal": false,
+    "target": "es5",
+    "outDir": "./dist",
+    "lib": [
+      "es5",
+      "es2015.iterable",
+      "es2015.collection",
+      "es2015.promise",
+      "es2015.symbol",
+      "es2015.symbol.wellknown",
+      "dom"
+    ]
   },
   "formatCodeOptions": {
     "indentSize": 2,
@@ -18,6 +30,7 @@
   "files": [
     "./src/api-client.ts",
     "./src/goldmine.ts",
-    "./src/ident.ts"
+    "./src/ident.ts",
+    "./src/index.ts"
   ]
 }
