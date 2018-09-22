@@ -27,3 +27,6 @@ tsconfig.json
 .eslintrc
 .babelrc
 .gitignore
+
+# IDE files
+.idea
