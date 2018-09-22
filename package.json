@@ -1,6 +1,6 @@
 {
   "name": "provide-js",
-  "version": "0.0.9",
+  "version": "0.1.2",
   "description": "Provide javascript client library",
   "main": "dist/index.js",
   "scripts": {
@@ -22,12 +22,8 @@
   },
   "homepage": "https://github.com/provideservices/provide-js#readme",
   "dependencies": {
-    "@types/request": "latest",
-    "@types/request-promise-native": "latest",
-    "request": "latest",
-    "request-promise-native": "latest",
-    "tslib": "latest",
-    "typescript": "latest"
+    "tslib": ">= 1.9.3 < 2",
+    "typescript": ">= 2.9.2 < 3"
   },
   "devDependencies": {
     "tslint": "latest"
