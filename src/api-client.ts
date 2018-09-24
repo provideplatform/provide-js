@@ -37,7 +37,7 @@ export class ApiClient {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('User-Agent', 'provide-js client');
-    headers.append('Authorization', `bearer ${this.token}`);
+    headers.append('authorization', `bearer ${this.token}`);
 
     const requestInit: RequestInit = {
       method: 'GET',
@@ -54,7 +54,7 @@ export class ApiClient {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('User-Agent', 'provide-js client');
-    headers.append('Authorization', `bearer ${this.token}`);
+    headers.append('authorization', `bearer ${this.token}`);
 
     const requestInit: RequestInit = {
       method: 'POST',
@@ -72,7 +72,7 @@ export class ApiClient {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('User-Agent', 'provide-js client');
-    headers.append('Authorization', `bearer ${this.token}`);
+    headers.append('authorization', `bearer ${this.token}`);
 
     const requestInit: RequestInit = {
       method: 'PUT',
@@ -90,7 +90,7 @@ export class ApiClient {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('User-Agent', 'provide-js client');
-    headers.append('Authorization', `bearer ${this.token}`);
+    headers.append('authorization', `bearer ${this.token}`);
 
     const requestInit: RequestInit = {
       method: 'DELETE',
