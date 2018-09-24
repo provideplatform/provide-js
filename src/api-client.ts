@@ -32,7 +32,7 @@ export class ApiClient {
   }
 
   public get(uri: string, params: object): Promise<any> {
-    const uriWithQuery = uri + ApiClient.toQuery(params);
+    const uriWithQuery = this.baseUrl + uri + ApiClient.toQuery(params);
 
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
