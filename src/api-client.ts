@@ -1,29 +1,30 @@
 export class ApiClient {
 
-  private static readonly DEFAULT_SCHEME = 'https';
-  private static readonly DEFAULT_HOST = 'provide.services';
-  private static readonly DEFAULT_PATH = 'api/v1';
+  public static readonly DEFAULT_SCHEME = 'https';
+  public static readonly DEFAULT_HOST = 'provide.services';
+  public static readonly DEFAULT_PATH = 'api/v1';
 
-  public baseUrl: string;
+  private baseUri: string;
+  private headers: Headers;
 
-  private token: string;
-
-  constructor(token: string, scheme?: string, host?: string, path?: string) {
-    if (!scheme) scheme = ApiClient.DEFAULT_SCHEME;
-    if (!host) host = ApiClient.DEFAULT_HOST;
-    if (!path) path = ApiClient.DEFAULT_PATH;
-
-    this.baseUrl = `${scheme}://${host}/${path}/`;
-
-    this.token = token;
+  constructor(
+    apiToken: string,
+    scheme = ApiClient.DEFAULT_SCHEME,
+    host = ApiClient.DEFAULT_HOST,
+    path = ApiClient.DEFAULT_PATH,
+  ) {
+    this.baseUri = `${scheme}://${host}/${path}/`;
+    this.headers = new Headers();
+    this.headers.append('Authorization', `bearer ${apiToken}`);
+    this.headers.append('Content-Type', 'application/json');
   }
 
-  private static toQuery(params: object): string {
+  private static toQuery(paramObject: object): string {
     const paramList = [];
 
-    for (const p in params)
-      if (params.hasOwnProperty(p))
-        paramList.push(encodeURIComponent(p) + "=" + encodeURIComponent(params[p]));
+    for (const p in paramObject)
+      if (paramObject.hasOwnProperty(p))
+        paramList.push(encodeURIComponent(p) + "=" + encodeURIComponent(paramObject[p]));
 
     if (paramList.length > 0)
       return '?' + paramList.join("&");
@@ -32,73 +33,52 @@ export class ApiClient {
   }
 
   public get(uri: string, params: object): Promise<any> {
-    const uriWithQuery = this.baseUrl + uri + ApiClient.toQuery(params);
-
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('User-Agent', 'provide-js client');
-    headers.append('authorization', `bearer ${this.token}`);
-
     const requestInit: RequestInit = {
+      headers: this.headers,
       method: 'GET',
-      headers: headers,
       mode: 'cors'
     };
 
+    const uriWithQuery = this.baseUri + uri + ApiClient.toQuery(params);
     const request = new Request(uriWithQuery, requestInit);
 
     return fetch(request);
   }
 
   public post(uri: string, params: object): Promise<any> {
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('User-Agent', 'provide-js client');
-    headers.append('authorization', `bearer ${this.token}`);
-
     const requestInit: RequestInit = {
+      headers: this.headers,
       method: 'POST',
-      headers: headers,
       mode: 'cors',
       body: JSON.stringify(params),
     };
 
-    const request = new Request(this.baseUrl + uri, requestInit);
+    const request = new Request(this.baseUri + uri, requestInit);
 
     return fetch(request);
   }
 
   public put(uri: string, params: object): Promise<any> {
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('User-Agent', 'provide-js client');
-    headers.append('authorization', `bearer ${this.token}`);
-
     const requestInit: RequestInit = {
+      headers: this.headers,
       method: 'PUT',
-      headers: headers,
       mode: 'cors',
       body: JSON.stringify(params),
     };
 
-    const request = new Request(this.baseUrl + uri, requestInit);
+    const request = new Request(this.baseUri + uri, requestInit);
 
     return fetch(request);
   }
 
   public delete(uri: string): Promise<any> {
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('User-Agent', 'provide-js client');
-    headers.append('authorization', `bearer ${this.token}`);
-
     const requestInit: RequestInit = {
+      headers: this.headers,
       method: 'DELETE',
-      headers: headers,
       mode: 'cors',
     };
 
-    const request = new Request(this.baseUrl + uri, requestInit);
+    const request = new Request(this.baseUri + uri, requestInit);
 
     return fetch(request);
   }
