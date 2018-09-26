@@ -29,6 +29,7 @@
   },
   "files": [
     "./src/api-client.ts",
+    "./src/api-client-response.ts",
     "./src/goldmine.ts",
     "./src/ident.ts",
     "./src/index.ts"

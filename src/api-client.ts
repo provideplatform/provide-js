@@ -1,11 +1,13 @@
+import {ApiClientResponse} from "./api-client-response";
+
 export class ApiClient {
 
   public static readonly DEFAULT_SCHEME = 'https';
   public static readonly DEFAULT_HOST = 'provide.services';
   public static readonly DEFAULT_PATH = 'api/v1';
 
-  private readonly apiToken: string;
   private readonly baseUri: string;
+  private readonly requestHeaders: Map<string, string>;
 
   constructor(
     apiToken: string,
@@ -13,8 +15,11 @@ export class ApiClient {
     host = ApiClient.DEFAULT_HOST,
     path = ApiClient.DEFAULT_PATH,
   ) {
-    this.apiToken = apiToken;
     this.baseUri = `${scheme}://${host}/${path}/`;
+
+    this.requestHeaders = new Map<string, string>();
+    this.requestHeaders.set('Authorization', `bearer ${apiToken}`);
+    this.requestHeaders.set('Content-Type', 'application/json');
   }
 
   private static toQuery(paramObject: object): string {
@@ -46,24 +51,54 @@ export class ApiClient {
     return this.makeRequest('DELETE', uri);
   }
 
-  private makeRequest(method: string, uri: string, params: object = null): Promise<any> {
+  private makeRequest(
+    method: string,
+    uri: string,
+    params: object = null
+  ): Promise<ApiClientResponse> {
+
     return new Promise((resolve, reject) => {
 
       const xhr = new XMLHttpRequest();
       xhr.open(method, this.baseUri + uri);
 
-      xhr.onload = () => resolve(xhr.response);
-      xhr.onerror = () => reject(new Error(`${method} failed.`));
+      this.requestHeaders.forEach((value, header) => {
+        xhr.setRequestHeader(header, value);
+      });
 
-      xhr.setRequestHeader('Authorization', `bearer ${this.apiToken}`);
-      xhr.setRequestHeader('Content-Type', 'application/json');
+      let requestBody: string;
 
       if (params === null)
-        xhr.send();
+        requestBody = undefined;
       else if (method === "GET")
-        xhr.send(ApiClient.toQuery(params));
+        requestBody = ApiClient.toQuery(params);
       else
-        xhr.send(JSON.stringify(params));
+        requestBody = JSON.stringify(params);
+
+      xhr.onload = () => resolve(
+        new ApiClientResponse(
+          requestBody,
+          this.requestHeaders,
+          xhr.response,
+          xhr.getAllResponseHeaders(),
+          xhr,
+        )
+      );
+
+      xhr.onerror = () => reject(
+        new ApiClientResponse(
+          requestBody,
+          this.requestHeaders,
+          xhr.response,
+          xhr.getAllResponseHeaders(),
+          xhr,
+        )
+      );
+
+      if (requestBody === undefined)
+        xhr.send();
+      else
+        xhr.send(requestBody);
 
     });
   }

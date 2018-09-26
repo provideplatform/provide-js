@@ -1,6 +1,6 @@
 {
   "name": "provide-js",
-  "version": "0.2.4",
+  "version": "0.2.8",
   "description": "Provide javascript client library",
   "main": "dist/index.js",
   "scripts": {
