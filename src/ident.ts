@@ -10,9 +10,9 @@ export class Ident {
 
   private readonly client: ApiClient;
 
-  constructor(token: string, scheme?: string, host?: string, path?: string) {
+  constructor(apiToken: string, scheme?: string, host?: string, path?: string) {
     if (!host) host = Ident.DEFAULT_HOST;
-    this.client = new ApiClient(token, scheme, host, path);
+    this.client = new ApiClient(apiToken, scheme, host, path);
   }
 
   public createApplication(params: object) {

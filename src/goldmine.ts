@@ -8,11 +8,11 @@ export class Goldmine {
 
   private static readonly DEFAULT_HOST = 'goldmine.provide.services';
 
-  private client: ApiClient;
+  private readonly client: ApiClient;
 
-  constructor(token: string, scheme?: string, host?: string, path?: string) {
+  constructor(apiToken: string, scheme?: string, host?: string, path?: string) {
     if (!host) host = Goldmine.DEFAULT_HOST;
-    this.client = new ApiClient(token, scheme, host, path);
+    this.client = new ApiClient(apiToken, scheme, host, path);
   }
 
   public fetchBridges(params?: object) {

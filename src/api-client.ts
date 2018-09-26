@@ -4,8 +4,8 @@ export class ApiClient {
   public static readonly DEFAULT_HOST = 'provide.services';
   public static readonly DEFAULT_PATH = 'api/v1';
 
-  private baseUri: string;
-  private headers: Headers;
+  private readonly apiToken: string;
+  private readonly baseUri: string;
 
   constructor(
     apiToken: string,
@@ -13,10 +13,8 @@ export class ApiClient {
     host = ApiClient.DEFAULT_HOST,
     path = ApiClient.DEFAULT_PATH,
   ) {
+    this.apiToken = apiToken;
     this.baseUri = `${scheme}://${host}/${path}/`;
-    this.headers = new Headers();
-    this.headers.append('Authorization', `bearer ${apiToken}`);
-    this.headers.append('Content-Type', 'application/json');
   }
 
   private static toQuery(paramObject: object): string {
@@ -27,60 +25,47 @@ export class ApiClient {
         paramList.push(encodeURIComponent(p) + "=" + encodeURIComponent(paramObject[p]));
 
     if (paramList.length > 0)
-      return '?' + paramList.join("&");
+      return paramList.join("&");
     else
       return '';
   }
 
   public get(uri: string, params: object): Promise<any> {
-    const requestInit: RequestInit = {
-      headers: this.headers,
-      method: 'GET',
-      mode: 'cors'
-    };
-
-    const uriWithQuery = this.baseUri + uri + ApiClient.toQuery(params);
-    const request = new Request(uriWithQuery, requestInit);
-
-    return fetch(request);
+    return this.makeRequest('GET', uri, params);
   }
 
   public post(uri: string, params: object): Promise<any> {
-    const requestInit: RequestInit = {
-      headers: this.headers,
-      method: 'POST',
-      mode: 'cors',
-      body: JSON.stringify(params),
-    };
-
-    const request = new Request(this.baseUri + uri, requestInit);
-
-    return fetch(request);
+    return this.makeRequest('POST', uri, params);
   }
 
   public put(uri: string, params: object): Promise<any> {
-    const requestInit: RequestInit = {
-      headers: this.headers,
-      method: 'PUT',
-      mode: 'cors',
-      body: JSON.stringify(params),
-    };
-
-    const request = new Request(this.baseUri + uri, requestInit);
-
-    return fetch(request);
+    return this.makeRequest('PUT', uri, params);
   }
 
   public delete(uri: string): Promise<any> {
-    const requestInit: RequestInit = {
-      headers: this.headers,
-      method: 'DELETE',
-      mode: 'cors',
-    };
+    return this.makeRequest('DELETE', uri);
+  }
 
-    const request = new Request(this.baseUri + uri, requestInit);
+  private makeRequest(method: string, uri: string, params: object = null): Promise<any> {
+    return new Promise((resolve, reject) => {
 
-    return fetch(request);
+      const xhr = new XMLHttpRequest();
+      xhr.open(method, this.baseUri + uri);
+
+      xhr.onload = () => resolve(xhr.response);
+      xhr.onerror = () => reject(new Error(`${method} failed.`));
+
+      xhr.setRequestHeader('Authorization', `bearer ${this.apiToken}`);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+
+      if (params === null)
+        xhr.send();
+      else if (method === "GET")
+        xhr.send(ApiClient.toQuery(params));
+      else
+        xhr.send(JSON.stringify(params));
+
+    });
   }
 
 }
