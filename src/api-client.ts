@@ -23,7 +23,7 @@ export class ApiClient {
   }
 
   private static toQuery(paramObject: object): string {
-    const paramList = [];
+    const paramList: string[] = [];
 
     for (const p in paramObject)
       if (paramObject.hasOwnProperty(p))
@@ -35,19 +35,19 @@ export class ApiClient {
       return '';
   }
 
-  public get(uri: string, params: object): Promise<any> {
+  public get(uri: string, params: object): Promise<ApiClientResponse> {
     return this.makeRequest('GET', uri, params);
   }
 
-  public post(uri: string, params: object): Promise<any> {
+  public post(uri: string, params: object): Promise<ApiClientResponse> {
     return this.makeRequest('POST', uri, params);
   }
 
-  public put(uri: string, params: object): Promise<any> {
+  public put(uri: string, params: object): Promise<ApiClientResponse> {
     return this.makeRequest('PUT', uri, params);
   }
 
-  public delete(uri: string): Promise<any> {
+  public delete(uri: string): Promise<ApiClientResponse> {
     return this.makeRequest('DELETE', uri);
   }
 

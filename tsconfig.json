@@ -1,37 +1,23 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "removeComments": true,
-    "preserveConstEnums": true,
-    "sourceMap": true,
-    "strictFunctionTypes": true,
-    "noImplicitAny": true,
+    "lib": [
+      "dom",
+      "es5",
+      "es6",
+      "scripthost"
+    ],
+    "module": "commonjs",
+    "moduleResolution": "node",
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "moduleResolution": "node",
-    "stripInternal": false,
-    "target": "es5",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "outDir": "./dist",
-    "lib": [
-      "es5",
-      "es2015.iterable",
-      "es2015.collection",
-      "es2015.promise",
-      "es2015.symbol",
-      "es2015.symbol.wellknown",
-      "dom"
-    ]
-  },
-  "formatCodeOptions": {
-    "indentSize": 2,
-    "tabSize": 2
+    "strictFunctionTypes": true,
+    "target": "es5"
   },
   "files": [
-    "./src/api-client.ts",
-    "./src/api-client-response.ts",
-    "./src/goldmine.ts",
-    "./src/ident.ts",
-    "./src/index.ts"
+    "src/provide-js.ts"
   ]
 }

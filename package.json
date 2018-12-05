@@ -1,8 +1,9 @@
 {
   "name": "provide-js",
-  "version": "0.2.8",
+  "version": "0.3.2",
   "description": "Provide javascript client library",
-  "main": "dist/index.js",
+  "main": "./dist/provide-js.js",
+  "types": "./dist/provide-js.d.ts",
   "scripts": {
     "build": "tsc"
   },
@@ -13,7 +14,7 @@
   "keywords": [
     "provide",
     "provide.network",
-    "provide"
+    "provide.services"
   ],
   "author": "Philip Keiter <philip@provide.services>",
   "license": "MIT",
@@ -22,10 +23,10 @@
   },
   "homepage": "https://github.com/provideservices/provide-js#readme",
   "dependencies": {
-    "tslib": ">= 1.9.3 < 2",
-    "typescript": ">= 2.9.2 < 3"
+    "ipfs": "latest"
   },
   "devDependencies": {
-    "tslint": "latest"
+    "tslint": "latest",
+    "typescript": "2.7.2"
   }
 }

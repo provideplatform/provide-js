@@ -62,4 +62,12 @@ typings/
 # next.js build output
 .next
 
+built/
+compiled/
 dist/
+
+.DS_Store
+.vscode
+.idea
+.awcache
+.rpt2_cache

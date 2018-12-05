@@ -21,6 +21,7 @@ test
 examples
 CHANGELOG.md
 tsconfig.json
+tslint.json
 .travis.yml
 .editorconfig
 .eslintignore

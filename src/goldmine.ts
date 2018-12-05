@@ -1,4 +1,5 @@
 import { ApiClient } from './api-client';
+import { ApiClientResponse } from './api-client-response';
 
 /*
  * Goldmine microservice; provides access to functionality
@@ -15,179 +16,179 @@ export class Goldmine {
     this.client = new ApiClient(apiToken, scheme, host, path);
   }
 
-  public fetchBridges(params?: object) {
+  public fetchBridges(params?: object): Promise<ApiClientResponse> {
     return this.client.get('bridges', (params || { }));
   }
 
-  public fetchBridgeDetails(bridgeId: string) {
+  public fetchBridgeDetails(bridgeId: string): Promise<ApiClientResponse> {
     return this.client.get(`bridges/${bridgeId}`, { });
   }
 
-  public createBridge(params: object) {
+  public createBridge(params: object): Promise<ApiClientResponse> {
     return this.client.post('bridges', params);
   }
 
-  public fetchConnectors(params?: object) {
+  public fetchConnectors(params?: object): Promise<ApiClientResponse> {
     return this.client.get('connectors', (params || { }));
   }
 
-  public fetchConnectorDetails(connectorId: string) {
+  public fetchConnectorDetails(connectorId: string): Promise<ApiClientResponse> {
     return this.client.get(`connectors/${connectorId}`, { });
   }
 
-  public createConnector(params: object) {
+  public createConnector(params: object): Promise<ApiClientResponse> {
     return this.client.post('connectors', params);
   }
 
-  public deleteConnector(connectorId: string) {
+  public deleteConnector(connectorId: string): Promise<ApiClientResponse> {
     return this.client.delete(`connectors/${connectorId}`);
   }
 
-  public fetchContracts(params?: object) {
+  public fetchContracts(params?: object): Promise<ApiClientResponse> {
     return this.client.get('contracts', (params || { }));
   }
 
-  public fetchContractDetails(contractId: string) {
+  public fetchContractDetails(contractId: string): Promise<ApiClientResponse> {
     return this.client.get(`contracts/${contractId}`, { });
   }
 
-  public createContract(params: object) {
+  public createContract(params: object): Promise<ApiClientResponse> {
     return this.client.post('contracts', params);
   }
 
-  public executeContract(contractId: string, params: object) {
+  public executeContract(contractId: string, params: object): Promise<ApiClientResponse> {
     return this.client.post(`contracts/${contractId}/execute`, params);
   }
 
-  public fetchNetworks(params?: object) {
+  public fetchNetworks(params?: object): Promise<ApiClientResponse> {
     return this.client.get('networks', (params || { }));
   }
 
-  public createNetwork(params: object) {
+  public createNetwork(params: object): Promise<ApiClientResponse> {
     return this.client.post('networks', params);
   }
 
-  public updateNetwork(networkId: string, params: object) {
+  public updateNetwork(networkId: string, params: object): Promise<ApiClientResponse> {
     return this.client.put(`networks/${networkId}`, params);
   }
 
-  public fetchNetworkDetails(networkId: string) {
+  public fetchNetworkDetails(networkId: string): Promise<ApiClientResponse> {
     return this.client.get(`networks/${networkId}`, { });
   }
 
-  public fetchNetworkAccounts(networkId: string, params: object) {
+  public fetchNetworkAccounts(networkId: string, params: object): Promise<ApiClientResponse> {
     return this.client.get(`networks/${networkId}/accounts`, params);
   }
 
-  public fetchNetworkBlocks(networkId: string, params: object) {
+  public fetchNetworkBlocks(networkId: string, params: object): Promise<ApiClientResponse> {
     return this.client.get(`networks/${networkId}/blocks`, params);
   }
 
-  public fetchNetworkBridges(networkId: string, params: object) {
+  public fetchNetworkBridges(networkId: string, params: object): Promise<ApiClientResponse> {
     return this.client.get(`networks/${networkId}/bridges`, params);
   }
 
-  public fetchNetworkConnectors(networkId: string, params: object) {
+  public fetchNetworkConnectors(networkId: string, params: object): Promise<ApiClientResponse> {
     return this.client.get(`networks/${networkId}/connectors`, params);
   }
 
-  public fetchNetworkContracts(networkId: string, params: object) {
+  public fetchNetworkContracts(networkId: string, params: object): Promise<ApiClientResponse> {
     return this.client.get(`networks/${networkId}/contracts`, params);
   }
 
-  public fetchNetworkContractDetails(networkId: string, contractId: string) {
+  public fetchNetworkContractDetails(networkId: string, contractId: string): Promise<ApiClientResponse> {
     return this.client.get(`networks/${networkId}/contracts/${contractId}`, { });
   }
 
-  public fetchNetworkOracles(networkId: string, params: object) {
+  public fetchNetworkOracles(networkId: string, params: object): Promise<ApiClientResponse> {
     return this.client.get(`networks/${networkId}/oracles`, params);
   }
 
-  public fetchNetworkTokens(networkId: string, params: object) {
+  public fetchNetworkTokens(networkId: string, params: object): Promise<ApiClientResponse> {
     return this.client.get(`networks/${networkId}/tokens`, params);
   }
 
-  public network_transactions(networkId: string, params: object) {
+  public network_transactions(networkId: string, params: object): Promise<ApiClientResponse> {
     return this.client.get(`networks/${networkId}/transactions`, params);
   }
 
-  public fetchNetworkTransactionDetails(networkId: string, transactionId: string) {
+  public fetchNetworkTransactionDetails(networkId: string, transactionId: string): Promise<ApiClientResponse> {
     return this.client.get(`networks/${networkId}/transactions/${transactionId}`, { });
   }
 
-  public fetchNetworkStatus(networkId: string) {
+  public fetchNetworkStatus(networkId: string): Promise<ApiClientResponse> {
     return this.client.get(`networks/${networkId}/status`, { });
   }
 
-  public fetchNetworkNodes(networkId: string, params?: object) {
+  public fetchNetworkNodes(networkId: string, params?: object): Promise<ApiClientResponse> {
     return this.client.get(`networks/${networkId}/nodes`, (params || { }));
   }
 
-  public createNetworkNode(networkId: string, params: object) {
+  public createNetworkNode(networkId: string, params: object): Promise<ApiClientResponse> {
     return this.client.post(`networks/${networkId}/nodes`, params);
   }
 
-  public fetchNetworkNodeDetails(networkId: string, nodeId: string) {
+  public fetchNetworkNodeDetails(networkId: string, nodeId: string): Promise<ApiClientResponse> {
     return this.client.get(`networks/${networkId}/nodes/${nodeId}`, { });
   }
 
-  public fetchNetworkNodeLogs(networkId: string, nodeId: string) {
+  public fetchNetworkNodeLogs(networkId: string, nodeId: string): Promise<ApiClientResponse> {
     return this.client.get(`networks/${networkId}/nodes/${nodeId}/logs`, { });
   }
 
-  public deleteNetworkNode(networkId: string, nodeId: string) {
+  public deleteNetworkNode(networkId: string, nodeId: string): Promise<ApiClientResponse> {
     return this.client.delete(`networks/${networkId}/nodes/${nodeId}`);
   }
 
-  public fetchOracles(params?: object) {
+  public fetchOracles(params?: object): Promise<ApiClientResponse> {
     return this.client.get('oracles', (params || { }));
   }
 
-  public fetchOracleDetails(oracleId: string) {
+  public fetchOracleDetails(oracleId: string): Promise<ApiClientResponse> {
     return this.client.get(`oracles/${oracleId}`, { });
   }
 
-  public createOracle(params: object) {
+  public createOracle(params: object): Promise<ApiClientResponse> {
     return this.client.post('oracles', params);
   }
 
-  public fetchTokens(params?: object) {
+  public fetchTokens(params?: object): Promise<ApiClientResponse> {
     return this.client.get('tokens', (params || { }));
   }
 
-  public fetchTokenDetails(tokenId: string) {
+  public fetchTokenDetails(tokenId: string): Promise<ApiClientResponse> {
     return this.client.get(`tokens/${tokenId}`, { });
   }
 
-  public createToken(params: object) {
+  public createToken(params: object): Promise<ApiClientResponse> {
     return this.client.post('tokens', params);
   }
 
-  public createTransaction(params: object) {
+  public createTransaction(params: object): Promise<ApiClientResponse> {
     return this.client.post('transactions', params);
   }
 
-  public fetchTransactions(params?: object) {
+  public fetchTransactions(params?: object): Promise<ApiClientResponse> {
     return this.client.get('transactions', (params || { }));
   }
 
-  public fetchTransactionDetails(transactionId: string) {
+  public fetchTransactionDetails(transactionId: string): Promise<ApiClientResponse> {
     return this.client.get(`transactions/${transactionId}`, { });
   }
 
-  public fetchWalletBalance(walletId: string, tokenId: string) {
+  public fetchWalletBalance(walletId: string, tokenId: string): Promise<ApiClientResponse> {
     return this.client.get(`wallets/${walletId}/balances/${tokenId}`, { });
   }
 
-  public fetchWallets(params?: object) {
+  public fetchWallets(params?: object): Promise<ApiClientResponse> {
     return this.client.get('wallets', (params || { }));
   }
 
-  public fetchWalletDetails(walletId: string) {
+  public fetchWalletDetails(walletId: string): Promise<ApiClientResponse> {
     return this.client.get(`wallets/${walletId}`, { });
   }
 
-  public createWallet(params: object) {
+  public createWallet(params: object): Promise<ApiClientResponse> {
     return this.client.post('wallets', params);
   }
 }
