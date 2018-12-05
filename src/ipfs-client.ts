@@ -1,4 +1,4 @@
-import IPFS from 'ipfs';
+import IPFS from 'ipfs-http-client';
 
 export class IpfsClient {
 
@@ -10,29 +10,25 @@ export class IpfsClient {
   private ipfs: IPFS;
 
   /**
-   * Connect to the IPFS parameters form a full URI of [scheme]://[host]:[port][path]
+   * Connect to the IPFS. Parameters form a full URI of [scheme]://[host]:[port][path]
    * @param scheme Either http or https
    * @param host The domain name or ip address of the host of the IPFS
    * @param port Port number to use
    * @param path The path under the domain
-   *
-   * @return A Promise with true if resolved or false if rejected
    */
-  public connect(
+  constructor(
     scheme = IpfsClient.DEFAULT_SCHEME,
     host = IpfsClient.DEFAULT_HOST,
     port = IpfsClient.DEFAULT_PORT,
     path = IpfsClient.DEFAULT_PATH,
-  ): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      try {
-        this.ipfs = new IPFS(host, port, path, scheme === 'https');
-        this.ipfs.once('ready', () => resolve(true));
-      }
-      catch (e) {
-        reject(false);
-      }
-    });
+  ) {
+    const options = {
+      protocol: scheme,
+      host,
+      port,
+      'api-path': path,
+    };
+    this.ipfs = new IPFS(options);
   }
 
   /**

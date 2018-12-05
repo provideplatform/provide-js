@@ -7,7 +7,7 @@
       "es6",
       "scripthost"
     ],
-    "module": "commonjs",
+    "module": "es2015",
     "moduleResolution": "node",
     "noImplicitReturns": true,
     "noImplicitThis": true,
