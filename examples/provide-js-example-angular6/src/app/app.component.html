@@ -1,0 +1,13 @@
+<input #fileName placeholder="File name to store in IPFS" /><br>
+
+<input #fileContent placeholder="File content to store in IPFS" /><br>
+
+<button (click)="onAdd(fileName.value, fileContent.value)">Add</button><br><br>
+
+<input #fileHash placeholder="File hash in IPFS" [value]="hash"/><br>
+
+<button (click)="onCat(fileHash.value)">Cat</button>
+
+<p *ngIf="!!content">Content: {{ content }}</p>
+
+<p *ngIf="!!error" [style.color]="'red'">{{ error }}</p>
