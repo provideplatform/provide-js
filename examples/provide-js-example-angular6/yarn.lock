@@ -3902,7 +3902,7 @@ is-symbol@^1.0.2:
   dependencies:
     has-symbols "^1.0.0"
 
-is-typedarray@~1.0.0:
+is-typedarray@^1.0.0, is-typedarray@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/is-typedarray/-/is-typedarray-1.0.0.tgz#e479c80858df0c1b11ddda6940f96011fcda4a9a"
   integrity sha1-5HnICFjfDBsR3dppQPlgEfzaSpo=
@@ -5978,10 +5978,10 @@ protractor@~5.3.0:
     webdriver-js-extender "^1.0.0"
     webdriver-manager "^12.0.6"
 
-provide-js@^0.3.6:
-  version "0.3.6"
-  resolved "https://registry.yarnpkg.com/provide-js/-/provide-js-0.3.6.tgz#88bff368b6651af5f5dd055590d6f218ebb77792"
-  integrity sha512-5xdtPxGufmo0x6XKUd/i+LOAsrl8WbXrRBEzBKPqhAd5oUS0IjcLlqfM2aFBleAmX3S//RyrIuOZKoZn+rBzpg==
+provide-js@^0.3.7:
+  version "0.3.7"
+  resolved "https://registry.yarnpkg.com/provide-js/-/provide-js-0.3.7.tgz#f56a71dd87e996922b093ce94f87acd179d4dc06"
+  integrity sha512-UQzVv80Teas02bn78B/hy69NnuzE1KOq57jUweb4wiWRollZ2By3GTte++ilRp1Mwjj8P0tw4OYj5HQpPR/jKw==
   dependencies:
     ipfs-http-client "~27.1.0"
 
@@ -6024,6 +6024,13 @@ pull-defer@~0.2.3:
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/pull-defer/-/pull-defer-0.2.3.tgz#4ee09c6d9e227bede9938db80391c3dac489d113"
   integrity sha512-/An3KE7mVjZCqNhZsr22k1Tx8MACnUnHZZNPSJ0S62td8JtYr/AiRG42Vz7Syu31SoTLUzVIe61jtT/pNdjVYA==
+
+pull-file-reader@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/pull-file-reader/-/pull-file-reader-1.0.2.tgz#d9b0d3d2de56f1a1ebb2ce8d313e79567d92dc48"
+  integrity sha1-2bDT0t5W8aHrss6NMT55Vn2S3Eg=
+  dependencies:
+    typedarray-to-buffer "^3.1.2"
 
 pull-pushable@^2.2.0:
   version "2.2.0"
@@ -7564,6 +7571,13 @@ type-is@~1.6.16:
   dependencies:
     media-typer "0.3.0"
     mime-types "~2.1.18"
+
+typedarray-to-buffer@^3.1.2:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/typedarray-to-buffer/-/typedarray-to-buffer-3.1.5.tgz#a97ee7a9ff42691b9f783ff1bc5112fe3fca9080"
+  integrity sha512-zdu8XMNEDepKKR+XYOXAVPtWui0ly0NtohUscw+UmaHiAWT8hrV1rr//H6V+0DvJ3OQ19S979M0laLfX8rm82Q==
+  dependencies:
+    is-typedarray "^1.0.0"
 
 typedarray@^0.0.6:
   version "0.0.6"

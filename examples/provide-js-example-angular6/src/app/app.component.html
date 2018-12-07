@@ -1,13 +1,31 @@
+<h3>Text File Creation Example</h3>
+
 <input #fileName placeholder="File name to store in IPFS" /><br>
 
 <input #fileContent placeholder="File content to store in IPFS" /><br>
 
 <button (click)="onAdd(fileName.value, fileContent.value)">Add</button><br><br>
 
-<input #fileHash placeholder="File hash in IPFS" [value]="hash"/><br>
+<input #fileHash placeholder="File hash in IPFS" [value]="hash || ''"/><br>
 
 <button (click)="onCat(fileHash.value)">Cat</button>
 
 <p *ngIf="!!content">Content: {{ content }}</p>
+
+<h3>File Upload Example</h3>
+
+<div>
+  <form id='captureMedia' (submit)="onSubmit($event)">
+    <input type='file' (change)="onCaptureFile($event)" /><br/>
+    <label>{{ uploadProgress }}</label>
+  </form>
+  <div>
+    <a target="_blank"
+       [href]="uploadPath + uploadedHash"
+    >
+      Download {{ uploadedHash }}
+    </a>
+  </div>
+</div>
 
 <p *ngIf="!!error" [style.color]="'red'">{{ error }}</p>
