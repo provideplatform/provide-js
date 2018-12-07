@@ -1,10 +1,15 @@
-<p [style.color]="'red'">
-  Note that you must add localhost:4200 (or whatever port angular is running on) to your IPFS CORS:<br>
-  ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '["http://localhost:4200"]'<br>
-  ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "GET", "POST"]'<br>
+<p>
+  <em>Note that you must add localhost:4200 (or whatever port angular is running on) to your IPFS CORS:</em><br>
+  <code>ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '["http://localhost:4200"]'</code><br>
+  <code>ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "GET", "POST"]'</code><br>
 </p>
 
-<h3>Connect</h3>
+<h3>
+  Connect<br>
+  <sub>
+    These values are from your Provide network or dapp. You should first add your IPFS node as a connector in Provide, before using this form.
+  </sub>
+</h3>
 
 <input #apiToken placeholder="API Token" /><br>
 
