@@ -1,3 +1,13 @@
+<h3>Connect</h3>
+
+<input #apiToken placeholder="API Token" /><br>
+
+<input #networkId placeholder="Network ID" /><br>
+
+<input #dappId placeholder="Application ID (optional)" /><br>
+
+<button (click)="onConnect(apiToken.value, networkId.value, dappId.value)">Connect</button><br><br>
+
 <h3>Text File Creation Example</h3>
 
 <input #fileName placeholder="File name to store in IPFS" /><br>

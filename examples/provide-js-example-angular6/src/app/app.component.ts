@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Buffer } from 'buffer';
-import { IpfsClient } from 'provide-js';
+import { ApiClientResponse, Goldmine, IpfsClient } from 'provide-js';
 import { from } from 'rxjs';
 import { first } from 'rxjs/operators';
 import fileReaderPullStream from 'pull-file-reader';
@@ -10,7 +10,7 @@ import fileReaderPullStream from 'pull-file-reader';
   styleUrls: ['./app.component.css'],
   templateUrl: './app.component.html',
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
 
   public content: string;
   public error: Error;
@@ -19,12 +19,8 @@ export class AppComponent implements OnInit {
   public uploadPath: string;
   public uploadProgress: string;
 
+  private goldmine: Goldmine;
   private ipfs: IpfsClient;
-
-  public ngOnInit(): void {
-    this.ipfs = new IpfsClient();
-    this.uploadPath = `${IpfsClient.DEFAULT_SCHEME}://${IpfsClient.DEFAULT_HOST}:${IpfsClient.DEFAULT_PORT}${IpfsClient.DEFAULT_PATH}`;
-  }
 
   public onAdd(path: string, content: string): void {
     this.error = null;
@@ -52,8 +48,47 @@ export class AppComponent implements OnInit {
     )
   }
 
+  public onConnect(apiToken: string, networkId: string, dappId: string = null): void {
+    this.goldmine = new Goldmine(apiToken);
+
+    const params = {
+      application_id: dappId,
+      network_id: networkId,
+      type: 'ipfs',
+    };
+    if (!dappId) delete params.application_id;
+
+    const observable = from(this.goldmine.fetchConnectors(params));
+    observable.subscribe(
+      (response: ApiClientResponse) => {
+        const connectorList = JSON.parse(response.responseBody);
+        console.log(connectorList);
+        if (connectorList.length > 0) {
+          const uri = AppComponent.parseUri(connectorList[0].config.rpc_url);
+          this.ipfs = new IpfsClient(uri.protocol, uri.host, parseInt(uri.port), uri.path);
+          this.uploadPath = `${uri.protocol}://${uri.host}:${uri.port}${uri.path}`;
+        } else {
+          this.ipfs = new IpfsClient();
+          this.uploadPath = `${IpfsClient.DEFAULT_SCHEME}://${IpfsClient.DEFAULT_HOST}:${IpfsClient.DEFAULT_PORT}${IpfsClient.DEFAULT_PATH}`;
+        }
+      },
+      (error: Error) => this.error = error,
+    );
+  }
+
   public onSubmit (event) {
     event.preventDefault();
+  }
+
+  private static parseUri(uri) {
+    const a =  document.createElement('a');
+    a.href = uri;
+    return {
+      protocol: a.protocol.replace(':',''),
+      host: a.hostname,
+      port: a.port || '',
+      path: a.pathname || '',
+    };
   }
 
   private saveToIpfsWithFilename (file) {
