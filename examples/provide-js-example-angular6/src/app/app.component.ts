@@ -12,6 +12,7 @@ import fileReaderPullStream from 'pull-file-reader';
 })
 export class AppComponent {
 
+  public apiPath = '';
   public content: string;
   public error: Error;
   public gatewayPath = '';
@@ -66,12 +67,12 @@ export class AppComponent {
         if (connectorList.length > 0) {
           const apiUri = AppComponent.parseUri(connectorList[0].config.rpc_url);
           const gatewayUri = AppComponent.parseUri(connectorList[0].config.gateway_url);
-          console.log('apiUri', apiUri);
-          console.log('gatewayUri', gatewayUri);
           this.ipfs = new IpfsClient(apiUri.protocol, apiUri.host, parseInt(apiUri.port), apiUri.path);
+          this.apiPath = `${apiUri.protocol}://${apiUri.host}:${apiUri.port}${apiUri.path}`;
           this.gatewayPath = `${gatewayUri.protocol}://${gatewayUri.host}:${gatewayUri.port}${gatewayUri.path}`;
         } else {
           this.ipfs = new IpfsClient();
+          this.apiPath = `${IpfsClient.DEFAULT_SCHEME}://${IpfsClient.DEFAULT_HOST}:${IpfsClient.DEFAULT_PORT}${IpfsClient.DEFAULT_PATH}`;
           this.gatewayPath = `${IpfsClient.DEFAULT_SCHEME}://${IpfsClient.DEFAULT_HOST}:${IpfsClient.DEFAULT_GATEWAY_PORT}${IpfsClient.DEFAULT_GATEWAY_PATH}`;
         }
       },
