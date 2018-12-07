@@ -6,6 +6,8 @@ export class IpfsClient {
   public static readonly DEFAULT_HOST = 'ipfs.provide.services';
   public static readonly DEFAULT_PORT = 5001;
   public static readonly DEFAULT_PATH = '/api/v0/';
+  public static readonly DEFAULT_GATEWAY_PORT = 8080;
+  public static readonly DEFAULT_GATEWAY_PATH = '/ipfs/';
 
   private ipfs: IPFS;
 
