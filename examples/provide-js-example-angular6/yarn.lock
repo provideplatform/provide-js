@@ -5978,10 +5978,10 @@ protractor@~5.3.0:
     webdriver-js-extender "^1.0.0"
     webdriver-manager "^12.0.6"
 
-provide-js@^0.3.7:
-  version "0.3.7"
-  resolved "https://registry.yarnpkg.com/provide-js/-/provide-js-0.3.7.tgz#f56a71dd87e996922b093ce94f87acd179d4dc06"
-  integrity sha512-UQzVv80Teas02bn78B/hy69NnuzE1KOq57jUweb4wiWRollZ2By3GTte++ilRp1Mwjj8P0tw4OYj5HQpPR/jKw==
+provide-js@^0.3.8:
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/provide-js/-/provide-js-0.3.8.tgz#3cf36447a1faf4b9fbdb2251c2b0d7680e53a000"
+  integrity sha512-G29+xrW7PjHaiv59jokH0mhgU7Lzh3bNZ9Mz/Gh13J9u6Cl1qngIbu0z4CexpZGW31h7G0P4XL/NmBaGv7hqNw==
   dependencies:
     ipfs-http-client "~27.1.0"
 
