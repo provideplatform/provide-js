@@ -11,10 +11,10 @@ export class IpfsClient {
 
   /**
    * Connect to the IPFS. Parameters form a full URI of [scheme]://[host]:[port][path]
-   * @param scheme Either http or https
+   * @param scheme Either 'http' or 'https'
    * @param host The domain name or ip address of the host of the IPFS
    * @param port Port number to use
-   * @param path The path under the domain
+   * @param path The path under the domain, e.g. '/api/v0/'
    */
   constructor(
     scheme = IpfsClient.DEFAULT_SCHEME,
@@ -32,31 +32,33 @@ export class IpfsClient {
   }
 
   /**
-   * Add a file to the IPFS (note that you must connect first)
+   * Add a file to the IPFS
    * @param path The file path or name. (e.g. "myfile.txt" or "mydir/myfile.txt")
    * @param content A Buffer, Readable Stream, or Pull Stream with the contents of the file
+   * @param options An optional IPFS options object. See IPFS documentation.
    *
    * @return A Promise with the hash if resolved or an Error if rejected
    */
-  public add(path: string, content: any): Promise<string | Error> {
+  public add(path: string, content: any, options: any = null): Promise<string | Error> {
     const files =
       [{
-        path: path, // The file path
-        content: content, // A Buffer, Readable Stream or Pull Stream with the contents of the file
+        path: path,
+        content: content,
       }];
 
     return new Promise((resolve, reject) => {
-      this.ipfs.add(
-        files,
-        (error: Error, resultFiles: any[]) => {
-          if (error) reject(error);
-          else resolve(resultFiles[0].hash);
-        });
+      this.ipfs.add(files, options)
+        .then(
+          (resultFiles: any[]) => resolve(resultFiles[0].hash)
+        )
+        .catch(
+          (error: Error) => reject(error)
+        );
     });
   }
 
   /**
-   * Retrieve a file from the IPFS (note that you must connect first)
+   * Retrieve a file from the IPFS
    * @param hash A hash associated with a file on the IPFS
    *
    * @return A Promise with the file buffer if resolved, or an Error if rejected
