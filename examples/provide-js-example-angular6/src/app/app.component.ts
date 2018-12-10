@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Buffer } from 'buffer';
 import { ApiClientResponse, Goldmine, IpfsClient } from 'provide-js';
-import { from } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 import fileReaderPullStream from 'pull-file-reader';
 
@@ -25,7 +25,7 @@ export class AppComponent {
 
   public onAdd(path: string, content: string): void {
     this.error = null;
-    const observable = from(this.ipfs.add(path, Buffer.from(content)));
+    const observable: Observable<string | Error> = from(this.ipfs.add(path, Buffer.from(content)));
     observable.pipe(first()).subscribe(
       (hash: string) => this.hash = hash,
       (error: Error) => this.error = error,
@@ -35,14 +35,14 @@ export class AppComponent {
   public onCaptureFile (event) {
     event.stopPropagation();
     event.preventDefault();
-    const file = event.target.files[0];
+    const file: File = event.target.files[0];
     this.saveToIpfsWithFilename(file);
   }
 
 
   public onCat(hash: string): void {
     this.error = null;
-    const observable = from(this.ipfs.cat(hash));
+    const observable: Observable<Buffer | Error> = from(this.ipfs.cat(hash));
     observable.pipe(first()).subscribe(
       (fileBuffer: Buffer) => this.content = fileBuffer.toString(),
       (error: Error) => this.error = error,
@@ -59,7 +59,7 @@ export class AppComponent {
     };
     if (!dappId) delete params.application_id;
 
-    const observable = from(this.goldmine.fetchConnectors(params));
+    const observable: Observable<ApiClientResponse> = from(this.goldmine.fetchConnectors(params));
     observable.subscribe(
       (response: ApiClientResponse) => {
         const connectorList = JSON.parse(response.responseBody);
@@ -98,14 +98,14 @@ export class AppComponent {
   private saveToIpfsWithFilename (file) {
     // create a stream from a file, which enables uploads of big files without allocating memory twice
     const content = fileReaderPullStream(file);
-    const path = file.name;
+    const path: string = file.name;
 
     const options = {
-      progress: (progress) => this.uploadProgress = `received: ${progress}`,
+      progress: (progress: number) => this.uploadProgress = `received: ${progress}`,
       wrapWithDirectory: true,
     };
 
-    const observable = from(this.ipfs.add(path, content, options));
+    const observable: Observable<string | Error> = from(this.ipfs.add(path, content, options));
     observable.pipe(first()).subscribe(
       (hash: string) => this.uploadedHash = hash,
       (error: Error) => this.error = error,
