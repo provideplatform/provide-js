@@ -347,7 +347,7 @@ observable.pipe(first()).subscribe(
 <a name="Ident"></a>
 ## Ident
 
-Here is a usage examples for 1 of the 10+ Ident methods. The others have similar usage.
+Here is a usage example for 1 of the 10+ Ident methods. The others have similar usage.
 
 <a name="IdentJavaScriptPromise"></a>
 ### Ident with JavaScript and Promise
