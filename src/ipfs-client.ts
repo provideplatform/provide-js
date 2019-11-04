@@ -2,6 +2,8 @@ import IPFS from 'ipfs-http-client';
 import { ApiClient } from './api-client';
 import { ApiClientResponse } from './api-client-response';
 
+import { lookup as mimelookup } from 'mime-types';
+
 export class IpfsClient {
 
   public static readonly DEFAULT_SCHEME = 'http';
@@ -92,8 +94,9 @@ export class IpfsClient {
             JSON.parse(response.responseBody)['Objects'].forEach((ipfsObject: object[]) => {
               ipfsObject['Links'].forEach((lnk: object) => {
                 links.push({
-                  name: lnk['Name'],
                   hash: lnk['Hash'],
+                  mime: lnk['Name'] === '' ? null : mimelookup(lnk['Name']),
+                  name: lnk['Name'],
                   size: lnk['Size'],
                   target: lnk['Target'] === '' ? null : lnk['Target'],
                   type: lnk['Type'],
