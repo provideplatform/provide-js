@@ -27,8 +27,8 @@ export class ApiClient {
         const param = paramObject[p];
         if (param instanceof Array) {
           // tslint:disable-next-line: forin
-          for (const val in param) {
-            paramList.push(encodeURIComponent(p) + '=' + encodeURIComponent(val));
+          for (const i in param) {
+            paramList.push(encodeURIComponent(p) + '=' + encodeURIComponent(param[i]));
           }
         } else {
           paramList.push(encodeURIComponent(p) + '=' + encodeURIComponent(paramObject[p]));
@@ -66,8 +66,19 @@ export class ApiClient {
   ): Promise<ApiClientResponse> {
 
     return new Promise((resolve, reject) => {
+      let query = '';
+      let requestBody: string;
+
+      if (params === null) {
+        requestBody = undefined;
+      } else if (method === 'GET' && Object.keys(params).length > 0) {
+        query = `?${ApiClient.toQuery(params)}`;
+      } else {
+        requestBody = JSON.stringify(params);
+      }
+
       const xhr = new XMLHttpRequest();
-      xhr.open(method, this.baseUri + uri);
+      xhr.open(method, this.baseUri + uri + query);
 
       const requestHeaders = new Map<string, string>();
       if (this.apiToken) {
@@ -81,17 +92,6 @@ export class ApiClient {
       requestHeaders.forEach((value, header) => {
         xhr.setRequestHeader(header, value);
       });
-
-      let query: string;
-      let requestBody: string;
-
-      if (params === null) {
-        requestBody = undefined;
-      } else if (method === 'GET') {
-        query = ApiClient.toQuery(params);
-      } else {
-        requestBody = JSON.stringify(params);
-      }
 
       xhr.onload = () => resolve(
         new ApiClientResponse(
