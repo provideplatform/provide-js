@@ -89,7 +89,7 @@ export class IpfsClient {
         .then(
           (response: ApiClientResponse) => {
             const links = [];
-            JSON.parse(response.responseBody['Objects']).forEach((ipfsObject: object[]) => {
+            JSON.parse(response.responseBody)['Objects'].forEach((ipfsObject: object[]) => {
               ipfsObject['Links'].forEach((lnk: object) => {
                 links.push({
                   name: lnk['Name'],
