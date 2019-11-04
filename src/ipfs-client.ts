@@ -1,4 +1,6 @@
 import IPFS from 'ipfs-http-client';
+import { ApiClient } from './api-client';
+import { ApiClientResponse } from './api-client-response';
 
 export class IpfsClient {
 
@@ -9,10 +11,14 @@ export class IpfsClient {
   public static readonly DEFAULT_GATEWAY_PORT = 8080;
   public static readonly DEFAULT_GATEWAY_PATH = '/ipfs/';
 
+  private apiClient: ApiClient;
   private ipfs: IPFS;
 
   /**
-   * Connect to the IPFS. Parameters form a full URI of [scheme]://[host]:[port][path]
+   * Initialize IPFS client.
+   *
+   * Parameters form a full URI of [scheme]://[host]:[port][path]
+   *
    * @param scheme Either 'http' or 'https'
    * @param host The domain name or ip address of the host of the IPFS
    * @param port Port number to use
@@ -24,17 +30,18 @@ export class IpfsClient {
     port = IpfsClient.DEFAULT_PORT,
     path = IpfsClient.DEFAULT_PATH,
   ) {
-    const options = {
+    this.apiClient = new ApiClient(null, scheme, host, path);
+    this.ipfs = new IPFS({
       protocol: scheme,
       host,
       port,
       'api-path': path,
-    };
-    this.ipfs = new IPFS(options);
+    });
   }
 
   /**
-   * Add a file to the IPFS
+   * Add a file to IPFS.
+   *
    * @param path The file path or name. (e.g. "myfile.txt" or "mydir/myfile.txt")
    * @param content A Buffer, Readable Stream, or Pull Stream with the contents of the file
    * @param options An optional IPFS options object. See IPFS documentation.
@@ -42,16 +49,15 @@ export class IpfsClient {
    * @return A Promise with the hash if resolved or an Error if rejected
    */
   public add(path: string, content: any, options: any = null): Promise<string | Error> {
-    const files =
-      [{
-        path: path,
-        content: content,
-      }];
+    const files = [{
+      path: path,
+      content: content,
+    }];
 
     return new Promise((resolve, reject) => {
       this.ipfs.add(files, options)
         .then(
-          (resultFiles: any[]) => resolve(resultFiles[0].hash)
+          (resultFiles: any[]) => resolve(resultFiles[resultFiles.length - 1].hash)
         )
         .catch(
           (error: Error) => reject(error)
@@ -60,7 +66,8 @@ export class IpfsClient {
   }
 
   /**
-   * Retrieve a file from the IPFS
+   * Retrieve a file from IPFS for the given hash.
+   *
    * @param hash A hash associated with a file on the IPFS
    *
    * @return A Promise with the file buffer if resolved, or an Error if rejected
@@ -69,4 +76,36 @@ export class IpfsClient {
     return this.ipfs.cat(hash);
   }
 
+  /**
+   * List the directory contents for Unix filesystem objects.
+   *
+   * @param hashes An array of hashes for which the associated IPFS links will be returned
+   *
+   * @return A Promise with the linked objects if resolved, or an Error if rejected
+   */
+  public ls(hashes: string[]): Promise<any | Error> {
+    return new Promise((resolve, reject) => {
+      this.apiClient.get('ls', {arg: hashes})
+        .then(
+          (response: ApiClientResponse) => {
+            const links = [];
+            JSON.parse(response.responseBody['Objects']).forEach((ipfsObject: object[]) => {
+              ipfsObject['Links'].forEach((lnk: object) => {
+                links.push({
+                  name: lnk['Name'],
+                  hash: lnk['Hash'],
+                  size: lnk['Size'],
+                  target: lnk['Target'] === '' ? null : lnk['Target'],
+                  type: lnk['Type'],
+                });
+              });
+            });
+            resolve(links);
+          }
+        )
+        .catch(
+          (error: Error) => reject(error)
+        );
+    });
+  }
 }

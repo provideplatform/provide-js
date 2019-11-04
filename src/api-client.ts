@@ -1,4 +1,4 @@
-import {ApiClientResponse} from "./api-client-response";
+import {ApiClientResponse} from './api-client-response';
 
 export class ApiClient {
 
@@ -6,33 +6,41 @@ export class ApiClient {
   public static readonly DEFAULT_HOST = 'provide.services';
   public static readonly DEFAULT_PATH = 'api/v1';
 
+  private readonly apiToken: string;
   private readonly baseUri: string;
-  private readonly requestHeaders: Map<string, string>;
 
   constructor(
-    apiToken: string,
+    apiToken?: string,
     scheme = ApiClient.DEFAULT_SCHEME,
     host = ApiClient.DEFAULT_HOST,
     path = ApiClient.DEFAULT_PATH,
   ) {
+    this.apiToken = apiToken;
     this.baseUri = `${scheme}://${host}/${path}/`;
-
-    this.requestHeaders = new Map<string, string>();
-    this.requestHeaders.set('Authorization', `bearer ${apiToken}`);
-    this.requestHeaders.set('Content-Type', 'application/json');
   }
 
   private static toQuery(paramObject: object): string {
     const paramList: string[] = [];
 
-    for (const p in paramObject)
-      if (paramObject.hasOwnProperty(p))
-        paramList.push(encodeURIComponent(p) + "=" + encodeURIComponent(paramObject[p]));
+    for (const p in paramObject) {
+      if (paramObject.hasOwnProperty(p)) {
+        const param = paramObject[p];
+        if (param instanceof Array) {
+          // tslint:disable-next-line: forin
+          for (const val in param) {
+            paramList.push(encodeURIComponent(p) + '=' + encodeURIComponent(val));
+          }
+        } else {
+          paramList.push(encodeURIComponent(p) + '=' + encodeURIComponent(paramObject[p]));
+        }
+      }
+    }
 
-    if (paramList.length > 0)
-      return paramList.join("&");
-    else
-      return '';
+    if (paramList.length > 0) {
+      return paramList.join('&');
+    }
+
+    return '';
   }
 
   public get(uri: string, params: object): Promise<ApiClientResponse> {
@@ -58,27 +66,38 @@ export class ApiClient {
   ): Promise<ApiClientResponse> {
 
     return new Promise((resolve, reject) => {
-
       const xhr = new XMLHttpRequest();
       xhr.open(method, this.baseUri + uri);
 
-      this.requestHeaders.forEach((value, header) => {
+      const requestHeaders = new Map<string, string>();
+      if (this.apiToken) {
+        requestHeaders.set('Authorization', `bearer ${this.apiToken}`);
+      }
+
+      if (['POST', 'PUT'].indexOf(method) !== -1) {
+        requestHeaders.set('Content-Type', 'application/json');
+      }
+
+      requestHeaders.forEach((value, header) => {
         xhr.setRequestHeader(header, value);
       });
 
+      let query: string;
       let requestBody: string;
 
-      if (params === null)
+      if (params === null) {
         requestBody = undefined;
-      else if (method === "GET")
-        requestBody = ApiClient.toQuery(params);
-      else
+      } else if (method === 'GET') {
+        query = ApiClient.toQuery(params);
+      } else {
         requestBody = JSON.stringify(params);
+      }
 
       xhr.onload = () => resolve(
         new ApiClientResponse(
+          query,
           requestBody,
-          this.requestHeaders,
+          requestHeaders,
           xhr.response,
           xhr.getAllResponseHeaders(),
           xhr,
@@ -87,20 +106,20 @@ export class ApiClient {
 
       xhr.onerror = () => reject(
         new ApiClientResponse(
+          query,
           requestBody,
-          this.requestHeaders,
+          requestHeaders,
           xhr.response,
           xhr.getAllResponseHeaders(),
           xhr,
         )
       );
 
-      if (requestBody === undefined)
+      if (requestBody === undefined) {
         xhr.send();
-      else
+      } else {
         xhr.send(requestBody);
-
+      }
     });
   }
-
 }
