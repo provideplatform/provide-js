@@ -12,8 +12,27 @@ export class Goldmine {
   private readonly client: ApiClient;
 
   constructor(apiToken: string, scheme?: string, host?: string, path?: string) {
-    if (!host) host = Goldmine.DEFAULT_HOST;
+    if (!host) {
+      host = Goldmine.DEFAULT_HOST;
+    }
+
     this.client = new ApiClient(apiToken, scheme, host, path);
+  }
+
+  public fetchAccounts(params?: object): Promise<ApiClientResponse> {
+    return this.client.get('accounts', (params || { }));
+  }
+
+  public fetchAccountDetails(accountId: string): Promise<ApiClientResponse> {
+    return this.client.get(`accounts/${accountId}`, { });
+  }
+
+  public fetchAccountBalance(accountId: string, tokenId: string): Promise<ApiClientResponse> {
+    return this.client.get(`accounts/${accountId}/balances/${tokenId}`, { });
+  }
+
+  public createAccount(params: object): Promise<ApiClientResponse> {
+    return this.client.post('accounts', params);
   }
 
   public fetchBridges(params?: object): Promise<ApiClientResponse> {
@@ -174,10 +193,6 @@ export class Goldmine {
 
   public fetchTransactionDetails(transactionId: string): Promise<ApiClientResponse> {
     return this.client.get(`transactions/${transactionId}`, { });
-  }
-
-  public fetchWalletBalance(walletId: string, tokenId: string): Promise<ApiClientResponse> {
-    return this.client.get(`wallets/${walletId}/balances/${tokenId}`, { });
   }
 
   public fetchWallets(params?: object): Promise<ApiClientResponse> {
