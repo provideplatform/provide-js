@@ -1,6 +1,6 @@
 {
   "name": "provide-js",
-  "version": "0.3.18",
+  "version": "0.4.0",
   "description": "Provide javascript client library",
   "main": "./dist/provide-js.js",
   "types": "./dist/provide-js.d.ts",
