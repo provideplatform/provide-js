@@ -1,23 +1,37 @@
 {
   "compilerOptions": {
+    "allowJs": false,
     "declaration": true,
+    "declarationMap": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
     "lib": [
+      "es2017",
       "dom",
-      "es5",
-      "es6",
-      "scripthost"
+      "esnext.asynciterable"
     ],
-    "module": "es2015",
+    "module": "esnext",
     "moduleResolution": "node",
+    "noImplicitAny": false,
     "noImplicitReturns": true,
     "noImplicitThis": true,
+    "noLib": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "outDir": "./dist",
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "strict": true,
     "strictFunctionTypes": true,
-    "target": "es5"
+    "target": "es2017",
+    "typeRoots": [
+      "./node_modules/@types"
+    ]
   },
   "files": [
-    "src/provide-js.ts"
+    "src/index.ts"
   ]
 }

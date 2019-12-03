@@ -1,7 +1,10 @@
+import { Model, unmarshal } from '@provide/types';
+
+
 export class ApiClientResponse {
 
   public readonly requestBody: string;
-  public readonly requestHeaders: string;
+  public readonly requestHeaders?: string;
   public readonly responseBody: string;
   public readonly responseHeaders: string;
   public readonly query: string;
@@ -22,7 +25,6 @@ export class ApiClientResponse {
     this.xhr = xhr;
 
     let requestHeadersString = '';
-
     requestHeaders.forEach((value, header) => {
       requestHeadersString += `${header}: ${value}\n`;
     });
@@ -30,5 +32,18 @@ export class ApiClientResponse {
     if (requestHeadersString !== '') {
       this.requestHeaders = requestHeadersString;
     }
+  }
+
+  public unmarshalResponse<T extends Model | Model[]>(clazz: new () => T): Model | Model[] | null {
+    let response: any;
+    const contentLength = this.xhr.getResponseHeader('content-length');
+    if (clazz !== null && contentLength !== null && parseInt(contentLength, 10) >= 2) {
+      const retval = unmarshal(this.responseBody, clazz);
+      if (retval != null) {
+        response = retval;
+      }
+    }
+
+    return response;
   }
 }

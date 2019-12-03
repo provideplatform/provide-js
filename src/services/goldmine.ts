@@ -1,5 +1,5 @@
-import { ApiClient } from './api-client';
-import { ApiClientResponse } from './api-client-response';
+import { ApiClient, ApiClientResponse } from '../clients';
+
 
 /*
  * Goldmine microservice; provides access to functionality
@@ -20,15 +20,15 @@ export class Goldmine {
   }
 
   public fetchAccounts(params?: object): Promise<ApiClientResponse> {
-    return this.client.get('accounts', (params || { }));
+    return this.client.get('accounts', (params || {}));
   }
 
   public fetchAccountDetails(accountId: string): Promise<ApiClientResponse> {
-    return this.client.get(`accounts/${accountId}`, { });
+    return this.client.get(`accounts/${accountId}`, {});
   }
 
   public fetchAccountBalance(accountId: string, tokenId: string): Promise<ApiClientResponse> {
-    return this.client.get(`accounts/${accountId}/balances/${tokenId}`, { });
+    return this.client.get(`accounts/${accountId}/balances/${tokenId}`, {});
   }
 
   public createAccount(params: object): Promise<ApiClientResponse> {
@@ -36,11 +36,11 @@ export class Goldmine {
   }
 
   public fetchBridges(params?: object): Promise<ApiClientResponse> {
-    return this.client.get('bridges', (params || { }));
+    return this.client.get('bridges', (params || {}));
   }
 
   public fetchBridgeDetails(bridgeId: string): Promise<ApiClientResponse> {
-    return this.client.get(`bridges/${bridgeId}`, { });
+    return this.client.get(`bridges/${bridgeId}`, {});
   }
 
   public createBridge(params: object): Promise<ApiClientResponse> {
@@ -48,11 +48,11 @@ export class Goldmine {
   }
 
   public fetchConnectors(params?: object): Promise<ApiClientResponse> {
-    return this.client.get('connectors', (params || { }));
+    return this.client.get('connectors', (params || {}));
   }
 
   public fetchConnectorDetails(connectorId: string): Promise<ApiClientResponse> {
-    return this.client.get(`connectors/${connectorId}`, { });
+    return this.client.get(`connectors/${connectorId}`, {});
   }
 
   public createConnector(params: object): Promise<ApiClientResponse> {
@@ -64,11 +64,11 @@ export class Goldmine {
   }
 
   public fetchContracts(params?: object): Promise<ApiClientResponse> {
-    return this.client.get('contracts', (params || { }));
+    return this.client.get('contracts', (params || {}));
   }
 
   public fetchContractDetails(contractId: string): Promise<ApiClientResponse> {
-    return this.client.get(`contracts/${contractId}`, { });
+    return this.client.get(`contracts/${contractId}`, {});
   }
 
   public createContract(params: object): Promise<ApiClientResponse> {
@@ -80,7 +80,7 @@ export class Goldmine {
   }
 
   public fetchNetworks(params?: object): Promise<ApiClientResponse> {
-    return this.client.get('networks', (params || { }));
+    return this.client.get('networks', (params || {}));
   }
 
   public createNetwork(params: object): Promise<ApiClientResponse> {
@@ -92,7 +92,7 @@ export class Goldmine {
   }
 
   public fetchNetworkDetails(networkId: string): Promise<ApiClientResponse> {
-    return this.client.get(`networks/${networkId}`, { });
+    return this.client.get(`networks/${networkId}`, {});
   }
 
   public fetchNetworkAccounts(networkId: string, params: object): Promise<ApiClientResponse> {
@@ -116,7 +116,7 @@ export class Goldmine {
   }
 
   public fetchNetworkContractDetails(networkId: string, contractId: string): Promise<ApiClientResponse> {
-    return this.client.get(`networks/${networkId}/contracts/${contractId}`, { });
+    return this.client.get(`networks/${networkId}/contracts/${contractId}`, {});
   }
 
   public fetchNetworkOracles(networkId: string, params: object): Promise<ApiClientResponse> {
@@ -132,15 +132,15 @@ export class Goldmine {
   }
 
   public fetchNetworkTransactionDetails(networkId: string, transactionId: string): Promise<ApiClientResponse> {
-    return this.client.get(`networks/${networkId}/transactions/${transactionId}`, { });
+    return this.client.get(`networks/${networkId}/transactions/${transactionId}`, {});
   }
 
   public fetchNetworkStatus(networkId: string): Promise<ApiClientResponse> {
-    return this.client.get(`networks/${networkId}/status`, { });
+    return this.client.get(`networks/${networkId}/status`, {});
   }
 
   public fetchNetworkNodes(networkId: string, params?: object): Promise<ApiClientResponse> {
-    return this.client.get(`networks/${networkId}/nodes`, (params || { }));
+    return this.client.get(`networks/${networkId}/nodes`, (params || {}));
   }
 
   public createNetworkNode(networkId: string, params: object): Promise<ApiClientResponse> {
@@ -148,11 +148,11 @@ export class Goldmine {
   }
 
   public fetchNetworkNodeDetails(networkId: string, nodeId: string): Promise<ApiClientResponse> {
-    return this.client.get(`networks/${networkId}/nodes/${nodeId}`, { });
+    return this.client.get(`networks/${networkId}/nodes/${nodeId}`, {});
   }
 
   public fetchNetworkNodeLogs(networkId: string, nodeId: string): Promise<ApiClientResponse> {
-    return this.client.get(`networks/${networkId}/nodes/${nodeId}/logs`, { });
+    return this.client.get(`networks/${networkId}/nodes/${nodeId}/logs`, {});
   }
 
   public deleteNetworkNode(networkId: string, nodeId: string): Promise<ApiClientResponse> {
@@ -160,11 +160,11 @@ export class Goldmine {
   }
 
   public fetchOracles(params?: object): Promise<ApiClientResponse> {
-    return this.client.get('oracles', (params || { }));
+    return this.client.get('oracles', (params || {}));
   }
 
   public fetchOracleDetails(oracleId: string): Promise<ApiClientResponse> {
-    return this.client.get(`oracles/${oracleId}`, { });
+    return this.client.get(`oracles/${oracleId}`, {});
   }
 
   public createOracle(params: object): Promise<ApiClientResponse> {
@@ -172,11 +172,11 @@ export class Goldmine {
   }
 
   public fetchTokens(params?: object): Promise<ApiClientResponse> {
-    return this.client.get('tokens', (params || { }));
+    return this.client.get('tokens', (params || {}));
   }
 
   public fetchTokenDetails(tokenId: string): Promise<ApiClientResponse> {
-    return this.client.get(`tokens/${tokenId}`, { });
+    return this.client.get(`tokens/${tokenId}`, {});
   }
 
   public createToken(params: object): Promise<ApiClientResponse> {
@@ -188,19 +188,23 @@ export class Goldmine {
   }
 
   public fetchTransactions(params?: object): Promise<ApiClientResponse> {
-    return this.client.get('transactions', (params || { }));
+    return this.client.get('transactions', (params || {}));
   }
 
   public fetchTransactionDetails(transactionId: string): Promise<ApiClientResponse> {
-    return this.client.get(`transactions/${transactionId}`, { });
+    return this.client.get(`transactions/${transactionId}`, {});
   }
 
   public fetchWallets(params?: object): Promise<ApiClientResponse> {
-    return this.client.get('wallets', (params || { }));
+    return this.client.get('wallets', (params || {}));
+  }
+
+  public fetchWalletAccounts(walletId: string): Promise<ApiClientResponse> {
+    return this.client.get(`wallets/${walletId}/accounts`, {});
   }
 
   public fetchWalletDetails(walletId: string): Promise<ApiClientResponse> {
-    return this.client.get(`wallets/${walletId}`, { });
+    return this.client.get(`wallets/${walletId}`, {});
   }
 
   public createWallet(params: object): Promise<ApiClientResponse> {

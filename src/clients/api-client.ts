@@ -1,12 +1,13 @@
 import { ApiClientResponse } from './api-client-response';
 
+
 export class ApiClient {
 
   public static readonly DEFAULT_SCHEME = 'https';
   public static readonly DEFAULT_HOST = 'provide.services';
   public static readonly DEFAULT_PATH = 'api/v1';
 
-  private readonly token: string;
+  private readonly token?: string;
   private readonly baseUrl: string;
 
   /**
@@ -70,18 +71,18 @@ export class ApiClient {
   }
 
   public delete(uri: string): Promise<ApiClientResponse> {
-    return this.sendRequest('DELETE', uri);
+    return this.sendRequest('DELETE', uri, null);
   }
 
   private sendRequest(
     method: string,
     uri: string,
-    params: object = null
+    params: any = null,
   ): Promise<ApiClientResponse> {
 
     return new Promise((resolve, reject) => {
       let query = '';
-      let requestBody: string;
+      let requestBody: any;
 
       if (params === null) {
         requestBody = undefined;

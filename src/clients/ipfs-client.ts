@@ -1,8 +1,9 @@
-import IPFS from 'ipfs-http-client';
+import { IPFS } from 'ipfs-http-client';
+import { lookup as mimelookup } from 'mime-types';
+
 import { ApiClient } from './api-client';
 import { ApiClientResponse } from './api-client-response';
 
-import { lookup as mimelookup } from 'mime-types';
 
 export class IpfsClient {
 
@@ -32,7 +33,7 @@ export class IpfsClient {
     port = IpfsClient.DEFAULT_PORT,
     path = IpfsClient.DEFAULT_PATH,
   ) {
-    this.apiClient = new ApiClient(null, scheme, host, path);
+    this.apiClient = new ApiClient(undefined, scheme, host, path);
     this.ipfs = new IPFS({
       protocol: scheme,
       host,
@@ -90,7 +91,7 @@ export class IpfsClient {
       this.apiClient.get('ls', {arg: hashes})
         .then(
           (response: ApiClientResponse) => {
-            const links = [];
+            const links: any[] = [];
             JSON.parse(response.responseBody)['Objects'].forEach((ipfsObject: object[]) => {
               ipfsObject['Links'].forEach((lnk: object) => {
                 links.push({

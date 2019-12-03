@@ -1,33 +1,57 @@
 {
   "name": "provide-js",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Provide javascript client library",
-  "main": "./dist/provide-js.js",
-  "types": "./dist/provide-js.d.ts",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.esm.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "clean": "rm -rf ./dist"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/provideservices/provide-js.git"
   },
+  "author": "Provide Technologies Inc.",
+  "contributors": [
+    {
+      "name": "Philip Keiter",
+      "email": "philip@provide.services"
+    },
+    {
+      "name": "Kyle Thomas",
+      "email": "kyle@provide.services"
+    }
+  ],
   "keywords": [
     "provide",
     "provide.network",
     "provide.services"
   ],
-  "author": "Philip Keiter <philip@provide.services>",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/provideservices/provide-js/issues"
   },
   "homepage": "https://github.com/provideservices/provide-js#readme",
   "dependencies": {
+    "@provide/types": "^0.9.4",
+    "@types/jsonwebtoken": "^8.3.5",
+    "@types/node": "^12.12.14",
     "ipfs-http-client": "^33.1.1",
+    "jsonwebtoken": "^8.5.1",
     "mime-types": "^2.1.24"
   },
   "devDependencies": {
-    "tslint": "^5.18.0",
-    "typescript": "^2.9.2"
+    "prettier": "1.19.1",
+    "tslint": "5.20.1",
+    "tslint-config-airbnb": "5.11.2",
+    "tslint-config-prettier": "1.18.0",
+    "tslint-plugin-prettier": "2.0.1",
+    "typescript": "^3.7.2"
   }
 }
