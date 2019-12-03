@@ -49,8 +49,8 @@ export class AppComponent {
     )
   }
 
-  public onConnect(apiToken: string, networkId: string, dappId: string = null): void {
-    this.goldmine = new Goldmine(apiToken);
+  public onConnect(token: string, networkId: string, dappId: string = null): void {
+    this.goldmine = new Goldmine(token);
 
     const params = {
       application_id: dappId,

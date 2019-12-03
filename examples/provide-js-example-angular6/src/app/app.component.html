@@ -11,13 +11,13 @@
   </sub>
 </h3>
 
-<input #apiToken placeholder="API Token" /><br>
+<input #token placeholder="API Token" /><br>
 
 <input #networkId placeholder="Network ID" /><br>
 
 <input #dappId placeholder="Application ID (optional)" /><br>
 
-<button (click)="onConnect(apiToken.value, networkId.value, dappId.value)">Connect</button><br><br>
+<button (click)="onConnect(token.value, networkId.value, dappId.value)">Connect</button><br><br>
 
 <div *ngIf="gatewayPath || apiPath">
   Connected to IPFS with<br>

@@ -11,12 +11,12 @@ export class Goldmine {
 
   private readonly client: ApiClient;
 
-  constructor(apiToken: string, scheme?: string, host?: string, path?: string) {
+  constructor(token: string, scheme?: string, host?: string, path?: string) {
     if (!host) {
       host = Goldmine.DEFAULT_HOST;
     }
 
-    this.client = new ApiClient(apiToken, scheme, host, path);
+    this.client = new ApiClient(token, scheme, host, path);
   }
 
   public fetchAccounts(params?: object): Promise<ApiClientResponse> {

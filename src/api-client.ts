@@ -1,4 +1,4 @@
-import {ApiClientResponse} from './api-client-response';
+import { ApiClientResponse } from './api-client-response';
 
 export class ApiClient {
 
@@ -6,32 +6,42 @@ export class ApiClient {
   public static readonly DEFAULT_HOST = 'provide.services';
   public static readonly DEFAULT_PATH = 'api/v1';
 
-  private readonly apiToken: string;
-  private readonly baseUri: string;
+  private readonly token: string;
+  private readonly baseUrl: string;
 
+  /**
+   * Initialize the API client.
+   *
+   * Parameters form a full URI of [scheme]://[host]:[port][path]
+   *
+   * @param token The bearer authorization token
+   * @param scheme Either 'http' or 'https'
+   * @param host The domain name or ip address and port of the service
+   * @param path The base path, e.g. 'api/v1'
+   */
   constructor(
-    apiToken?: string,
+    token?: string,
     scheme = ApiClient.DEFAULT_SCHEME,
     host = ApiClient.DEFAULT_HOST,
     path = ApiClient.DEFAULT_PATH,
   ) {
-    this.apiToken = apiToken;
-    this.baseUri = `${scheme}://${host}/${path}/`;
+    this.token = token;
+    this.baseUrl = `${scheme}://${host}/${path}/`;
   }
 
-  private static toQuery(paramObject: object): string {
+  private static toQuery(params: object): string {
     const paramList: string[] = [];
 
-    for (const p in paramObject) {
-      if (paramObject.hasOwnProperty(p)) {
-        const param = paramObject[p];
+    for (const p in params) {
+      if (params.hasOwnProperty(p)) {
+        const param = params[p];
         if (param instanceof Array) {
           // tslint:disable-next-line: forin
           for (const i in param) {
             paramList.push(encodeURIComponent(p) + '=' + encodeURIComponent(param[i]));
           }
         } else {
-          paramList.push(encodeURIComponent(p) + '=' + encodeURIComponent(paramObject[p]));
+          paramList.push(encodeURIComponent(p) + '=' + encodeURIComponent(params[p]));
         }
       }
     }
@@ -44,22 +54,26 @@ export class ApiClient {
   }
 
   public get(uri: string, params: object): Promise<ApiClientResponse> {
-    return this.makeRequest('GET', uri, params);
+    return this.sendRequest('GET', uri, params);
+  }
+
+  public patch(uri: string, params: object): Promise<ApiClientResponse> {
+    return this.sendRequest('PATCH', uri, params);
   }
 
   public post(uri: string, params: object): Promise<ApiClientResponse> {
-    return this.makeRequest('POST', uri, params);
+    return this.sendRequest('POST', uri, params);
   }
 
   public put(uri: string, params: object): Promise<ApiClientResponse> {
-    return this.makeRequest('PUT', uri, params);
+    return this.sendRequest('PUT', uri, params);
   }
 
   public delete(uri: string): Promise<ApiClientResponse> {
-    return this.makeRequest('DELETE', uri);
+    return this.sendRequest('DELETE', uri);
   }
 
-  private makeRequest(
+  private sendRequest(
     method: string,
     uri: string,
     params: object = null
@@ -78,11 +92,11 @@ export class ApiClient {
       }
 
       const xhr = new XMLHttpRequest();
-      xhr.open(method, this.baseUri + uri + query);
+      xhr.open(method, this.baseUrl + uri + query);
 
       const requestHeaders = new Map<string, string>();
-      if (this.apiToken) {
-        requestHeaders.set('Authorization', `bearer ${this.apiToken}`);
+      if (this.token) {
+        requestHeaders.set('Authorization', `bearer ${this.token}`);
       }
 
       if (['POST', 'PUT'].indexOf(method) !== -1) {

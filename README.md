@@ -76,10 +76,10 @@ Here are usage examples for 2 of the 50+ Goldmine methods. The others have simil
 ```javascript
 import { Goldmine } from 'provide-js';
 
-const apiToken = 'myapitoken';
+const token = 'myapitoken';
 const dappId = 'mydappid';
 const networkId = 'mynetworkid';
-const goldmine = new Goldmine(apiToken);
+const goldmine = new Goldmine(token);
 const params = {
   application_id: dappId,
   network_id: networkId,
@@ -108,7 +108,7 @@ goldmine.fetchConnectors(params).then(
 ```javascript
 import { Goldmine } from 'provide-js';
 
-const apiToken = 'myapitoken';
+const token = 'myapitoken';
 const methodParams = ["1stparamvalue","2ndparamvalue"];
 const executionParams = {
     method: 'methodname',
@@ -117,7 +117,7 @@ const executionParams = {
     wallet_id: 'mywalletid',
 };
 const contractId = 'mycontractid';
-const goldmine = new Goldmine(apiToken);
+const goldmine = new Goldmine(token);
 
 goldmine.executeContract(contractId, executionParams).then(
   (response) => {
@@ -145,10 +145,10 @@ import { Goldmine } from 'provide-js';
 import { from } from 'rxjs';
 import { first } from 'rxjs/operators';
 
-const apiToken = 'myapitoken';
+const token = 'myapitoken';
 const dappId = 'mydappid';
 const networkId = 'mynetworkid';
-const goldmine = new Goldmine(apiToken);
+const goldmine = new Goldmine(token);
 const params = {
   application_id: dappId,
   network_id: networkId,
@@ -179,7 +179,7 @@ import { Goldmine } from 'provide-js';
 import { from } from 'rxjs';
 import { first } from 'rxjs/operators';
 
-const apiToken = 'myapitoken';
+const token = 'myapitoken';
 const methodParams = ["1stparamvalue","2ndparamvalue"];
 const executionParams = {
     method: 'methodname',
@@ -188,7 +188,7 @@ const executionParams = {
     wallet_id: 'mywalletid',
 };
 const contractId = 'mycontractid';
-const goldmine = new Goldmine(apiToken);
+const goldmine = new Goldmine(token);
 const observable = from(goldmine.executeContract(contractId, executionParams));
 
 observable.pipe(first()).subscribe(
@@ -214,10 +214,10 @@ observable.pipe(first()).subscribe(
 ```typescript
 import { ApiClientResponse, Goldmine } from 'provide-js';
 
-const apiToken: string = 'myapitoken';
+const token: string = 'myapitoken';
 const dappId: string = 'mydappid';
 const networkId: string = 'mynetworkid';
-const goldmine = new Goldmine(apiToken);
+const goldmine = new Goldmine(token);
 const params = {
   application_id: dappId,
   network_id: networkId,
@@ -246,7 +246,7 @@ goldmine.fetchConnectors(params).then(
 ```typescript
 import { ApiClientResponse, Goldmine } from 'provide-js';
 
-const apiToken: string = 'myapitoken';
+const token: string = 'myapitoken';
 const methodParams: (number|string)[] = ["1stparamvalue","2ndparamvalue"];
 const executionParams: object = {
     method: 'methodname',
@@ -255,7 +255,7 @@ const executionParams: object = {
     wallet_id: 'mywalletid',
 };
 const contractId: string = 'mycontractid';
-const goldmine: Goldmine = new Goldmine(apiToken);
+const goldmine: Goldmine = new Goldmine(token);
 
 goldmine.executeContract(contractId, executionParams).then(
   (response: ApiClientResponse) => {
@@ -283,10 +283,10 @@ import { ApiClientResponse, Goldmine } from 'provide-js';
 import { from, Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 
-const apiToken: string = 'myapitoken';
+const token: string = 'myapitoken';
 const dappId: string = 'mydappid';
 const networkId: string = 'mynetworkid';
-const goldmine = new Goldmine(apiToken);
+const goldmine = new Goldmine(token);
 const params = {
   application_id: dappId,
   network_id: networkId,
@@ -317,7 +317,7 @@ import { ApiClientResponse, Goldmine } from 'provide-js';
 import { from, Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 
-const apiToken: string = 'myapitoken';
+const token: string = 'myapitoken';
 const methodParams: (number|string)[] = ["1stparamvalue","2ndparamvalue"];
 const executionParams = {
     method: 'methodname',
@@ -326,7 +326,7 @@ const executionParams = {
     wallet_id: 'mywalletid',
 };
 const contractId: string = 'mycontractid';
-const goldmine: Goldmine = new Goldmine(apiToken);
+const goldmine: Goldmine = new Goldmine(token);
 const observable: Observable<ApiClientResponse> = from<ApiClientResponse>(goldmine.executeContract(contractId, executionParams));
 
 observable.pipe(first()).subscribe(
@@ -357,9 +357,9 @@ Here is a usage example for 1 of the 10+ Ident methods. The others have similar 
 ```javascript
 import { Ident } from 'provide-js';
 
-const apiToken = 'myapitoken';
+const token = 'myapitoken';
 const dappId = 'mydappid';
-const ident = new Ident(apiToken);
+const ident = new Ident(token);
 
 ident.fetchApplicationDetails(dappId).then(
   (response) => {
@@ -389,9 +389,9 @@ import { Ident } from 'provide-js';
 import { from } from 'rxjs';
 import { first } from 'rxjs/operators';
 
-const apiToken = 'myapitoken';
+const token = 'myapitoken';
 const dappId = 'mydappid';
-const ident = new Ident(apiToken);
+const ident = new Ident(token);
 const observable = from(ident.fetchApplicationDetails(dappId));
 
 observable.pipe(first()).subscribe(
@@ -419,9 +419,9 @@ observable.pipe(first()).subscribe(
 ```typescript
 import { ApiClientResponse, Ident } from 'provide-js';
 
-const apiToken: string = 'myapitoken';
+const token: string = 'myapitoken';
 const dappId: string = 'mydappid';
-const ident = new Ident(apiToken);
+const ident = new Ident(token);
 
 ident.fetchApplicationDetails(dappId).then(
   (response: ApiClientResponse) => {
@@ -451,9 +451,9 @@ import { ApiClientResponse, Ident } from 'provide-js';
 import { from, Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 
-const apiToken: string = 'myapitoken';
+const token: string = 'myapitoken';
 const dappId: string = 'mydappid';
-const ident = new Ident(apiToken);
+const ident = new Ident(token);
 const observable: Observable<ApiClientResponse> = from(ident.fetchApplicationDetails(dappId));
 
 observable.pipe(first()).subscribe(
