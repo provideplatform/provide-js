@@ -3,7 +3,7 @@ import * as url from 'url';
 
 import { ApiClientResponse, IpfsClient } from '../clients';
 import { Goldmine, Ident } from '.';
-import { Account, Application, Connector, Contract, Message, Transaction, MessageData } from '@provide/types';
+import { Account, Application, Connector, ConnectorConfig, Contract, Message, MessageData, Transaction } from '@provide/types';
 
 
 /*
@@ -11,7 +11,10 @@ import { Account, Application, Connector, Contract, Message, Transaction, Messag
  */
 export class MessageBus {
 
+  public static readonly APPLICATION_TYPE_MESSAGE_BUS = 'message_bus';
   public static readonly CONNECTOR_TYPE_IPFS = 'ipfs';
+  public static readonly CONNECTOR_TYPE_IPFS_DEFAULT_API_PORT = 5001;
+  public static readonly CONNECTOR_TYPE_IPFS_DEFAULT_GATEWAY_PORT = 8080;
   public static readonly CONTRACT_TYPE_REGISTRY = 'registry';
   public static readonly CONTRACT_REGISTRY_DEFAULT_LIST_METHOD = 'listMessages';
   public static readonly CONTRACT_REGISTRY_DEFAULT_LIST_RESULTS_PER_PAGE = 25;
@@ -29,6 +32,69 @@ export class MessageBus {
 
   private ipfs?: IpfsClient;
   private token?: any;
+
+  public static create(token: string, networkId: string, name: string, connectorConfig: ConnectorConfig): Promise<MessageBus> {
+    return new Promise((resolve, reject) => {
+      const goldmine = new Goldmine(token);
+      const ident = new Ident(token);
+
+      ident.createApplication({
+        name: name,
+        config: {
+          network_id: networkId,
+          type: MessageBus.APPLICATION_TYPE_MESSAGE_BUS,
+        },
+      }).then(
+        (response: ApiClientResponse) => {
+          const application = response.unmarshalResponse(Application) as Application;
+          console.log(`created message bus application: ${application.id}`);
+
+          goldmine.createConnector({
+            name: `${name} message bus connector - ${MessageBus.CONNECTOR_TYPE_IPFS} - ${connectorConfig.region}`,
+            network_id: networkId,
+            type: MessageBus.CONNECTOR_TYPE_IPFS,
+            config: connectorConfig,
+          }).then(
+            (connectorResponse: ApiClientResponse) => {
+              const connector = connectorResponse.unmarshalResponse(Connector) as Connector;
+              console.log(`created connector ${connector.id} for message bus application: ${application.id}`);
+
+              goldmine.createContract({
+                name: `${name} message bus connector - ${MessageBus.CONNECTOR_TYPE_IPFS} - ${connectorConfig.region}`,
+                network_id: networkId,
+                type: MessageBus.CONNECTOR_TYPE_IPFS,
+                config: connectorConfig,
+              }).then(
+                (contractResponse: ApiClientResponse) => {
+                  const contract = contractResponse.unmarshalResponse(Contract) as Contract;
+                  console.log(`created registry contract ${contract.id} for message bus application: ${application.id}`);
+
+                  const appToken = '';
+                  const mb = new MessageBus(appToken);
+                  resolve(mb);
+                }
+              ).catch(
+                (contractResponse: any) => {
+                  console.log(`WARNING: failed to create registry contract for message bus application ${application.id}; ${contractResponse}`);
+                  reject(contractResponse);
+                }
+              );
+            }
+          ).catch(
+            (connectorResponse: any) => {
+              console.log(`WARNING: failed to create connector for message bus application ${application.id}; ${connectorResponse}`);
+              reject(connectorResponse);
+            }
+          );
+        }
+      ).catch(
+        (response: any) => {
+          console.log(`WARNING: failed to create message bus application; ${response}`);
+          reject(response);
+        }
+      );
+    });
+  }
 
   constructor(token: string) {
     this.goldmine = new Goldmine(token);
@@ -86,7 +152,7 @@ export class MessageBus {
     }
 
     // tslint:disable-next-line: no-non-null-assertion
-    const ipfsUrl: any = url.parse(`${connector.config!.apiUrl}/api/v0`);
+    const ipfsUrl: any = url.parse(`${connector.config!['api_url']}/api/v0`);
 
     this.ipfs = new IpfsClient(ipfsUrl.protocol.replace(':', ''),
                                ipfsUrl.host,
@@ -272,7 +338,7 @@ export class MessageBus {
           (ipfsLinks: object[]) => {
             for (const link of ipfsLinks) {
               // tslint:disable-next-line: max-line-length no-non-null-assertion
-              link['data_url'] = `${this.getConnector()!.config!.apiUrl}/api/v0/get?arg=/ipfs/${atob(link['hash'])}&encoding=json&stream-channels=true"`;
+              link['data_url'] = `${this.getConnector()!.config!['api_url']}/api/v0/get?arg=/ipfs/${atob(link['hash'])}&encoding=json&stream-channels=true"`;
               link['modified_at'] = ipfsHashesModifiedAt[ipfsLinks.indexOf(link)]; // HACK
 
               const msgData = new MessageData();
