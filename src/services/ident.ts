@@ -19,6 +19,29 @@ export class Ident {
     this.client = new ApiClient(token, scheme, host, path);
   }
 
+  private static clientFactory(token?: string | undefined): ApiClient {
+    const scheme = process.env['IDENT_API_SCHEME'] || 'https';
+    const host = process.env['IDENT_API_HOST'] || Ident.DEFAULT_HOST;
+    const path = process.env['IDENT_API_PATH'] || ApiClient.DEFAULT_PATH;
+    return new ApiClient(token, scheme, host, path);
+  }
+
+  public static authenticate(params: object): Promise<ApiClientResponse> {
+    return Ident.clientFactory(undefined).post('authenticate', params);
+  }
+
+  public static createUser(params: object): Promise<ApiClientResponse> {
+    return Ident.clientFactory(undefined).post('users', params);
+  }
+
+  public static requestPasswordReset(email: string): Promise<ApiClientResponse> {
+    return Ident.clientFactory(undefined).post('users', { email });
+  }
+
+  public static resetPassword(token: string, password: string): Promise<ApiClientResponse> {
+    return Ident.clientFactory(undefined).post('users', { token, password });
+  }
+
   public createApplication(params: object): Promise<ApiClientResponse> {
     return this.client.post('applications', params);
   }
@@ -37,10 +60,6 @@ export class Ident {
 
   public fetchApplicationTokens(appId: string): Promise<ApiClientResponse> {
     return this.client.get(`applications/${appId}/tokens`, {});
-  }
-
-  public authenticate(params: object): Promise<ApiClientResponse> {
-    return this.client.post('authenticate', params);
   }
 
   public fetchTokens(params: object): Promise<ApiClientResponse> {
