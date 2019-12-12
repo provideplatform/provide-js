@@ -35,11 +35,11 @@ export class Ident {
   }
 
   public static requestPasswordReset(email: string): Promise<ApiClientResponse> {
-    return Ident.clientFactory(undefined).post('users', { email });
+    return Ident.clientFactory(undefined).post('reset_password', { email });
   }
 
   public static resetPassword(token: string, password: string): Promise<ApiClientResponse> {
-    return Ident.clientFactory(undefined).post('users', { token, password });
+    return Ident.clientFactory(undefined).post(`reset_password/${token}`, { password });
   }
 
   public createApplication(params: object): Promise<ApiClientResponse> {
