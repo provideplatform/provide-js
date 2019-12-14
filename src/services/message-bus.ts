@@ -3,7 +3,7 @@ import * as url from 'url';
 
 import { ApiClientResponse, IpfsClient } from '../clients';
 import { Goldmine, Ident } from '.';
-import { Account, Application, Connector, ConnectorConfig, Contract, Message, MessageData, Transaction } from '@provide/types';
+import { Account, Application, Connector, ConnectorConfig, Contract, Message, MessageData, Token, Transaction, unmarshal } from '@provide/types';
 
 
 /*
@@ -33,26 +33,47 @@ export class MessageBus {
   private ipfs?: IpfsClient;
   private token?: any;
 
-  public static create(token: string, networkId: string, name: string, connectorConfig: ConnectorConfig): Promise<MessageBus> {
+  public static create(
+      token: string,
+      networkId: string,
+      name: string,
+      connectorConfig: ConnectorConfig,
+      registryContract: Contract,
+    ): Promise<MessageBus> {
     return new Promise((resolve, reject) => {
-      const goldmine = new Goldmine(token);
       const ident = new Ident(token);
+
+      if (!connectorConfig) {
+        reject('invalid registry contract');
+        return;
+      }
+
+      if (!registryContract || !registryContract.params || !registryContract.params.compiled_artifact) {
+        reject('invalid registry contract');
+        return;
+      }
 
       ident.createApplication({
         name: name,
-        config: {
-          network_id: networkId,
-          type: MessageBus.APPLICATION_TYPE_MESSAGE_BUS,
-        },
+        network_id: networkId,
+        type: MessageBus.APPLICATION_TYPE_MESSAGE_BUS,
       }).then(
         (response: ApiClientResponse) => {
-          const application = response.unmarshalResponse(Application) as Application;
+          const resp = JSON.parse(response.responseBody);
+          const application = unmarshal(JSON.stringify(resp.application), Application) as Application;
+          const applicationToken = unmarshal(JSON.stringify(resp.token), Token) as Token;
+          const applicationIdentity = unmarshal(JSON.stringify(resp.account), Account) as Account;
+          // const applicationHdWallet = unmarshal(JSON.stringify(resp.wallet), Wallet) as Wallet;
           console.log(`created message bus application: ${application.id}`);
+
+          // tslint:disable-next-line: no-non-null-assertion
+          const goldmine = new Goldmine(applicationToken.token!);
 
           goldmine.createConnector({
             name: `${name} message bus connector - ${MessageBus.CONNECTOR_TYPE_IPFS} - ${connectorConfig.region}`,
+            application_id: application.id,
             network_id: networkId,
-            type: MessageBus.CONNECTOR_TYPE_IPFS,
+            type: MessageBus.CONTRACT_TYPE_REGISTRY,
             config: connectorConfig,
           }).then(
             (connectorResponse: ApiClientResponse) => {
@@ -60,17 +81,22 @@ export class MessageBus {
               console.log(`created connector ${connector.id} for message bus application: ${application.id}`);
 
               goldmine.createContract({
-                name: `${name} message bus connector - ${MessageBus.CONNECTOR_TYPE_IPFS} - ${connectorConfig.region}`,
-                network_id: networkId,
-                type: MessageBus.CONNECTOR_TYPE_IPFS,
-                config: connectorConfig,
+                name:           registryContract.name,
+                network_id:     networkId,
+                application_id: application.id,
+                address:        '0x',
+                params:         {
+                  // tslint:disable-next-line: no-non-null-assertion
+                  compiled_artifact: registryContract.params!.compiled_artifact,
+                  wallet_address: applicationIdentity.address,
+                },
               }).then(
                 (contractResponse: ApiClientResponse) => {
                   const contract = contractResponse.unmarshalResponse(Contract) as Contract;
                   console.log(`created registry contract ${contract.id} for message bus application: ${application.id}`);
 
-                  const appToken = '';
-                  const mb = new MessageBus(appToken);
+                  // tslint:disable-next-line: no-non-null-assertion
+                  const mb = new MessageBus(applicationToken.token!);
                   resolve(mb);
                 }
               ).catch(
