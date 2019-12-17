@@ -1,4 +1,4 @@
-import { IPFS } from 'ipfs-http-client';
+import IPFS from 'ipfs-http-client';
 import { lookup as mimelookup } from 'mime-types';
 
 import { ApiClient } from './api-client';
