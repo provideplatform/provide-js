@@ -99,7 +99,7 @@ export class MessageBus {
                         params:         {
                           // tslint:disable-next-line: no-non-null-assertion
                           compiled_artifact: registryContract.params!.compiled_artifact,
-                          wallet_address: applicationIdentity.address,
+                          hd_derivation_path: applicationIdentity.hdDerivationPath,
                         },
                       }).then(
                         (contractResponse: ApiClientResponse) => {
