@@ -123,14 +123,14 @@ export class MessageBus {
                     }
                   ).catch(
                     (connectorResponse: any) => {
-                      console.log(`WARNING: failed to create connector for message bus application ${application.id}; ${connectorResponse}`);
+                      console.log(`WARNING: failed to create connector for message bus application ${application.id}; ${accountsResponse}`);
                       reject(connectorResponse);
                     }
                   );
                 }
               ).catch(
                 (accountsResponse: any) => {
-                  console.log(`WARNING: failed to create registry contract for message bus application ${application.id}; ${accountsResponse}`);
+                  console.log(`WARNING: failed to fetch HD wallet accounts for message bus application ${application.id}; ${accountsResponse}`);
                   reject(accountsResponse);
                 }
               );
