@@ -136,9 +136,9 @@ export class MessageBus {
               );
             },
           ).catch(
-            (contractResponse: any) => {
-              console.log(`WARNING: failed to create registry contract for message bus application ${application.id}; ${contractResponse}`);
-              reject(contractResponse);
+            (hdWalletResponse: any) => {
+              console.log(`WARNING: failed to create HD wallet for message bus application ${application.id}; ${hdWalletResponse}`);
+              reject(hdWalletResponse);
             }
           );
         }
