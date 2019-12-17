@@ -3,7 +3,7 @@ import * as url from 'url';
 
 import { ApiClientResponse, IpfsClient } from '../clients';
 import { Goldmine, Ident } from '.';
-import { Account, Application, Connector, ConnectorConfig, Contract, Message, MessageData, Token, Transaction, unmarshal } from '@provide/types';
+import { Account, Application, Connector, ConnectorConfig, Contract, Message, MessageData, Token, Transaction, Wallet, unmarshal } from '@provide/types';
 
 
 /*
@@ -12,6 +12,7 @@ import { Account, Application, Connector, ConnectorConfig, Contract, Message, Me
 export class MessageBus {
 
   public static readonly APPLICATION_TYPE_MESSAGE_BUS = 'message_bus';
+  public static readonly APPLICATION_HD_WALLET_DEFAULT_PURPOSE = 44;
   public static readonly CONNECTOR_TYPE_IPFS = 'ipfs';
   public static readonly CONNECTOR_TYPE_IPFS_DEFAULT_API_PORT = 5001;
   public static readonly CONNECTOR_TYPE_IPFS_DEFAULT_GATEWAY_PORT = 8080;
@@ -62,54 +63,78 @@ export class MessageBus {
           const resp = JSON.parse(response.responseBody);
           const application = unmarshal(JSON.stringify(resp.application), Application) as Application;
           const applicationToken = unmarshal(JSON.stringify(resp.token), Token) as Token;
-          const applicationIdentity = unmarshal(JSON.stringify(resp.account), Account) as Account;
-          // const applicationHdWallet = unmarshal(JSON.stringify(resp.wallet), Wallet) as Wallet;
           console.log(`created message bus application: ${application.id}`);
 
           // tslint:disable-next-line: no-non-null-assertion
           const goldmine = new Goldmine(applicationToken.token!);
 
-          goldmine.createConnector({
-            name: `${name} message bus connector - ${MessageBus.CONNECTOR_TYPE_IPFS} - ${connectorConfig.region}`,
-            application_id: application.id,
-            network_id: networkId,
-            type: MessageBus.CONTRACT_TYPE_REGISTRY,
-            config: connectorConfig,
+          goldmine.createWallet({
+            purpose: MessageBus.APPLICATION_HD_WALLET_DEFAULT_PURPOSE,
           }).then(
-            (connectorResponse: ApiClientResponse) => {
-              const connector = connectorResponse.unmarshalResponse(Connector) as Connector;
-              console.log(`created connector ${connector.id} for message bus application: ${application.id}`);
+            (hdWalletResponse: ApiClientResponse) => {
+              const applicationHdWallet = unmarshal(hdWalletResponse.responseBody, Wallet) as Wallet;
 
-              goldmine.createContract({
-                name:           registryContract.name,
-                network_id:     networkId,
-                application_id: application.id,
-                address:        '0x',
-                params:         {
-                  // tslint:disable-next-line: no-non-null-assertion
-                  compiled_artifact: registryContract.params!.compiled_artifact,
-                  wallet_address: applicationIdentity.address,
-                },
-              }).then(
-                (contractResponse: ApiClientResponse) => {
-                  const contract = contractResponse.unmarshalResponse(Contract) as Contract;
-                  console.log(`created registry contract ${contract.id} for message bus application: ${application.id}`);
+              // tslint:disable-next-line: no-non-null-assertion
+              goldmine.fetchWalletAccounts(applicationHdWallet.id!).then(
+                (accountsResponse: ApiClientResponse) => {
+                  const hdWalletAccounts = unmarshal(accountsResponse.responseBody, Account) as Account[];
+                  const applicationIdentity = hdWalletAccounts[0];
 
-                  // tslint:disable-next-line: no-non-null-assertion
-                  const mb = new MessageBus(applicationToken.token!);
-                  resolve(mb);
+                  goldmine.createConnector({
+                    name: `${name} message bus connector - ${MessageBus.CONNECTOR_TYPE_IPFS} - ${connectorConfig.region}`,
+                    application_id: application.id,
+                    network_id: networkId,
+                    type: MessageBus.CONTRACT_TYPE_REGISTRY,
+                    config: connectorConfig,
+                  }).then(
+                    (connectorResponse: ApiClientResponse) => {
+                      const connector = connectorResponse.unmarshalResponse(Connector) as Connector;
+                      console.log(`created connector ${connector.id} for message bus application: ${application.id}`);
+
+                      goldmine.createContract({
+                        name:           registryContract.name,
+                        network_id:     networkId,
+                        application_id: application.id,
+                        address:        '0x',
+                        params:         {
+                          // tslint:disable-next-line: no-non-null-assertion
+                          compiled_artifact: registryContract.params!.compiled_artifact,
+                          wallet_address: applicationIdentity.address,
+                        },
+                      }).then(
+                        (contractResponse: ApiClientResponse) => {
+                          const contract = contractResponse.unmarshalResponse(Contract) as Contract;
+                          console.log(`created registry contract ${contract.id} for message bus application: ${application.id}`);
+
+                          // tslint:disable-next-line: no-non-null-assertion
+                          const mb = new MessageBus(applicationToken.token!);
+                          resolve(mb);
+                        }
+                      ).catch(
+                        (contractResponse: any) => {
+                          console.log(`WARNING: failed to create registry contract for message bus application ${application.id}; ${contractResponse}`);
+                          reject(contractResponse);
+                        }
+                      );
+                    }
+                  ).catch(
+                    (connectorResponse: any) => {
+                      console.log(`WARNING: failed to create connector for message bus application ${application.id}; ${connectorResponse}`);
+                      reject(connectorResponse);
+                    }
+                  );
                 }
               ).catch(
-                (contractResponse: any) => {
-                  console.log(`WARNING: failed to create registry contract for message bus application ${application.id}; ${contractResponse}`);
-                  reject(contractResponse);
+                (accountsResponse: any) => {
+                  console.log(`WARNING: failed to create registry contract for message bus application ${application.id}; ${accountsResponse}`);
+                  reject(accountsResponse);
                 }
               );
-            }
+            },
           ).catch(
-            (connectorResponse: any) => {
-              console.log(`WARNING: failed to create connector for message bus application ${application.id}; ${connectorResponse}`);
-              reject(connectorResponse);
+            (contractResponse: any) => {
+              console.log(`WARNING: failed to create registry contract for message bus application ${application.id}; ${contractResponse}`);
+              reject(contractResponse);
             }
           );
         }
