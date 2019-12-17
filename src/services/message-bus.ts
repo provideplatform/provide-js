@@ -73,9 +73,11 @@ export class MessageBus {
           }).then(
             (hdWalletResponse: ApiClientResponse) => {
               const applicationHdWallet = unmarshal(hdWalletResponse.responseBody, Wallet) as Wallet;
+              // tslint:disable-next-line: no-non-null-assertion
+              const hdWalletId = applicationHdWallet.id!;
 
               // tslint:disable-next-line: no-non-null-assertion
-              goldmine.fetchWalletAccounts(applicationHdWallet.id!).then(
+              goldmine.fetchWalletAccounts(hdWalletId).then(
                 (accountsResponse: ApiClientResponse) => {
                   const hdWalletAccounts = unmarshal(accountsResponse.responseBody, Account) as Account[];
                   const applicationIdentity = hdWalletAccounts[0];
@@ -99,6 +101,7 @@ export class MessageBus {
                         params:         {
                           // tslint:disable-next-line: no-non-null-assertion
                           compiled_artifact: registryContract.params!.compiled_artifact,
+                          wallet_id: hdWalletId,
                           hd_derivation_path: applicationIdentity.hdDerivationPath,
                         },
                       }).then(
