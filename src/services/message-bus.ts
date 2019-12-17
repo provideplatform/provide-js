@@ -183,6 +183,7 @@ export class MessageBus {
             this.resolveWallets().then(
               (wallets: Wallet[]) => {
                 this.wallets = wallets;
+                console.log(`resolved ${this.wallets.length} HD wallet(s) for application: ${application.id}`);
               }
             );
 
