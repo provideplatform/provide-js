@@ -30,6 +30,7 @@ export class MessageBus {
   private registryContract?: Contract;
   private signingIdentities?: Account[];
   private signingIdentity?: Account;
+  private wallets?: Wallet[];
 
   private ipfs?: IpfsClient;
   private token?: any;
@@ -90,7 +91,7 @@ export class MessageBus {
                     config: connectorConfig,
                   }).then(
                     (connectorResponse: ApiClientResponse) => {
-                      const connector = connectorResponse.unmarshalResponse(Connector) as Connector;
+                      const connector = unmarshal(connectorResponse.responseBody, Connector) as Connector;
                       console.log(`created connector ${connector.id} for message bus application: ${application.id}`);
 
                       goldmine.createContract({
@@ -107,8 +108,8 @@ export class MessageBus {
                         },
                       }).then(
                         (contractResponse: ApiClientResponse) => {
-                          const contract = contractResponse.unmarshalResponse(Contract) as Contract;
-                          console.log(`created registry contract ${JSON.stringify(contract)} message bus application: ${application.id}`);
+                          const contract = unmarshal(contractResponse.responseBody, Contract) as Contract;
+                          console.log(`created registry contract ${contract.id} for message bus application: ${application.id}`);
 
                           // tslint:disable-next-line: no-non-null-assertion
                           const mb = new MessageBus(applicationToken.token!);
@@ -173,11 +174,17 @@ export class MessageBus {
     return this.resolveApplication().then(
       (application: Application) => {
         this.application = application;
-        console.log(`resolved application: ${this.application}`);
+        console.log(`resolved application: ${this.application.id}`);
 
         this.resolveRegistryContract().then(
           (registryContract: Contract) => {
             this.registryContract = registryContract;
+
+            this.resolveWallets().then(
+              (wallets: Wallet[]) => {
+                this.wallets = wallets;
+              }
+            );
 
             this.resolveSigningIdentities().then(
               (signingIdentities: Account[]) => {
@@ -235,13 +242,12 @@ export class MessageBus {
     return new Promise((resolve, reject) => {
       this.ident.fetchApplicationDetails(this.getApplicationId()).then(
         (response: ApiClientResponse) => {
-          const application = response.unmarshalResponse(Application) as Application;
+          const application = unmarshal(response.responseBody, Application) as Application;
           resolve(application);
         }
       ).catch(
         (response: ApiClientResponse) => {
-          const application = response.unmarshalResponse(Application) as Application;
-          reject(application);
+          reject(response);
         }
       );
     });
@@ -251,13 +257,12 @@ export class MessageBus {
     return new Promise((resolve, reject) => {
       this.goldmine.fetchConnectors({ type: MessageBus.CONNECTOR_TYPE_IPFS }).then(
         (response: ApiClientResponse) => {
-          const connectors = response.unmarshalResponse(Connector) as Connector[];
+          const connectors = unmarshal(response.responseBody, Connector) as Connector[];
           resolve(connectors);
         }
       ).catch(
         (response: ApiClientResponse) => {
-          const connector = response.unmarshalResponse(Connector) as Connector;
-          reject(connector);
+          reject(response);
         }
       );
     });
@@ -267,7 +272,7 @@ export class MessageBus {
     return new Promise((resolve, reject) => {
       this.goldmine.fetchContracts({ type: MessageBus.CONTRACT_TYPE_REGISTRY }).then(
         (response: ApiClientResponse) => {
-          const contracts = response.unmarshalResponse(Contract) as Contract[];
+          const contracts = unmarshal(response.responseBody, Contract) as Contract[];
           contracts.forEach(
             (contract: Contract) => {
               resolve(contract);
@@ -278,8 +283,7 @@ export class MessageBus {
         },
       ).catch(
         (response: ApiClientResponse) => {
-          const contract = response.unmarshalResponse(Contract) as Contract;
-          reject(contract);
+          reject(response);
         },
       );
     });
@@ -289,13 +293,27 @@ export class MessageBus {
     return new Promise((resolve, reject) => {
       this.goldmine.fetchAccounts().then(
         (response: ApiClientResponse) => {
-          const accounts = response.unmarshalResponse(Account) as Account[];
+          const accounts = unmarshal(response.responseBody, Account) as Account[];
           resolve(accounts);
         },
       ).catch(
         (response: ApiClientResponse) => {
-          const account = response.unmarshalResponse(Account) as Account;
-          reject(account);
+          reject(response);
+        },
+      );
+    });
+  }
+
+  private resolveWallets(): Promise<Wallet[]> {
+    return new Promise((resolve, reject) => {
+      this.goldmine.fetchWallets().then(
+        (response: ApiClientResponse) => {
+          const wallets = unmarshal(response.responseBody, Wallet) as Wallet[];
+          resolve(wallets);
+        },
+      ).catch(
+        (response: ApiClientResponse) => {
+          reject(response);
         },
       );
     });
