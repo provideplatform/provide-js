@@ -108,7 +108,7 @@ export class MessageBus {
                       }).then(
                         (contractResponse: ApiClientResponse) => {
                           const contract = contractResponse.unmarshalResponse(Contract) as Contract;
-                          console.log(`created registry contract ${contract.id} for message bus application: ${application.id}`);
+                          console.log(`created registry contract ${JSON.stringify(contract)} message bus application: ${application.id}`);
 
                           // tslint:disable-next-line: no-non-null-assertion
                           const mb = new MessageBus(applicationToken.token!);
