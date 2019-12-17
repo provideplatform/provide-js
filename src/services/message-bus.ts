@@ -94,12 +94,12 @@ export class MessageBus {
                       console.log(`created connector ${connector.id} for message bus application: ${application.id}`);
 
                       goldmine.createContract({
-                        name:           registryContract.name,
-                        network_id:     networkId,
+                        name: registryContract.name,
+                        network_id: networkId,
                         application_id: application.id,
                         type: MessageBus.CONTRACT_TYPE_REGISTRY,
-                        address:        '0x',
-                        params:         {
+                        address: '0x',
+                        params: {
                           // tslint:disable-next-line: no-non-null-assertion
                           compiled_artifact: registryContract.params!.compiled_artifact,
                           wallet_id: hdWalletId,
