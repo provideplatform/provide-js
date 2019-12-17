@@ -326,6 +326,26 @@ export class MessageBus {
     });
   }
 
+  public getApplication(): Application | undefined {
+    return this.application;
+  }
+
+  public getConnectors(): Connector[] {
+    return this.connectors;
+  }
+
+  public getRegistryContract(): Contract | undefined {
+    return this.registryContract;
+  }
+
+  public getSigningIdentities(): Account[] | undefined {
+    return this.signingIdentities;
+  }
+
+  public getWallets(): Wallet[] | undefined {
+    return this.wallets;
+  }
+
   public getMessages(): Message[] {
     return this.messages;
   }
