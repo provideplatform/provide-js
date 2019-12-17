@@ -86,7 +86,7 @@ export class MessageBus {
                     name: `${name} message bus connector - ${MessageBus.CONNECTOR_TYPE_IPFS} - ${connectorConfig.region}`,
                     application_id: application.id,
                     network_id: networkId,
-                    type: MessageBus.CONTRACT_TYPE_REGISTRY,
+                    type: MessageBus.CONNECTOR_TYPE_IPFS,
                     config: connectorConfig,
                   }).then(
                     (connectorResponse: ApiClientResponse) => {
@@ -97,6 +97,7 @@ export class MessageBus {
                         name:           registryContract.name,
                         network_id:     networkId,
                         application_id: application.id,
+                        type: MessageBus.CONTRACT_TYPE_REGISTRY,
                         address:        '0x',
                         params:         {
                           // tslint:disable-next-line: no-non-null-assertion
