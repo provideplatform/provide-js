@@ -41,7 +41,7 @@
   },
   "homepage": "https://github.com/provideservices/provide-js#readme",
   "dependencies": {
-    "@provide/types": "^0.9.6",
+    "@provide/types": "^0.9.7",
     "@types/jsonwebtoken": "^8.3.5",
     "@types/node": "^12.12.14",
     "ipfs-http-client": "^33.1.1",
