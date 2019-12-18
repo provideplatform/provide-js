@@ -58,8 +58,56 @@ export class Ident {
     return this.client.get(`applications/${appId}`, {});
   }
 
+  public fetchApplicationOrganizations(appId: string, params: object): Promise<ApiClientResponse> {
+    return this.client.get(`applications/${appId}/organizations`, params);
+  }
+
+  public createApplicationOrganization(appId: string, params: object): Promise<ApiClientResponse> {
+    return this.client.post(`applications/${appId}/organizations`, params);
+  }
+
+  public updateApplicationOrganization(appId: string, organizationId: string, params: object): Promise<ApiClientResponse> {
+    return this.client.put(`applications/${appId}/organizations/${organizationId}`, params);
+  }
+
+  public deleteApplicationOrganization(appId: string, organizationId: string): Promise<ApiClientResponse> {
+    return this.client.delete(`applications/${appId}/organizations/${organizationId}`);
+  }
+
   public fetchApplicationTokens(appId: string): Promise<ApiClientResponse> {
     return this.client.get(`applications/${appId}/tokens`, {});
+  }
+
+  public createOrganization(params: object): Promise<ApiClientResponse> {
+    return this.client.post('organizations', params);
+  }
+
+  public fetchOrganizations(params: object): Promise<ApiClientResponse> {
+    return this.client.get('organizations', params);
+  }
+
+  public fetchOrganizationDetails(organizationId: string): Promise<ApiClientResponse> {
+    return this.client.get(`organizations/${organizationId}`, {});
+  }
+
+  public updateOrganization(organizationId: string, params: object): Promise<ApiClientResponse> {
+    return this.client.put(`organizations/${organizationId}`, params);
+  }
+
+  public fetchOrganizationUsers(organizationId: string, params: object): Promise<ApiClientResponse> {
+    return this.client.get(`organizations/${organizationId}/users`, params);
+  }
+
+  public createOrganizationUser(organizationId: string, params: object): Promise<ApiClientResponse> {
+    return this.client.post(`organizations/${organizationId}/users`, params);
+  }
+
+  public updateOrganizationUser(organizationId: string, userId: string, params: object): Promise<ApiClientResponse> {
+    return this.client.put(`organizations/${organizationId}/users/${userId}`, params);
+  }
+
+  public deleteOrganizationUser(organizationId: string, userId: string): Promise<ApiClientResponse> {
+    return this.client.delete(`organizations/${organizationId}/users/${userId}`);
   }
 
   public fetchTokens(params: object): Promise<ApiClientResponse> {
