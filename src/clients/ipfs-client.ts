@@ -34,10 +34,17 @@ export class IpfsClient {
     path = IpfsClient.DEFAULT_PATH,
   ) {
     this.apiClient = new ApiClient(undefined, scheme, host, path);
+
+    let sanitizedHost = host;
+    const portSuffix = `${port}`;
+    if (host.lastIndexOf(portSuffix) === host.length - portSuffix.length) {
+      sanitizedHost = host.substr(0, host.length - portSuffix.length);
+    }
+
     this.ipfs = new IPFS({
       protocol: scheme,
-      host,
-      port,
+      host: sanitizedHost,
+      port: port,
       'api-path': path,
     });
   }

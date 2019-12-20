@@ -232,7 +232,7 @@ export class MessageBus {
     this.ipfs = new IpfsClient(ipfsUrl.protocol.replace(':', ''),
                                ipfsUrl.host,
                                parseInt(ipfsUrl.port, 10),
-                               ipfsUrl.path.replace('/', ''));
+                               ipfsUrl.path);
   }
 
   private getApplicationId(): string {
