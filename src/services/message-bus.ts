@@ -31,6 +31,7 @@ export class MessageBus {
   private signingIdentities?: Account[];
   private signingIdentity?: Account;
   private wallets?: Wallet[];
+  private walletAccounts?: Account[];
 
   private ipfs?: IpfsClient;
   private token?: any;
@@ -166,7 +167,7 @@ export class MessageBus {
   private initialize(token: string): Promise<any> {
     const payload = jwt.decode(token);
     if (payload === null) {
-      throw new Error(`failed to parse jwt: ${token}`);
+      return Promise.reject(`failed to parse jwt: ${token}`);
     }
 
     this.token = payload;
@@ -183,7 +184,12 @@ export class MessageBus {
             this.resolveWallets().then(
               (wallets: Wallet[]) => {
                 this.wallets = wallets;
-                console.log(`resolved ${this.wallets.length} HD wallet(s) for application: ${application.id}`);
+
+                this.resolveWalletAccounts().then(
+                  (accounts: Account[]) => {
+                    this.walletAccounts = accounts;
+                  }
+                );
               }
             );
 
@@ -326,6 +332,28 @@ export class MessageBus {
     });
   }
 
+  private resolveWalletAccounts(): Promise<Account[]> {
+    if (!this.wallets || this.wallets.length === 0) {
+      return Promise.reject('no HD wallet for which signing accounts can be resolved');
+    }
+
+    // tslint:disable-next-line: no-non-null-assertion
+    const hdWalletId = this.wallets[0].id!;
+
+    return new Promise((resolve, reject) => {
+      this.goldmine.fetchWalletAccounts(hdWalletId).then(
+        (response: ApiClientResponse) => {
+          const accounts = unmarshal(response.responseBody, Account) as Account[];
+          resolve(accounts);
+        },
+      ).catch(
+        (response: ApiClientResponse) => {
+          reject(response);
+        },
+      );
+    });
+  }
+
   public getApplication(): Application | undefined {
     return this.application;
   }
@@ -350,110 +378,132 @@ export class MessageBus {
     return this.messages;
   }
 
-  public publish(subject: string, msg: Uint8Array) {
+  public publish(subject: string, msg: Uint8Array): Promise<string> {
     if (this.ipfs === null) {
-      throw new Error('unable to publish message without configured ipfs');
+      return Promise.reject('unable to publish message without configured ipfs');
     }
     if (typeof this.registryContract === 'undefined') {
-      throw new Error('unable to publish message without configured registry contract');
+      return Promise.reject('unable to publish message without configured registry contract');
     }
     if (typeof this.signingIdentity === 'undefined') {
-      throw new Error('unable to publish message without configured signing identity');
+      return Promise.reject('unable to publish message without configured signing identity');
     }
 
-    // tslint:disable-next-line: no-non-null-assertion
-    this.ipfs!.add('', msg).then(
-      (hash: any) => {
-        // tslint:disable-next-line: no-non-null-assertion
-        this.goldmine.executeContract(this.registryContract!.id!, {
-          method: MessageBus.CONTRACT_REGISTRY_DEFAULT_PUBLISH_METHOD,
-          params: [subject, hash],
-          value: 0,
+    let accountAddress, hdWalletId, hdDerivationPath;
+
+    if (this.signingIdentity) {
+      accountAddress = this.signingIdentity.address;
+    } else if (this.wallets && this.wallets.length > 0 && this.walletAccounts && this.walletAccounts.length > 0) {
+      hdWalletId = this.wallets[0].id;
+      hdDerivationPath = this.walletAccounts[0].hdDerivationPath;
+    } else {
+      return Promise.reject('unable to publish message without configured signing identity or HD wallet');
+    }
+
+    return new Promise<string>((resolve, reject) => {
+      // tslint:disable-next-line: no-non-null-assertion
+      this.ipfs!.add('', msg).then(
+        (hash: any) => {
           // tslint:disable-next-line: no-non-null-assertion
-          account_address: this.signingIdentity!.address,
-        }).then(
-          (response: ApiClientResponse) => {
-            console.log(`received ${response}`);
-          }
-        ).catch((err) => {
-          console.log(`WARNING: failed to publish ${msg.length}-byte message ${hash} to registry; ${err}`);
-        });
-      }
-    ).catch((err) => {
-      console.log(`WARNING: failed to publish message to IPFS; ${err}`);
+          this.goldmine.executeContract(this.registryContract!.id!, {
+            method: MessageBus.CONTRACT_REGISTRY_DEFAULT_PUBLISH_METHOD,
+            params: [subject, hash],
+            value: 0,
+            // tslint:disable-next-line: no-non-null-assertion
+            account_address: accountAddress,
+            wallet_id: hdWalletId,
+            hd_derivation_path: hdDerivationPath,
+          }).then(
+            (response: ApiClientResponse) => {
+              console.log(`received ${response}`);
+              resolve(hash);
+            }
+          ).catch((err) => {
+            reject(`WARNING: failed to publish ${msg.length}-byte message ${hash} to registry; ${err}`);
+          });
+        }
+      ).catch((err) => {
+        reject(`WARNING: failed to publish message to IPFS; ${err}`);
+      });
     });
   }
 
   public readRegistryContract(
       page: number = 1,
       rpp: number = MessageBus.CONTRACT_REGISTRY_DEFAULT_LIST_RESULTS_PER_PAGE,
-  ): void {
+  ): Promise<Message[]> {
     if (typeof this.registryContract === 'undefined') {
-      throw new Error('unable to read registry without configured registry contract');
+      return Promise.reject('unable to read registry without configured registry contract');
     }
     if (typeof this.registryContract === 'undefined') {
-      throw new Error('unable to read registry contract without configured ipfs');
+      return Promise.reject('unable to read registry contract without configured ipfs');
     }
 
     if (page === 1) {
       this.messages = [];
     }
 
-    // tslint:disable-next-line: no-non-null-assertion
-    this.goldmine.executeContract(this.registryContract!.id!, {
-      method: MessageBus.CONTRACT_REGISTRY_DEFAULT_LIST_METHOD,
-      params: [page, rpp],
-      value: 0,
+    return new Promise<Message[]>((resolve, reject) => {
       // tslint:disable-next-line: no-non-null-assertion
-      account_address: this.signingIdentity!.address,
-    }).then((response: ApiClientResponse) => {
-      if (response.xhr.status === 200) {
-        const messages: Message[] = [];
-        const messagesByHash = {};
-        const ipfsHashes: any[] = [];
-        const ipfsHashesModifiedAt: any[] = [];
-
-        const messagesList = JSON.parse(response.responseBody).response as any[];
-        for (const msg of messagesList) {
-          if (msg.sender && msg.sender !== '0x0000000000000000000000000000000000000000') { // HACK
-            const message = new Message();
-            message.sender = msg.sender;
-            message.timestamp = new Date(msg.timestamp * 1000).toUTCString();
-
-            const tx = new Transaction();
-            tx.unmarshal(JSON.stringify(msg));
-            message.tx = tx;
-
-            const hash = atob(msg.hash);
-
-            messages.push(message);
-            messagesByHash[hash] = message;
-            ipfsHashes.push(hash);
-            ipfsHashesModifiedAt.push(msg.timestamp);
-          }
-        }
-
+      this.goldmine.executeContract(this.registryContract!.id!, {
+        method: MessageBus.CONTRACT_REGISTRY_DEFAULT_LIST_METHOD,
+        params: [page, rpp],
+        value: 0,
         // tslint:disable-next-line: no-non-null-assertion
-        this.ipfs!.ls(ipfsHashes).then(
-          (ipfsLinks: object[]) => {
-            for (const link of ipfsLinks) {
-              // tslint:disable-next-line: max-line-length no-non-null-assertion
-              link['data_url'] = `${this.getConnector()!.config!['api_url']}/api/v0/get?arg=/ipfs/${atob(link['hash'])}&encoding=json&stream-channels=true"`;
-              link['modified_at'] = ipfsHashesModifiedAt[ipfsLinks.indexOf(link)]; // HACK
+        account_address: this.signingIdentity!.address,
+      }).then((response: ApiClientResponse) => {
+        if (response.xhr.status === 200) {
+          const messages: Message[] = [];
+          const messagesByHash = {};
+          const ipfsHashes: any[] = [];
+          const ipfsHashesModifiedAt: any[] = [];
 
-              const msgData = new MessageData();
-              msgData.unmarshal(JSON.stringify(link));
-              messagesByHash[link['hash']].data = msgData;
+          const messagesList = JSON.parse(response.responseBody).response as any[];
+          for (const msg of messagesList) {
+            if (msg.sender && msg.sender !== '0x0000000000000000000000000000000000000000') { // HACK
+              const message = new Message();
+              message.sender = msg.sender;
+              message.timestamp = new Date(msg.timestamp * 1000).toUTCString();
+
+              const tx = new Transaction();
+              tx.unmarshal(JSON.stringify(msg));
+              message.tx = tx;
+
+              const hash = atob(msg.hash);
+
+              messages.push(message);
+              messagesByHash[hash] = message;
+              ipfsHashes.push(hash);
+              ipfsHashesModifiedAt.push(msg.timestamp);
             }
           }
-        );
 
-        this.messages = messages;
-      } else {
-        console.log(`WARNING: failed to read registry contract; ${response.responseBody}`);
-      }
-    }).catch((err) => {
-      console.log(`WARNING: failed to read registry contract; ${err}`);
+          // tslint:disable-next-line: no-non-null-assertion
+          this.ipfs!.ls(ipfsHashes).then(
+            (ipfsLinks: object[]) => {
+              for (const link of ipfsLinks) {
+                // tslint:disable-next-line: max-line-length no-non-null-assertion
+                link['data_url'] = `${this.getConnector()!.config!['api_url']}/api/v0/get?arg=/ipfs/${atob(link['hash'])}&encoding=json&stream-channels=true"`;
+                link['modified_at'] = ipfsHashesModifiedAt[ipfsLinks.indexOf(link)]; // HACK
+
+                const msgData = new MessageData();
+                msgData.unmarshal(JSON.stringify(link));
+                messagesByHash[link['hash']].data = msgData;
+              }
+            }
+          );
+
+          messages.forEach((msg) => {
+            this.messages.push(msg);
+          });
+
+          resolve(messages);
+        } else {
+          reject(`WARNING: failed to read registry contract; ${response.responseBody}`);
+        }
+      }).catch((err) => {
+        reject(`WARNING: failed to read registry contract; ${err}`);
+      });
     });
   }
 }
