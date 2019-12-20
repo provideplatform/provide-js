@@ -36,7 +36,7 @@ export class IpfsClient {
     this.apiClient = new ApiClient(undefined, scheme, host, path);
 
     let sanitizedHost = host;
-    const portSuffix = `${port}`;
+    const portSuffix = `:${port}`;
     if (host.lastIndexOf(portSuffix) === host.length - portSuffix.length) {
       sanitizedHost = host.substr(0, host.length - portSuffix.length);
     }
