@@ -227,7 +227,7 @@ export class MessageBus {
     }
 
     // tslint:disable-next-line: no-non-null-assertion
-    const ipfsUrl: any = url.parse(`${connectorConfig['api_url']}/api/v0`);
+    const ipfsUrl: any = url.parse(`${connectorConfig['api_url']}/api/v0/`);
 
     this.ipfs = new IpfsClient(ipfsUrl.protocol.replace(':', ''),
                                ipfsUrl.host,
