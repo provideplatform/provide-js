@@ -385,9 +385,6 @@ export class MessageBus {
     if (typeof this.registryContract === 'undefined') {
       return Promise.reject('unable to publish message without configured registry contract');
     }
-    if (typeof this.signingIdentity === 'undefined') {
-      return Promise.reject('unable to publish message without configured signing identity');
-    }
 
     let accountAddress, hdWalletId, hdDerivationPath;
 
@@ -443,6 +440,17 @@ export class MessageBus {
       this.messages = [];
     }
 
+    let accountAddress, hdWalletId, hdDerivationPath;
+
+    if (this.signingIdentity) {
+      accountAddress = this.signingIdentity.address;
+    } else if (this.wallets && this.wallets.length > 0 && this.walletAccounts && this.walletAccounts.length > 0) {
+      hdWalletId = this.wallets[0].id;
+      hdDerivationPath = this.walletAccounts[0].hdDerivationPath;
+    } else {
+      return Promise.reject('unable to read registry contract without configured signing identity or HD wallet');
+    }
+
     return new Promise<Message[]>((resolve, reject) => {
       // tslint:disable-next-line: no-non-null-assertion
       this.goldmine.executeContract(this.registryContract!.id!, {
@@ -450,7 +458,9 @@ export class MessageBus {
         params: [page, rpp],
         value: 0,
         // tslint:disable-next-line: no-non-null-assertion
-        account_address: this.signingIdentity!.address,
+        account_address: accountAddress,
+        wallet_id: hdWalletId,
+        hd_derivation_path: hdDerivationPath,
       }).then((response: ApiClientResponse) => {
         if (response.xhr.status === 200) {
           const messages: Message[] = [];
