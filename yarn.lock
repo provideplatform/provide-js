@@ -305,10 +305,10 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
-"@provide/types@^0.9.7":
-  version "0.9.7"
-  resolved "https://registry.yarnpkg.com/@provide/types/-/types-0.9.7.tgz#4213dd5b8803e550749fac08ea5687d8aabe1f39"
-  integrity sha512-cOTV3j5KdrD4JtiYdyruUqxjKXV7OKB97v3LHhwemX5gLkTRpI4WAsMhaY854ANfaF7AipPYFa7alE5Lop/IIw==
+"@provide/types@^0.9.8":
+  version "0.9.8"
+  resolved "https://registry.yarnpkg.com/@provide/types/-/types-0.9.8.tgz#bd035ed92fad1125c77883a45c649c2af21307b0"
+  integrity sha512-ytnn0IfhTFj6M3tuXZWbg7UmHVT2aI9ohADCwQdP66cYW8V40gS20z9nJif+NYN+PNlVwYqcUHP+SI8BFBCDLg==
   dependencies:
     ethers "4.0.38"
 
