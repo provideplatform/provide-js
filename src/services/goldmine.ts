@@ -51,8 +51,8 @@ export class Goldmine {
     return this.client.get('connectors', (params || {}));
   }
 
-  public fetchConnectorDetails(connectorId: string): Promise<ApiClientResponse> {
-    return this.client.get(`connectors/${connectorId}`, {});
+  public fetchConnectorDetails(connectorId: string, params?: object): Promise<ApiClientResponse> {
+    return this.client.get(`connectors/${connectorId}`, (params || {}));
   }
 
   public createConnector(params: object): Promise<ApiClientResponse> {

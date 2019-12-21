@@ -11,6 +11,7 @@ import { Account, Application, Connector, ConnectorConfig, Contract, Message, Me
  */
 export class MessageBus {
 
+  public static readonly ADDRESS_ZERO_PATTERNS = ['0x0000000000000000000000000000000000000000'];
   public static readonly APPLICATION_TYPE_MESSAGE_BUS = 'message_bus';
   public static readonly APPLICATION_HD_WALLET_DEFAULT_PURPOSE = 44;
   public static readonly CONNECTOR_TYPE_IPFS = 'ipfs';
@@ -214,7 +215,7 @@ export class MessageBus {
     );
   }
 
-  private configureIpfsClient() {
+  private configureIpfsClient() { // FIXME-- make this an implementation of a ConnectorProvider interface or similar
     const connector = this.getConnector();
     if (connector === null) {
       return;
@@ -465,12 +466,12 @@ export class MessageBus {
         if (response.xhr.status === 200) {
           const messages: Message[] = [];
           const messagesByHash = {};
-          const ipfsHashes: any[] = [];
-          const ipfsHashesModifiedAt: any[] = [];
+          const hashes: any[] = [];
+          const hashesModifiedAt: any[] = [];
 
           const messagesList = JSON.parse(response.responseBody).response as any[];
           for (const msg of messagesList) {
-            if (msg.sender && msg.sender !== '0x0000000000000000000000000000000000000000') { // HACK
+            if (msg.sender && MessageBus.ADDRESS_ZERO_PATTERNS.indexOf(msg.sender) === -1) {
               const message = new Message();
               message.sender = msg.sender;
               message.timestamp = new Date(msg.timestamp * 1000).toUTCString();
@@ -483,26 +484,26 @@ export class MessageBus {
 
               messages.push(message);
               messagesByHash[hash] = message;
-              ipfsHashes.push(hash);
-              ipfsHashesModifiedAt.push(msg.timestamp);
+              hashes.push(hash);
+              hashesModifiedAt.push(msg.timestamp);
             }
           }
 
           // tslint:disable-next-line: no-non-null-assertion
-          this.goldmine.fetchConnectorDetails(this.getConnector()!.id!).then(
+          this.goldmine.fetchConnectorDetails(this.getConnector()!.id!, { objects: hashes.join(',') }).then(
             (connectorResponse: ApiClientResponse) => {
               const connector = unmarshal(connectorResponse.responseBody, Connector) as Connector;
               // tslint:disable-next-line: no-non-null-assertion
               const items = connector!.details!.data;
 
-              for (const link of items) {
-                // tslint:disable-next-line: max-line-length no-non-null-assertion
-                link['data_url'] = `${this.getConnector()!.config!['api_url']}/api/v0/get?arg=/ipfs/${atob(link['hash'])}&encoding=json&stream-channels=true"`;
-                link['modified_at'] = ipfsHashesModifiedAt[items.indexOf(link)]; // HACK
+              for (const item of items) {
+                if (!item.modified_at) {
+                  item['modified_at'] = hashesModifiedAt[items.indexOf(item)]; // HACK
+                }
 
                 const msgData = new MessageData();
-                msgData.unmarshal(JSON.stringify(link));
-                messagesByHash[link['hash']].data = msgData;
+                msgData.unmarshal(JSON.stringify(item));
+                messagesByHash[item['hash']].data = msgData;
               }
 
               messages.forEach((msg) => {
