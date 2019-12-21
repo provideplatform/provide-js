@@ -19,7 +19,7 @@ export class MessageBus {
   public static readonly CONNECTOR_TYPE_IPFS_DEFAULT_GATEWAY_PORT = 8080;
   public static readonly CONTRACT_TYPE_REGISTRY = 'registry';
   public static readonly CONTRACT_REGISTRY_DEFAULT_LIST_METHOD = 'listMessages';
-  public static readonly CONTRACT_REGISTRY_DEFAULT_LIST_RESULTS_PER_PAGE = 25;
+  public static readonly CONTRACT_REGISTRY_DEFAULT_LIST_RESULTS_PER_PAGE = 10;
   public static readonly CONTRACT_REGISTRY_DEFAULT_PUBLISH_METHOD = 'publish';
 
   private readonly goldmine: Goldmine;
