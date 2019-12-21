@@ -388,11 +388,11 @@ export class MessageBus {
 
     let accountAddress, hdWalletId, hdDerivationPath;
 
-    if (this.signingIdentity) {
-      accountAddress = this.signingIdentity.address;
-    } else if (this.wallets && this.wallets.length > 0 && this.walletAccounts && this.walletAccounts.length > 0) {
+    if (this.wallets && this.wallets.length > 0 && this.walletAccounts && this.walletAccounts.length > 0) {
       hdWalletId = this.wallets[0].id;
       hdDerivationPath = this.walletAccounts[0].hdDerivationPath;
+    } else if (this.signingIdentity) {
+      accountAddress = this.signingIdentity.address;
     } else {
       return Promise.reject('unable to publish message without configured signing identity or HD wallet');
     }
