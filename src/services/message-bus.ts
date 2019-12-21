@@ -489,25 +489,32 @@ export class MessageBus {
           }
 
           // tslint:disable-next-line: no-non-null-assertion
-          this.ipfs!.ls(ipfsHashes).then(
-            (ipfsLinks: object[]) => {
-              for (const link of ipfsLinks) {
+          this.goldmine.fetchConnectorDetails(this.getConnector()!.id!).then(
+            (connectorResponse: ApiClientResponse) => {
+              const connector = unmarshal(JSON.stringify(connectorResponse.responseBody), Connector) as Connector;
+              // tslint:disable-next-line: no-non-null-assertion
+              const items = connector!.details!.data;
+
+              for (const link of items) {
                 // tslint:disable-next-line: max-line-length no-non-null-assertion
                 link['data_url'] = `${this.getConnector()!.config!['api_url']}/api/v0/get?arg=/ipfs/${atob(link['hash'])}&encoding=json&stream-channels=true"`;
-                link['modified_at'] = ipfsHashesModifiedAt[ipfsLinks.indexOf(link)]; // HACK
+                link['modified_at'] = ipfsHashesModifiedAt[items.indexOf(link)]; // HACK
 
                 const msgData = new MessageData();
                 msgData.unmarshal(JSON.stringify(link));
                 messagesByHash[link['hash']].data = msgData;
               }
-            }
-          );
 
-          messages.forEach((msg) => {
-            this.messages.push(msg);
-          });
+              messages.forEach((msg) => {
+                this.messages.push(msg);
+              });
 
-          resolve(messages);
+              resolve(messages);
+            }).catch(
+              (connectorResponse) => {
+                reject(`failed to retrieve connector details; ${connectorResponse}`);
+              }
+            );
         } else {
           reject(`WARNING: failed to read registry contract; ${response.responseBody}`);
         }
