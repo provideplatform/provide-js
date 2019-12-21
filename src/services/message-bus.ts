@@ -491,7 +491,7 @@ export class MessageBus {
           // tslint:disable-next-line: no-non-null-assertion
           this.goldmine.fetchConnectorDetails(this.getConnector()!.id!).then(
             (connectorResponse: ApiClientResponse) => {
-              const connector = unmarshal(JSON.stringify(connectorResponse.responseBody), Connector) as Connector;
+              const connector = unmarshal(connectorResponse.responseBody, Connector) as Connector;
               // tslint:disable-next-line: no-non-null-assertion
               const items = connector!.details!.data;
 
