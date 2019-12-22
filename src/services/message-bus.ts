@@ -24,6 +24,7 @@ export class MessageBus {
 
   private readonly goldmine: Goldmine;
   private readonly ident: Ident;
+  private readonly token?: any;
 
   private application?: Application;
   private connectors: Connector[] = [];
@@ -35,7 +36,6 @@ export class MessageBus {
   private walletAccounts?: Account[];
 
   private ipfs?: IpfsClient;
-  private token?: any;
 
   public static create(
       token: string,
@@ -154,65 +154,87 @@ export class MessageBus {
     });
   }
 
-  constructor(token: string) {
+  public static factory(token: string): Promise<MessageBus> {
+    return new MessageBus(token).initialize();
+  }
+
+  private constructor(token: string) {
     this.goldmine = new Goldmine(token);
     this.ident = new Ident(token);
 
-    this.initialize(token).catch(
-      (response: any) => {
-        console.log(`failed to ${response}`);
-      }
-    );
-  }
-
-  private initialize(token: string): Promise<any> {
     const payload = jwt.decode(token);
     if (payload === null) {
-      return Promise.reject(`failed to parse jwt: ${token}`);
+      throw new Error(`failed to parse application jwt: ${token}`);
     }
 
     this.token = payload;
+  }
 
-    return this.resolveApplication().then(
-      (application: Application) => {
-        this.application = application;
-        console.log(`resolved application: ${this.application.id}`);
+  private initialize(): Promise<MessageBus> {
+    return new Promise((resolve, reject) => {
+      this.resolveApplication().then(
+        (application: Application) => {
+          this.application = application;
+          console.log(`resolved application: ${this.application.id}`);
 
-        this.resolveRegistryContract().then(
-          (registryContract: Contract) => {
-            this.registryContract = registryContract;
+          this.resolveRegistryContract().then(
+            (registryContract: Contract) => {
+              this.registryContract = registryContract;
 
-            this.resolveWallets().then(
-              (wallets: Wallet[]) => {
-                this.wallets = wallets;
+              this.resolveWallets().then(
+                (wallets: Wallet[]) => {
+                  this.wallets = wallets;
 
-                this.resolveWalletAccounts().then(
-                  (accounts: Account[]) => {
-                    this.walletAccounts = accounts;
-                  }
-                );
-              }
-            );
-
-            this.resolveSigningIdentities().then(
-              (signingIdentities: Account[]) => {
-                this.signingIdentities = signingIdentities;
-                if (this.signingIdentities.length > 0) {
-                  this.signingIdentity = this.signingIdentities[0];
+                  this.resolveWalletAccounts().then(
+                    (accounts: Account[]) => {
+                      this.walletAccounts = accounts;
+                    }
+                  ).catch(
+                    (err) => {
+                      reject(err);
+                    }
+                  );
                 }
+              );
 
-                this.resolveConnectors().then(
-                  (connectors: Connector[]) => {
-                    this.connectors = connectors;
-                    this.configureIpfsClient();
+              this.resolveSigningIdentities().then(
+                (signingIdentities: Account[]) => {
+                  this.signingIdentities = signingIdentities;
+                  if (this.signingIdentities.length > 0) {
+                    this.signingIdentity = this.signingIdentities[0];
                   }
-                );
-              }
-            );
-          }
-        );
-      }
-    );
+
+                  this.resolveConnectors().then(
+                    (connectors: Connector[]) => {
+                      this.connectors = connectors;
+                      this.configureIpfsClient();
+
+                      resolve(this);
+                    }
+                  ).catch(
+                    (err) => {
+                      reject(err);
+                    }
+                  );
+                }
+              ).catch(
+                (err) => {
+                  reject(err);
+                }
+              );
+            }
+          ).catch(
+            (err) => {
+              reject(err);
+            }
+          );
+        }
+      ).catch(
+        (err) => {
+          reject(err);
+        }
+      );
+    });
   }
 
   private configureIpfsClient() { // FIXME-- make this an implementation of a ConnectorProvider interface or similar
