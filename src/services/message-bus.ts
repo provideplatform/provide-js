@@ -332,7 +332,7 @@ export class MessageBus {
 
   private resolveOrganizations(): Promise<Organization[]> {
     return new Promise((resolve, reject) => {
-      this.ident.fetchApplicationOrganizations(this.getApplicationId(), { type: MessageBus.CONNECTOR_TYPE_IPFS }).then(
+      this.ident.fetchApplicationOrganizations(this.getApplicationId(), { }).then(
         (response: ApiClientResponse) => {
           const organizations = unmarshal(response.responseBody, Organization) as Organization[];
           resolve(organizations);
