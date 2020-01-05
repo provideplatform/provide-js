@@ -3,7 +3,21 @@ import * as url from 'url';
 
 import { ApiClientResponse, IpfsClient } from '../clients';
 import { Goldmine, Ident } from '.';
-import { Account, Application, Connector, ConnectorConfig, Contract, Message, MessageData, Token, Transaction, Wallet, unmarshal } from '@provide/types';
+
+import {
+  Account,
+  Application,
+  Connector,
+  ConnectorConfig,
+  Contract,
+  Message,
+  MessageData,
+  Organization,
+  Token,
+  Transaction,
+  Wallet,
+  unmarshal,
+} from '@provide/types';
 
 
 /*
@@ -29,6 +43,7 @@ export class MessageBus {
   private application?: Application;
   private connectors: Connector[] = [];
   private messages: Message[] = [];
+  private organizations: Organization[] = [];
   private registryContract?: Contract;
   private signingIdentities?: Account[];
   private signingIdentity?: Account;
@@ -177,6 +192,16 @@ export class MessageBus {
           this.application = application;
           console.log(`resolved application: ${this.application.id}`);
 
+          this.resolveOrganizations().then(
+            (organizations: Organization[]) => {
+              this.organizations = organizations;
+            }
+          ).catch(
+            (err) => {
+              console.log(`WARNING: failed to resolve application organizations; ${err}`);
+            }
+          );
+
           this.resolveRegistryContract().then(
             (registryContract: Contract) => {
               this.registryContract = registryContract;
@@ -304,6 +329,22 @@ export class MessageBus {
     });
   }
 
+
+  private resolveOrganizations(): Promise<Organization[]> {
+    return new Promise((resolve, reject) => {
+      this.ident.fetchApplicationOrganizations(this.getApplicationId(), { type: MessageBus.CONNECTOR_TYPE_IPFS }).then(
+        (response: ApiClientResponse) => {
+          const organizations = unmarshal(response.responseBody, Organization) as Organization[];
+          resolve(organizations);
+        }
+      ).catch(
+        (response: ApiClientResponse) => {
+          reject(response);
+        }
+      );
+    });
+  }
+
   private resolveRegistryContract(): Promise<Contract> {
     return new Promise((resolve, reject) => {
       this.goldmine.fetchContracts({ type: MessageBus.CONTRACT_TYPE_REGISTRY }).then(
@@ -399,6 +440,10 @@ export class MessageBus {
 
   public getMessages(): Message[] {
     return this.messages;
+  }
+
+  public getOrganizations(): Organization[] {
+    return this.organizations;
   }
 
   public publish(subject: string, msg: Uint8Array): Promise<string> {
@@ -544,6 +589,62 @@ export class MessageBus {
       }).catch((err) => {
         reject(`WARNING: failed to read registry contract; ${err}`);
       });
+    });
+  }
+
+  public addOrganization(organizationId: string, permissions?: number): Promise<void> {
+    const params = { organization_id: organizationId };
+    if (permissions && typeof permissions !== 'undefined') {
+      params['permissions'] = permissions;
+    }
+
+    return new Promise((resolve, reject) => {
+      this.ident.createApplicationOrganization(this.getApplicationId(), params).then(
+        (response: ApiClientResponse) => {
+          if (response.xhr.status === 204) {
+            this.resolveOrganizations();
+            resolve();
+          }
+        },
+      ).catch(
+        (response: ApiClientResponse) => {
+          reject(response);
+        },
+      );
+    });
+  }
+
+  public removeOrganization(organizationId: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.ident.deleteApplicationOrganization(this.getApplicationId(), organizationId).then(
+        (response: ApiClientResponse) => {
+          if (response.xhr.status === 204) {
+            this.resolveOrganizations();
+            resolve();
+          }
+        },
+      ).catch(
+        (response: ApiClientResponse) => {
+          reject(response);
+        },
+      );
+    });
+  }
+
+  public updateOrganization(organizationId: string, params: any): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.ident.updateApplicationOrganization(this.getApplicationId(), organizationId, params).then(
+        (response: ApiClientResponse) => {
+          if (response.xhr.status === 204) {
+            this.resolveOrganizations();
+            resolve();
+          }
+        },
+      ).catch(
+        (response: ApiClientResponse) => {
+          reject(response);
+        },
+      );
     });
   }
 }
