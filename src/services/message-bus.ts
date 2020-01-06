@@ -233,28 +233,32 @@ export class MessageBus {
                   this.resolveWalletAccounts().then(
                     (accounts: Account[]) => {
                       this.walletAccounts = accounts;
-                    }
-                  ).catch(
-                    (err) => {
-                      reject(err);
-                    }
-                  );
-                }
-              );
 
-              this.resolveSigningIdentities().then(
-                (signingIdentities: Account[]) => {
-                  this.signingIdentities = signingIdentities;
-                  if (this.signingIdentities.length > 0) {
-                    this.signingIdentity = this.signingIdentities[0];
-                  }
+                      this.resolveSigningIdentities().then(
+                        (signingIdentities: Account[]) => {
+                          this.signingIdentities = signingIdentities;
+                          if (this.signingIdentities.length > 0) {
+                            this.signingIdentity = this.signingIdentities[0];
+                          }
 
-                  this.resolveConnectors().then(
-                    (connectors: Connector[]) => {
-                      this.connectors = connectors;
-                      this.configureIpfsClient();
+                          this.resolveConnectors().then(
+                            (connectors: Connector[]) => {
+                              this.connectors = connectors;
+                              this.configureIpfsClient();
 
-                      resolve(this);
+                              resolve(this);
+                            }
+                          ).catch(
+                            (err) => {
+                              reject(err);
+                            }
+                          );
+                        }
+                      ).catch(
+                        (err) => {
+                          reject(err);
+                        }
+                      );
                     }
                   ).catch(
                     (err) => {
