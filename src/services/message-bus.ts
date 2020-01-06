@@ -329,7 +329,6 @@ export class MessageBus {
     });
   }
 
-
   private resolveOrganizations(): Promise<Organization[]> {
     return new Promise((resolve, reject) => {
       this.ident.fetchApplicationOrganizations(this.getApplicationId(), { }).then(
@@ -436,6 +435,14 @@ export class MessageBus {
 
   public getWallets(): Wallet[] | undefined {
     return this.wallets;
+  }
+
+  public getWalletAccount(i: number): Account | null {
+    if (this.walletAccounts && i <= this.walletAccounts.length - 1) {
+      return this.walletAccounts[i];
+    }
+
+    return null;
   }
 
   public getMessages(): Message[] {
