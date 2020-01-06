@@ -173,6 +173,26 @@ export class MessageBus {
     return new MessageBus(token).initialize();
   }
 
+  public static unmarshal(token: string, json: string): Promise<MessageBus> {
+    const msgbus = JSON.parse(json);
+    if (!msgbus) {
+      return Promise.reject();
+    }
+
+    const bus = new MessageBus(token);
+    bus.application = msgbus.application;
+    bus.connectors = msgbus.connectors;
+    bus.organizations = msgbus.organizations;
+    bus.registryContract = msgbus.registryContract;
+    bus.signingIdentities = msgbus.signingIdentities;
+    bus.signingIdentity = msgbus.signingIdentity;
+    bus.wallets = msgbus.wallets;
+    bus.walletAccounts = msgbus.walletAccounts;
+    bus.configureIpfsClient();
+
+    return Promise.resolve(bus);
+  }
+
   private constructor(token: string) {
     this.goldmine = new Goldmine(token);
     this.ident = new Ident(token);
