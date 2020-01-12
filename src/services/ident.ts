@@ -122,6 +122,10 @@ export class Ident {
     return this.client.delete(`tokens/${tokenId}`);
   }
 
+  public createInvitation(params: object): Promise<ApiClientResponse> {
+    return this.client.post('invitations', params);
+  }
+
   public createUser(params: object): Promise<ApiClientResponse> {
     return this.client.post('users', params);
   }
