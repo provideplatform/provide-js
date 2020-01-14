@@ -78,6 +78,22 @@ export class Ident {
     return this.client.get(`applications/${appId}/tokens`, {});
   }
 
+  public fetchApplicationUsers(appId: string, params: object): Promise<ApiClientResponse> {
+    return this.client.get(`applications/${appId}/users`, params);
+  }
+
+  public createApplicationUser(appId: string, params: object): Promise<ApiClientResponse> {
+    return this.client.post(`applications/${appId}/users`, params);
+  }
+
+  public updateApplicationUser(appId: string, userId: string, params: object): Promise<ApiClientResponse> {
+    return this.client.put(`applications/${appId}/users/${userId}`, params);
+  }
+
+  public deleteApplicationUser(appId: string, userId: string): Promise<ApiClientResponse> {
+    return this.client.delete(`applications/${appId}/users/${userId}`);
+  }
+
   public createOrganization(params: object): Promise<ApiClientResponse> {
     return this.client.post('organizations', params);
   }
