@@ -74,6 +74,10 @@ export class Ident {
     return this.client.delete(`applications/${appId}/organizations/${organizationId}`);
   }
 
+  public fetchApplicationInvitations(appId: string, params: object): Promise<ApiClientResponse> {
+    return this.client.get(`applications/${appId}/invitations`, params);
+  }
+
   public fetchApplicationTokens(appId: string): Promise<ApiClientResponse> {
     return this.client.get(`applications/${appId}/tokens`, {});
   }
@@ -108,6 +112,10 @@ export class Ident {
 
   public updateOrganization(organizationId: string, params: object): Promise<ApiClientResponse> {
     return this.client.put(`organizations/${organizationId}`, params);
+  }
+
+  public fetchOrganizationInvitations(organizationId: string, params: object): Promise<ApiClientResponse> {
+    return this.client.get(`organizations/${organizationId}/invitations`, params);
   }
 
   public fetchOrganizationUsers(organizationId: string, params: object): Promise<ApiClientResponse> {
