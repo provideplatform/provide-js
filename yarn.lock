@@ -305,10 +305,10 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
-"@provide/nats.ws@0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@provide/nats.ws/-/nats.ws-0.0.2.tgz#e876cfda1232577ccec859ade50bb747f17a5fc5"
-  integrity sha512-UUznrgtXNOn95ULCC3xrcDOcpkFO/Vt6GwrLwnXuqzuMHMzSu0jYZYfOyjHHYcU/d2ksHycCg+QtyirfY4GjBA==
+"@provide/nats.ws@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@provide/nats.ws/-/nats.ws-0.1.0.tgz#600611609149e3a9252a6ec2f4eabf769e1d1d82"
+  integrity sha512-MGvu4214atB76MXa7LlDZu/aTG0Qjs0nV3DAL32yXenD8aDgsw15XsvIFE65MOI6Min9sMnW5MwjSIlIMG/FgQ==
   dependencies:
     js-nuid "^1.1.1-4"
 
@@ -2627,7 +2627,7 @@ jest@^24.9.0:
     import-local "^2.0.0"
     jest-cli "^24.9.0"
 
-js-nuid@^1.1.1-3, js-nuid@^1.1.1-4:
+js-nuid@^1.1.1-4:
   version "1.1.1-4"
   resolved "https://registry.yarnpkg.com/js-nuid/-/js-nuid-1.1.1-4.tgz#bf8f72f2b10980e0d11abad3a929c7b20be16adb"
   integrity sha512-AVzfCb0jR72OJY7TeCI6IXpHxGq5mRYpex9IOePmHJAHvYTm2CRtwFoD7oReKwI6awbkdClsKxrG1U6pTo4yuw==
@@ -3217,13 +3217,6 @@ nanomatch@^1.2.9:
     regex-not "^1.0.0"
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
-
-nats.ws@^1.0.0-1:
-  version "1.0.0-1"
-  resolved "https://registry.yarnpkg.com/nats.ws/-/nats.ws-1.0.0-1.tgz#86c3da0b2cf15152219976291739802b39d11147"
-  integrity sha512-aTIRmFBQQbC6/c2myH2HFzHlHHiv2FTUuHtBzVCQcHdfxqccMcNKOTzMICxboqUv4aoU+6qO+SkXdRhrdEzJPA==
-  dependencies:
-    js-nuid "^1.1.1-3"
 
 nats@^1.3.0:
   version "1.4.0"
@@ -4515,13 +4508,12 @@ ts-nats@^1.2.4:
     nuid "^1.1.0"
     ts-nkeys "^1.0.12"
 
-ts-natsutil@^0.0.10:
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/ts-natsutil/-/ts-natsutil-0.0.10.tgz#f7ad1a815222d1df8d3ed50c156db838567ff460"
-  integrity sha512-zWb7Alc3elXa4V7VwW0Hp6yMJVmICUHBTwwZbSQ5XGs97KT+S9tOlabUSDUhkPw7i/vqx5uK0H17gZJD8xw7SA==
+ts-natsutil@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/ts-natsutil/-/ts-natsutil-0.1.6.tgz#4615c473a354376eb88f5a9bed661faf47687340"
+  integrity sha512-D8c1jzb5mSF0UEaHaZG+G/WgVeZDi1Ich4JunHgqtENcSQfqT02gDx//2+EOqfHUiCVxXuny5yq2b8418CN/Tg==
   dependencies:
-    "@provide/nats.ws" "0.0.2"
-    nats.ws "^1.0.0-1"
+    "@provide/nats.ws" "^0.1.0"
     node-nats-streaming "^0.2.6"
     ts-nats "^1.2.4"
     uuid "^3.3.2"
