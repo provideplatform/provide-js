@@ -305,10 +305,10 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
-"@provide/nats.ws@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@provide/nats.ws/-/nats.ws-0.1.0.tgz#600611609149e3a9252a6ec2f4eabf769e1d1d82"
-  integrity sha512-MGvu4214atB76MXa7LlDZu/aTG0Qjs0nV3DAL32yXenD8aDgsw15XsvIFE65MOI6Min9sMnW5MwjSIlIMG/FgQ==
+"@provide/nats.ws@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@provide/nats.ws/-/nats.ws-0.1.2.tgz#4ddcda0fd306ee059dc2de2282ab63b8b963cac4"
+  integrity sha512-RfLrz2GoVXBtJRJFUhLbMOx5POngwTjt/rLBUkY0K8tUHKPesQJWGi0yHumqmOM24U3YSoZidWm8R8Td0GBUxw==
   dependencies:
     js-nuid "^1.1.1-4"
 
@@ -4508,12 +4508,12 @@ ts-nats@^1.2.4:
     nuid "^1.1.0"
     ts-nkeys "^1.0.12"
 
-ts-natsutil@^0.1.6:
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/ts-natsutil/-/ts-natsutil-0.1.6.tgz#4615c473a354376eb88f5a9bed661faf47687340"
-  integrity sha512-D8c1jzb5mSF0UEaHaZG+G/WgVeZDi1Ich4JunHgqtENcSQfqT02gDx//2+EOqfHUiCVxXuny5yq2b8418CN/Tg==
+ts-natsutil@^0.1.9:
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/ts-natsutil/-/ts-natsutil-0.1.9.tgz#8e6dc74f51a5fc87c4f5c96e07f14582acd8fb8c"
+  integrity sha512-kVowlRxhcVQO0EzIkHVy+TCPNJ7JArGAo0YSoNVktT18IcGBcjGi9S5C9DMNV5qUj71MFYY1oqFZOYe2E+81Ow==
   dependencies:
-    "@provide/nats.ws" "^0.1.0"
+    "@provide/nats.ws" "^0.1.2"
     node-nats-streaming "^0.2.6"
     ts-nats "^1.2.4"
     uuid "^3.3.2"
