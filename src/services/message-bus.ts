@@ -59,13 +59,14 @@ export class MessageBus {
     connectorConfig: ConnectorConfig,
     registryContract: Contract,
     token?: string,
-    ident?: Ident,
     goldmineScheme?: string,
     goldmineHost?: string,
+    identScheme?: string,
+    identHost?: string,
   ): Promise<MessageBus> {
     return new Promise((resolve, reject) => {
-      if (!token && !ident) {
-        reject('must provide valid bearer token or ident instance');
+      if (!token) {
+        reject('must provide valid bearer token');
         return;
       }
 
@@ -80,8 +81,8 @@ export class MessageBus {
       }
 
       // tslint:disable-next-line: no-non-null-assertion
-      const localIdent = ident ? ident : identClientFactory(token!);
-      localIdent.createApplication({
+      let ident = identClientFactory(token!, identScheme, identHost);
+      ident.createApplication({
         name: name,
         network_id: networkId,
         type: MessageBus.APPLICATION_TYPE_MESSAGE_BUS,
@@ -142,7 +143,10 @@ export class MessageBus {
                           console.log(`created registry contract ${contract.id} for message bus application: ${application.id}`);
 
                           // tslint:disable-next-line: no-non-null-assertion
-                          const mb = new MessageBus(applicationToken.token!, goldmine, localIdent);
+                          ident = identClientFactory(applicationToken.token!, identScheme, identHost);
+
+                          // tslint:disable-next-line: no-non-null-assertion
+                          const mb = new MessageBus(applicationToken.token!, goldmine, ident);
                           resolve(mb);
                         }
                       ).catch(
