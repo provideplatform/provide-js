@@ -19,11 +19,11 @@ export class Goldmine {
     this.client = new ApiClient(token, scheme, host, path);
   }
 
-  public static clientFactory(token: string): Goldmine {
-    const scheme = process.env['GOLDMINE_API_SCHEME'] || 'https';
-    const host = process.env['GOLDMINE_API_HOST'] || Goldmine.DEFAULT_HOST;
-    const path = process.env['GOLDMINE_API_PATH'] || ApiClient.DEFAULT_PATH;
-    return new Goldmine(token, scheme, host, path);
+  public static clientFactory(token: string, scheme?: string, host?: string, path?: string): Goldmine {
+    const _scheme = scheme ? scheme : (process.env['GOLDMINE_API_SCHEME'] || 'https');
+    const _host = host ? host : (process.env['GOLDMINE_API_HOST'] || Goldmine.DEFAULT_HOST);
+    const _path = path ? path : (process.env['GOLDMINE_API_PATH'] || ApiClient.DEFAULT_PATH);
+    return new Goldmine(token, _scheme, _host, _path);
   }
 
   public fetchAccounts(params?: object): Promise<ApiClientResponse> {
@@ -223,6 +223,6 @@ export class Goldmine {
   }
 }
 
-export const goldmineClientFactory = (token: string): Goldmine => {
-  return Goldmine.clientFactory(token);
+export const goldmineClientFactory = (token: string, scheme?: string, host?: string, path?: string): Goldmine => {
+  return Goldmine.clientFactory(token, scheme, host, path);
 };

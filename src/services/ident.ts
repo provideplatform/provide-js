@@ -19,11 +19,11 @@ export class Ident {
     this.client = new ApiClient(token, scheme, host, path);
   }
 
-  public static clientFactory(token?: string | undefined): Ident | ApiClient {
-    const scheme = process.env['IDENT_API_SCHEME'] || 'https';
-    const host = process.env['IDENT_API_HOST'] || Ident.DEFAULT_HOST;
-    const path = process.env['IDENT_API_PATH'] || ApiClient.DEFAULT_PATH;
-    return token ? new Ident(token, scheme, host, path) : new ApiClient(token, scheme, host, path);
+  public static clientFactory(token?: string | undefined, scheme?: string, host?: string, path?: string): Ident | ApiClient {
+    const _scheme = scheme ? scheme : (process.env['IDENT_API_SCHEME'] || 'https');
+    const _host = host ? host : (process.env['IDENT_API_HOST'] || Ident.DEFAULT_HOST);
+    const _path = path ? path : (process.env['IDENT_API_PATH'] || ApiClient.DEFAULT_PATH);
+    return token ? new Ident(token, _scheme, _host, _path) : new ApiClient(token, _scheme, _host, _path);
   }
 
   private static unauthenticatedClientFactory(token?: string | undefined): ApiClient {
@@ -174,6 +174,6 @@ export class Ident {
   }
 }
 
-export const identClientFactory = (token: string): Ident => {
-  return Ident.clientFactory(token) as Ident;
+export const identClientFactory = (token: string, scheme?: string, host?: string, path?: string): Ident => {
+  return Ident.clientFactory(token, scheme, host, path) as Ident;
 };
