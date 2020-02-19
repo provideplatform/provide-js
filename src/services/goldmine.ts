@@ -19,6 +19,13 @@ export class Goldmine {
     this.client = new ApiClient(token, scheme, host, path);
   }
 
+  public static clientFactory(token: string): Goldmine {
+    const scheme = process.env['GOLDMINE_API_SCHEME'] || 'https';
+    const host = process.env['GOLDMINE_API_HOST'] || Goldmine.DEFAULT_HOST;
+    const path = process.env['GOLDMINE_API_PATH'] || ApiClient.DEFAULT_PATH;
+    return new Goldmine(token, scheme, host, path);
+  }
+
   public fetchAccounts(params?: object): Promise<ApiClientResponse> {
     return this.client.get('accounts', (params || {}));
   }
@@ -215,3 +222,7 @@ export class Goldmine {
     return this.client.post('wallets', params);
   }
 }
+
+export const goldmineClientFactory = (token: string): Goldmine => {
+  return Goldmine.clientFactory(token);
+};

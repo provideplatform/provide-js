@@ -19,7 +19,14 @@ export class Ident {
     this.client = new ApiClient(token, scheme, host, path);
   }
 
-  private static clientFactory(token?: string | undefined): ApiClient {
+  public static clientFactory(token?: string | undefined): Ident | ApiClient {
+    const scheme = process.env['IDENT_API_SCHEME'] || 'https';
+    const host = process.env['IDENT_API_HOST'] || Ident.DEFAULT_HOST;
+    const path = process.env['IDENT_API_PATH'] || ApiClient.DEFAULT_PATH;
+    return token ? new Ident(token, scheme, host, path) : new ApiClient(token, scheme, host, path);
+  }
+
+  private static unauthenticatedClientFactory(token?: string | undefined): ApiClient {
     const scheme = process.env['IDENT_API_SCHEME'] || 'https';
     const host = process.env['IDENT_API_HOST'] || Ident.DEFAULT_HOST;
     const path = process.env['IDENT_API_PATH'] || ApiClient.DEFAULT_PATH;
@@ -27,19 +34,19 @@ export class Ident {
   }
 
   public static authenticate(params: object): Promise<ApiClientResponse> {
-    return Ident.clientFactory(undefined).post('authenticate', params);
+    return Ident.unauthenticatedClientFactory(undefined).post('authenticate', params);
   }
 
   public static createUser(params: object): Promise<ApiClientResponse> {
-    return Ident.clientFactory(undefined).post('users', params);
+    return Ident.unauthenticatedClientFactory(undefined).post('users', params);
   }
 
   public static requestPasswordReset(email: string): Promise<ApiClientResponse> {
-    return Ident.clientFactory(undefined).post('reset_password', { email });
+    return Ident.unauthenticatedClientFactory(undefined).post('reset_password', { email });
   }
 
   public static resetPassword(token: string, password: string): Promise<ApiClientResponse> {
-    return Ident.clientFactory(undefined).post(`reset_password/${token}`, { password });
+    return Ident.unauthenticatedClientFactory(undefined).post(`reset_password/${token}`, { password });
   }
 
   public createApplication(params: object): Promise<ApiClientResponse> {
@@ -166,3 +173,7 @@ export class Ident {
     return this.client.put(`users/${userId}`, params);
   }
 }
+
+export const identClientFactory = (token: string): Ident => {
+  return Ident.clientFactory(token) as Ident;
+};

@@ -2,7 +2,8 @@ import * as jwt from 'jsonwebtoken';
 import * as url from 'url';
 
 import { ApiClientResponse, IpfsClient } from '../clients';
-import { Goldmine, Ident } from '.';
+import { Goldmine, goldmineClientFactory } from './goldmine';
+import { Ident, identClientFactory } from './ident';
 
 import {
   Account,
@@ -53,14 +54,17 @@ export class MessageBus {
   private ipfs?: IpfsClient;
 
   public static create(
-      token: string,
-      networkId: string,
-      name: string,
-      connectorConfig: ConnectorConfig,
-      registryContract: Contract,
-    ): Promise<MessageBus> {
+    token: string,
+    networkId: string,
+    name: string,
+    connectorConfig: ConnectorConfig,
+    registryContract: Contract,
+  ): Promise<MessageBus> {
     return new Promise((resolve, reject) => {
-      const ident = new Ident(token);
+      if (!token) {
+        reject('invalid bearer token');
+        return;
+      }
 
       if (!connectorConfig) {
         reject('invalid registry contract');
@@ -72,6 +76,7 @@ export class MessageBus {
         return;
       }
 
+      const ident = identClientFactory(token);
       ident.createApplication({
         name: name,
         network_id: networkId,
@@ -81,10 +86,14 @@ export class MessageBus {
           const resp = JSON.parse(response.responseBody);
           const application = unmarshal(JSON.stringify(resp.application), Application) as Application;
           const applicationToken = unmarshal(JSON.stringify(resp.token), Token) as Token;
-          console.log(`created message bus application: ${application.id}`);
+          if (!applicationToken.token) {
+            console.log(`WARNING: failed to create message bus application: ${application.id}; no app bearer token resolved`);
+            Promise.reject(`failed to create message bus application: ${application.id}; no app bearer token resolved`);
+            return;
+          }
 
-          // tslint:disable-next-line: no-non-null-assertion
-          const goldmine = new Goldmine(applicationToken.token!);
+          const goldmine = goldmineClientFactory(applicationToken.token);
+          console.log(`created message bus application: ${application.id}`);
 
           goldmine.createWallet({
             purpose: MessageBus.APPLICATION_HD_WALLET_DEFAULT_PURPOSE,
@@ -194,8 +203,8 @@ export class MessageBus {
   }
 
   private constructor(token: string) {
-    this.goldmine = new Goldmine(token);
-    this.ident = new Ident(token);
+    this.goldmine = goldmineClientFactory(token);
+    this.ident = identClientFactory(token);
 
     const payload = jwt.decode(token);
     if (payload === null) {
