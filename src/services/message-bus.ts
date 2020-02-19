@@ -54,15 +54,18 @@ export class MessageBus {
   private ipfs?: IpfsClient;
 
   public static create(
-    token: string,
     networkId: string,
     name: string,
     connectorConfig: ConnectorConfig,
     registryContract: Contract,
+    token?: string,
+    ident?: Ident,
+    goldmineScheme?: string,
+    goldmineHost?: string,
   ): Promise<MessageBus> {
     return new Promise((resolve, reject) => {
-      if (!token) {
-        reject('invalid bearer token');
+      if (!token && !ident) {
+        reject('must provide valid bearer token or ident instance');
         return;
       }
 
@@ -76,8 +79,9 @@ export class MessageBus {
         return;
       }
 
-      const ident = identClientFactory(token);
-      ident.createApplication({
+      // tslint:disable-next-line: no-non-null-assertion
+      const localIdent = ident ? ident : identClientFactory(token!);
+      localIdent.createApplication({
         name: name,
         network_id: networkId,
         type: MessageBus.APPLICATION_TYPE_MESSAGE_BUS,
@@ -92,7 +96,7 @@ export class MessageBus {
             return;
           }
 
-          const goldmine = goldmineClientFactory(applicationToken.token);
+          const goldmine = goldmineClientFactory(applicationToken.token, goldmineScheme, goldmineHost);
           console.log(`created message bus application: ${application.id}`);
 
           goldmine.createWallet({
@@ -138,7 +142,7 @@ export class MessageBus {
                           console.log(`created registry contract ${contract.id} for message bus application: ${application.id}`);
 
                           // tslint:disable-next-line: no-non-null-assertion
-                          const mb = new MessageBus(applicationToken.token!);
+                          const mb = new MessageBus(applicationToken.token!, goldmine, ident);
                           resolve(mb);
                         }
                       ).catch(
@@ -178,8 +182,8 @@ export class MessageBus {
     });
   }
 
-  public static factory(token: string): Promise<MessageBus> {
-    return new MessageBus(token).initialize();
+  public static factory(token: string, goldmine?: Goldmine, ident?: Ident): Promise<MessageBus> {
+    return new MessageBus(token, goldmine, ident).initialize();
   }
 
   public static unmarshal(token: string, json: string): Promise<MessageBus> {
@@ -202,9 +206,13 @@ export class MessageBus {
     return Promise.resolve(bus);
   }
 
-  private constructor(token: string) {
-    this.goldmine = goldmineClientFactory(token);
-    this.ident = identClientFactory(token);
+  private constructor(
+    token: string,
+    goldmine?: Goldmine,
+    ident?: Ident,
+  ) {
+    this.goldmine = goldmine ? goldmine : goldmineClientFactory(token);
+    this.ident = ident ? ident : identClientFactory(token);
 
     const payload = jwt.decode(token);
     if (payload === null) {
