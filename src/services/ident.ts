@@ -26,27 +26,27 @@ export class Ident {
     return token ? new Ident(token, _scheme, _host, _path) : new ApiClient(token, _scheme, _host, _path);
   }
 
-  private static unauthenticatedClientFactory(token?: string | undefined): ApiClient {
-    const scheme = process.env['IDENT_API_SCHEME'] || 'https';
-    const host = process.env['IDENT_API_HOST'] || Ident.DEFAULT_HOST;
-    const path = process.env['IDENT_API_PATH'] || ApiClient.DEFAULT_PATH;
-    return new ApiClient(token, scheme, host, path);
+  private static unauthenticatedClientFactory(token?: string | undefined, scheme?: string, host?: string, path?: string): ApiClient {
+    const _scheme = scheme ? scheme : (process.env['IDENT_API_SCHEME'] || 'https');
+    const _host = host ? host : (process.env['IDENT_API_HOST'] || Ident.DEFAULT_HOST);
+    const _path = path ? path : (process.env['IDENT_API_PATH'] || ApiClient.DEFAULT_PATH);
+    return new ApiClient(token, _scheme, _host, _path);
   }
 
-  public static authenticate(params: object): Promise<ApiClientResponse> {
-    return Ident.unauthenticatedClientFactory(undefined).post('authenticate', params);
+  public static authenticate(params: object, scheme?: string, host?: string, path?: string): Promise<ApiClientResponse> {
+    return Ident.unauthenticatedClientFactory(undefined, scheme, host, path).post('authenticate', params);
   }
 
-  public static createUser(params: object): Promise<ApiClientResponse> {
-    return Ident.unauthenticatedClientFactory(undefined).post('users', params);
+  public static createUser(params: object, scheme?: string, host?: string, path?: string): Promise<ApiClientResponse> {
+    return Ident.unauthenticatedClientFactory(undefined, scheme, host, path).post('users', params);
   }
 
-  public static requestPasswordReset(email: string): Promise<ApiClientResponse> {
-    return Ident.unauthenticatedClientFactory(undefined).post('reset_password', { email });
+  public static requestPasswordReset(email: string, scheme?: string, host?: string, path?: string): Promise<ApiClientResponse> {
+    return Ident.unauthenticatedClientFactory(undefined, scheme, host, path).post('reset_password', { email });
   }
 
-  public static resetPassword(token: string, password: string): Promise<ApiClientResponse> {
-    return Ident.unauthenticatedClientFactory(undefined).post(`reset_password/${token}`, { password });
+  public static resetPassword(token: string, password: string, scheme?: string, host?: string, path?: string): Promise<ApiClientResponse> {
+    return Ident.unauthenticatedClientFactory(undefined, scheme, host, path).post(`reset_password/${token}`, { password });
   }
 
   public createApplication(params: object): Promise<ApiClientResponse> {
