@@ -142,7 +142,7 @@ export class MessageBus {
                           console.log(`created registry contract ${contract.id} for message bus application: ${application.id}`);
 
                           // tslint:disable-next-line: no-non-null-assertion
-                          const mb = new MessageBus(applicationToken.token!, goldmine, ident);
+                          const mb = new MessageBus(applicationToken.token!, goldmine, localIdent);
                           resolve(mb);
                         }
                       ).catch(
