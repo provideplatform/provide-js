@@ -608,6 +608,11 @@ export class MessageBus {
             }
           }
 
+          if (hashes.length === 0) {
+            resolve(messages);
+            return;
+          }
+
           // tslint:disable-next-line: no-non-null-assertion
           this.goldmine.fetchConnectorDetails(this.getConnector()!.id!, { objects: hashes.join(',') }).then(
             (connectorResponse: ApiClientResponse) => {
@@ -630,11 +635,9 @@ export class MessageBus {
               });
 
               resolve(messages);
-            }).catch(
-              (connectorResponse) => {
-                reject(`failed to retrieve connector details; ${connectorResponse}`);
-              }
-            );
+            }).catch((err) => {
+              reject(`failed to retrieve connector details; ${err}`);
+            });
         } else {
           reject(`WARNING: failed to read registry contract; ${response.responseBody}`);
         }

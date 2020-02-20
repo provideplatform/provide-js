@@ -65,13 +65,11 @@ export class IpfsClient {
     }];
 
     return new Promise((resolve, reject) => {
-      this.ipfs.add(files, options)
-        .then(
-          (resultFiles: any[]) => resolve(resultFiles[resultFiles.length - 1].hash)
-        )
-        .catch(
-          (error: Error) => reject(error)
-        );
+      this.ipfs.add(files, options).then((resultFiles: any[]) => {
+        resolve(resultFiles[resultFiles.length - 1].hash);
+      }).catch((error: Error) => {
+        reject(error);
+      });
     });
   }
 
@@ -95,28 +93,24 @@ export class IpfsClient {
    */
   public ls(hashes: string[]): Promise<any | Error> {
     return new Promise((resolve, reject) => {
-      this.apiClient.get('ls', {arg: hashes})
-        .then(
-          (response: ApiClientResponse) => {
-            const links: any[] = [];
-            JSON.parse(response.responseBody)['Objects'].forEach((ipfsObject: object[]) => {
-              ipfsObject['Links'].forEach((lnk: object) => {
-                links.push({
-                  hash: lnk['Hash'],
-                  mime: lnk['Name'] === '' ? null : mimelookup(lnk['Name']),
-                  name: lnk['Name'],
-                  size: lnk['Size'],
-                  target: lnk['Target'] === '' ? null : lnk['Target'],
-                  type: lnk['Type'],
-                });
-              });
+      this.apiClient.get('ls', {arg: hashes}).then((response: ApiClientResponse) => {
+        const links: any[] = [];
+        JSON.parse(response.responseBody)['Objects'].forEach((ipfsObject: object[]) => {
+          ipfsObject['Links'].forEach((lnk: object) => {
+            links.push({
+              hash: lnk['Hash'],
+              mime: lnk['Name'] === '' ? null : mimelookup(lnk['Name']),
+              name: lnk['Name'],
+              size: lnk['Size'],
+              target: lnk['Target'] === '' ? null : lnk['Target'],
+              type: lnk['Type'],
             });
-            resolve(links);
-          }
-        )
-        .catch(
-          (error: Error) => reject(error)
-        );
+          });
+        });
+        resolve(links);
+      }).catch((error: Error) => {
+        reject(error);
+      });
     });
   }
 }
