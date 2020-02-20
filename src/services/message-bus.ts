@@ -498,7 +498,7 @@ export class MessageBus {
     return this.organizations;
   }
 
-  public publish(subject: string, msg: Uint8Array): Promise<string> {
+  public publish(subject: string, msg: Uint8Array, path?: string): Promise<string> {
     if (this.ipfs === null) {
       return Promise.reject('unable to publish message without configured ipfs');
     }
@@ -519,7 +519,7 @@ export class MessageBus {
 
     return new Promise<string>((resolve, reject) => {
       // tslint:disable-next-line: no-non-null-assertion
-      this.ipfs!.add('', msg).then(
+      this.ipfs!.add(path ? path : '', msg).then(
         (retval: any) => {
           const hash = retval.cid && retval.cid.string ? retval.cid.string : retval.path;
 
