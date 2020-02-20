@@ -520,7 +520,9 @@ export class MessageBus {
     return new Promise<string>((resolve, reject) => {
       // tslint:disable-next-line: no-non-null-assertion
       this.ipfs!.add('', msg).then(
-        (hash: any) => {
+        (retval: any) => {
+          const hash = retval.cid && retval.cid.string ? retval.cid.string : retval.path;
+
           // tslint:disable-next-line: no-non-null-assertion
           this.goldmine.executeContract(this.registryContract!.id!, {
             method: MessageBus.CONTRACT_REGISTRY_DEFAULT_PUBLISH_METHOD,
@@ -530,12 +532,9 @@ export class MessageBus {
             account_address: accountAddress,
             wallet_id: hdWalletId,
             hd_derivation_path: hdDerivationPath,
-          }).then(
-            (response: ApiClientResponse) => {
-              console.log(`received ${response}`);
-              resolve(hash);
-            }
-          ).catch((err) => {
+          }).then(() => {
+              resolve(retval);
+          }).catch((err) => {
             reject(`WARNING: failed to publish ${msg.length}-byte message ${hash} to registry; ${err}`);
           });
         }
