@@ -1,4 +1,4 @@
-import IPFS from 'ipfs-http-client';
+import IpfsHttpClient from 'ipfs-http-client';
 import { lookup as mimelookup } from 'mime-types';
 
 import { ApiClient } from './api-client';
@@ -18,7 +18,7 @@ export class IpfsClient {
   private ipfs: IPFS;
 
   /**
-   * Initialize IPFS client.
+   * Initialize a wrapped IPFS client.
    *
    * Parameters form a full URI of [scheme]://[host]:[port][path]
    *
@@ -41,7 +41,7 @@ export class IpfsClient {
       sanitizedHost = host.substr(0, host.length - portSuffix.length);
     }
 
-    this.ipfs = new IPFS({
+    this.ipfs = new IpfsHttpClient({
       protocol: scheme,
       host: sanitizedHost,
       port: port,
@@ -65,7 +65,7 @@ export class IpfsClient {
     }];
 
     return new Promise((resolve, reject) => {
-      this.ipfs.add(files, options).then((resultFiles: any[]) => {
+      this.ipfs.add(files, options).next().then((resultFiles: any[]) => {
         resolve(resultFiles[resultFiles.length - 1].hash);
       }).catch((error: Error) => {
         reject(error);
@@ -81,7 +81,7 @@ export class IpfsClient {
    * @return A Promise with the file buffer if resolved, or an Error if rejected
    */
   public cat(hash: string): Promise<any | Error> {
-    return this.ipfs.cat(hash);
+    return this.ipfs.cat(hash).next();
   }
 
   /**
