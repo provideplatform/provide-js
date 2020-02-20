@@ -15,7 +15,7 @@ export class IpfsClient {
   public static readonly DEFAULT_GATEWAY_PATH = '/ipfs/';
 
   private apiClient: ApiClient;
-  private ipfs: IPFS;
+  private ipfs: IpfsHttpClient;
 
   /**
    * Initialize a wrapped IPFS client.
