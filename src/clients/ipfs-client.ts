@@ -65,11 +65,17 @@ export class IpfsClient {
     }];
 
     return new Promise((resolve, reject) => {
-      this.ipfs.add(files, options).next().then((resultFiles: any[]) => {
-        resolve(resultFiles[resultFiles.length - 1].hash);
-      }).catch((error: Error) => {
-        reject(error);
-      });
+      const gen = this.ipfs.add(files, options);
+      let result = gen.next();
+      if (!result) {
+        reject(`failed to add ${content.byteLength}-byte object to IPFS`);
+        return;
+      }
+      while (!result.done) {
+        result = gen.next();
+      }
+
+      resolve(result);
     });
   }
 
@@ -81,7 +87,19 @@ export class IpfsClient {
    * @return A Promise with the file buffer if resolved, or an Error if rejected
    */
   public cat(hash: string): Promise<any | Error> {
-    return this.ipfs.cat(hash).next();
+    return new Promise((resolve, reject) => {
+      const gen = this.ipfs.cat(hash);
+      let result = gen.next();
+      if (!result) {
+        reject(`failed to cat IPFS object: ${hash}`);
+        return;
+      }
+      while (!result.done) {
+        result = gen.next();
+      }
+
+      resolve(result);
+    });
   }
 
   /**
