@@ -597,7 +597,6 @@ export class MessageBus {
       }).then((response: ApiClientResponse) => {
         if (response.xhr.status === 200) {
           const messages: Message[] = [];
-          const messagesByHash = {};
           const hashes: any[] = [];
           const hashesModifiedAt: any[] = [];
 
@@ -615,7 +614,6 @@ export class MessageBus {
               const hash = atob(msg.hash);
 
               messages.push(message);
-              messagesByHash[hash] = message;
               hashes.push(hash);
               hashesModifiedAt.push(msg.timestamp);
             }
@@ -632,6 +630,7 @@ export class MessageBus {
               const connector = unmarshal(connectorResponse.responseBody, Connector) as Connector;
               // tslint:disable-next-line: no-non-null-assertion
               const items = connector!.details!.data;
+              let i = 0;
 
               for (const item of items) {
                 if (!item.modified_at) {
@@ -641,7 +640,7 @@ export class MessageBus {
                 const msgData = new MessageData();
                 msgData.unmarshal(JSON.stringify(item));
                 msgData.type = msgData.filename ? mimelookup(msgData.filename) : null;
-                messagesByHash[item['hash']].data = msgData;
+                messages[i++].data = msgData;
               }
 
               messages.forEach((msg) => {
