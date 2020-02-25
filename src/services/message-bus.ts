@@ -1,5 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 import * as url from 'url';
+import { lookup as mimelookup } from 'mime-types';
 
 import { ApiClientResponse, IpfsClient } from '../clients';
 import { Goldmine, goldmineClientFactory } from './goldmine';
@@ -498,7 +499,7 @@ export class MessageBus {
     return this.organizations;
   }
 
-  public publish(subject: string, msg: Uint8Array, path?: string, opts?: any): Promise<string> {
+  public publish(subject: string, msg: Uint8Array, path?: string, opts?: any): Promise<any> {
     if (this.ipfs === null) {
       return Promise.reject('unable to publish message without configured ipfs');
     }
@@ -517,25 +518,38 @@ export class MessageBus {
       return Promise.reject('unable to publish message without configured signing identity or HD wallet');
     }
 
-    return new Promise<string>((resolve, reject) => {
+    return new Promise<any>((resolve, reject) => {
       // tslint:disable-next-line: no-non-null-assertion
-      this.ipfs!.add(path ? path : '', msg, opts || {}).then(
-        (retval: any) => {
-          const hash = retval.cid && retval.cid.string ? retval.cid.string : retval.path;
+      const ipfs = this.ipfs!;
+
+      ipfs.add(path ? path : '', msg, opts || {}).then(
+        (retvals: any) => {
+          const retval = {};
+
+          let hash = '';
+          retvals.reverse().forEach((resp: any) => {
+            // tslint:disable-next-line: max-line-length
+            if (typeof resp !== 'undefined' && typeof resp.path !== 'undefined' && resp.path === '' && resp.cid && resp.cid.string) {
+              hash = resp.cid.string;
+              retval['hash'] = hash;
+            } else if (resp.path !== '') {
+              retval['name'] = resp.path;
+              retval['size'] = resp.size;
+            }
+          });
 
           // tslint:disable-next-line: no-non-null-assertion
-          this.goldmine.executeContract(this.registryContract!.id!, {
-            method: MessageBus.CONTRACT_REGISTRY_DEFAULT_PUBLISH_METHOD,
-            params: [subject, hash],
-            value: 0,
-            // tslint:disable-next-line: no-non-null-assertion
-            account_address: accountAddress,
-            wallet_id: hdWalletId,
-            hd_derivation_path: hdDerivationPath,
+          this.goldmine.executeContract(this.registryContract!.id, {
+              method: MessageBus.CONTRACT_REGISTRY_DEFAULT_PUBLISH_METHOD,
+              params: [subject, hash],
+              value: 0,
+              account_address: accountAddress,
+              wallet_id: hdWalletId,
+              hd_derivation_path: hdDerivationPath,
           }).then(() => {
               resolve(retval);
           }).catch((err) => {
-            reject(`WARNING: failed to publish ${msg.length}-byte message ${hash} to registry; ${err}`);
+              reject(`WARNING: failed to publish ${msg.length}-byte message ${hash} to registry; ${err}`);
           });
         }
       ).catch((err) => {

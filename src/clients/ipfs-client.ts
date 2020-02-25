@@ -58,26 +58,30 @@ export class IpfsClient {
    *
    * @return A Promise with the hash if resolved or an Error if rejected
    */
-  public add(path: string, content: any, options: any = null): Promise<string | Error> {
+  public add(path: string, content: any, options: any = null): Promise<any[] | Error> {
     const files = [{
       path: path,
       content: content,
     }];
 
     return new Promise(async (resolve, reject) => {
-      let retval;
+      const retvals: any[] = [];
       const gen = this.ipfs.add(files, options);
       let result = await gen.next();
       if (!result) {
         reject(`failed to add ${content.byteLength}-byte object to IPFS`);
         return;
       }
-      retval = result.value;
+      if (result && typeof result.value !== 'undefined') {
+        retvals.push(result.value);
+      }
       while (!result.done) {
         result = await gen.next();
+        if (result && typeof result.value !== 'undefined') {
+          retvals.push(result.value);
+        }
       }
-
-      resolve(retval);
+      resolve(retvals);
     });
   }
 
