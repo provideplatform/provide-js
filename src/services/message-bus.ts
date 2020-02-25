@@ -539,7 +539,7 @@ export class MessageBus {
           });
 
           // tslint:disable-next-line: no-non-null-assertion
-          this.goldmine.executeContract(this.registryContract!.id, {
+          this.goldmine.executeContract(this.registryContract!.id!, {
               method: MessageBus.CONTRACT_REGISTRY_DEFAULT_PUBLISH_METHOD,
               params: [subject, hash],
               value: 0,
