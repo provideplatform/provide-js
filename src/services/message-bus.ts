@@ -640,6 +640,7 @@ export class MessageBus {
 
                 const msgData = new MessageData();
                 msgData.unmarshal(JSON.stringify(item));
+                msgData.type = msgData.filename ? mimelookup(msgData.filename) : null;
                 messagesByHash[item['hash']].data = msgData;
               }
 
