@@ -20,6 +20,7 @@ import {
   Wallet,
   unmarshal,
 } from '@provide/types';
+import { resolve } from 'dns';
 
 
 /*
@@ -139,7 +140,7 @@ export class MessageBus {
 
                       connectorConfigs.forEach((connectorConfig) => {
                         goldmine.createConnector({
-                          name: `${name} message bus connector - ${MessageBus.CONNECTOR_TYPE_IPFS} - ${connectorConfig.region}`,
+                          name: `${name} message bus ${MessageBus.CONNECTOR_TYPE_IPFS} connector - ${connectorConfig.region}`,
                           application_id: application.id,
                           network_id: networkId,
                           type: MessageBus.CONNECTOR_TYPE_IPFS,
@@ -157,7 +158,7 @@ export class MessageBus {
                           }
                         ).catch(
                           (connectorResponse: any) => {
-                            console.log(`WARNING: failed to create connector for message bus application ${application.id}; ${accountsResponse}`);
+                            console.log(`WARNING: failed to create connector for message bus application ${application.id}; ${connectorResponse}`);
                             reject(connectorResponse);
                           }
                         );
@@ -465,6 +466,37 @@ export class MessageBus {
         (response: ApiClientResponse) => {
           reject(response);
         },
+      );
+    });
+  }
+
+  public createConnector(connectorConfig: any, organizationId?: string): Promise<Connector | undefined> {
+    return new Promise((resolve, reject) => {
+      // tslint:disable-next-line: no-non-null-assertion
+      const application = this.application!;
+      const params = {
+        name: `${name} message bus ${MessageBus.CONNECTOR_TYPE_IPFS} connector - ${connectorConfig.region}`,
+        application_id: application.id,
+        network_id: application.networkId,
+        type: MessageBus.CONNECTOR_TYPE_IPFS,
+        config: connectorConfig,
+      };
+      if (organizationId) {
+        params['organization_id'] = organizationId;
+      }
+
+      this.goldmine.createConnector(params).then(
+        (connectorResponse: ApiClientResponse) => {
+          const connector = unmarshal(connectorResponse.responseBody, Connector) as Connector;
+          console.log(`created connector ${connector.id} for message bus application: ${application.id}`);
+          this.connectors.push(connector);
+          resolve(connector);
+        }
+      ).catch(
+        (connectorResponse: any) => {
+          console.log(`WARNING: failed to create connector for message bus application ${application.id}; ${connectorResponse}`);
+          reject(connectorResponse);
+        }
       );
     });
   }
