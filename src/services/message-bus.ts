@@ -369,7 +369,7 @@ export class MessageBus {
 
   private resolveConnectors(): Promise<Connector[]> {
     return new Promise((resolve, reject) => {
-      this.goldmine.fetchConnectors({ type: MessageBus.CONNECTOR_TYPE_IPFS }).then(
+      this.goldmine.fetchConnectors({}).then(
         (response: ApiClientResponse) => {
           const connectors = unmarshal(response.responseBody, Connector) as Connector[];
           resolve(connectors);
