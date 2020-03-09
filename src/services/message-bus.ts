@@ -470,15 +470,15 @@ export class MessageBus {
     });
   }
 
-  public createConnector(connectorConfig: any, organizationId?: string): Promise<Connector | undefined> {
+  public createConnector(connectorConfig: any, type?: string, organizationId?: string): Promise<Connector | undefined> {
     return new Promise((resolve, reject) => {
       // tslint:disable-next-line: no-non-null-assertion
       const application = this.application!;
       const params = {
-        name: `${name} message bus ${MessageBus.CONNECTOR_TYPE_IPFS} connector - ${connectorConfig.region}`,
+        name: `${name} message bus ${type} connector - ${connectorConfig.region}`,
         application_id: application.id,
         network_id: application.networkId,
-        type: MessageBus.CONNECTOR_TYPE_IPFS,
+        type: type,
         config: connectorConfig,
       };
       if (organizationId) {
