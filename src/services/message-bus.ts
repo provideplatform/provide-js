@@ -57,6 +57,7 @@ export class MessageBus {
   public static create(
     networkId: string,
     name: string,
+    config: any,
     connectorConfigs: ConnectorConfig[],
     registryContract: Contract,
     token?: string,
@@ -87,6 +88,7 @@ export class MessageBus {
         name: name,
         network_id: networkId,
         type: MessageBus.APPLICATION_TYPE_MESSAGE_BUS,
+        config: config,
       }).then(
         (response: ApiClientResponse) => {
           const resp = JSON.parse(response.responseBody);
