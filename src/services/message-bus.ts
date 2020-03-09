@@ -20,7 +20,6 @@ import {
   Wallet,
   unmarshal,
 } from '@provide/types';
-import { resolve } from 'dns';
 
 
 /*
