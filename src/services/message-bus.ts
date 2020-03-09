@@ -152,6 +152,7 @@ export class MessageBus {
                             if (connectorConfigs.indexOf(connectorConfig) === connectorConfigs.length - 1) {
                               // tslint:disable-next-line: no-non-null-assertion
                               const mb = new MessageBus(applicationToken.token!, goldmine, ident);
+                              mb.application = application;
                               resolve(mb);
                             }
                           }
