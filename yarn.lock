@@ -313,10 +313,10 @@
   dependencies:
     js-nuid "^1.1.1-4"
 
-"@provide/types@^0.9.9":
-  version "0.9.9"
-  resolved "https://registry.yarnpkg.com/@provide/types/-/types-0.9.9.tgz#9e865c1557c1850fe28609ae45c3b4e40bfb66f9"
-  integrity sha512-z55x2+9jmUSzGx75KRL3ehIXuSjp+x+/qC9qtMSSmaiyfQ/XEVULNOborDsagubNWIfimLxyKI9VKM1gLCPo2A==
+"@provide/types@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@provide/types/-/types-0.1.1.tgz#92129031193644788834804093bb56c2e00aae97"
+  integrity sha512-SgCXvSkgIreYTDsNd9+02dY8Zbf41a3wRb3mil+eozl2J6+0GFOaxvqELYBRzpiXT2NE1PFZjaoQE8lMZIBijw==
   dependencies:
     ethers "4.0.38"
 
