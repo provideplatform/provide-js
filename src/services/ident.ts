@@ -141,6 +141,34 @@ export class Ident {
     return this.client.delete(`organizations/${organizationId}/users/${userId}`);
   }
 
+  public fetchOrganizationVaults(organizationId: string, params: object): Promise<ApiClientResponse> {
+    return this.client.get(`organizations/${organizationId}/vaults`, params);
+  }
+
+  public fetchOrganizationVaultKeys(organizationId: string, vaultId: string, params: object): Promise<ApiClientResponse> {
+    return this.client.get(`organizations/${organizationId}/vaults/${vaultId}/keys`, params);
+  }
+
+  public createOrganizationVaultKey(organizationId: string, vaultId: string, params: object): Promise<ApiClientResponse> {
+    return this.client.post(`organizations/${organizationId}/vaults/${vaultId}/keys`, params);
+  }
+
+  public deleteOrganizationVaultKey(organizationId: string, vaultId: string, keyId: string): Promise<ApiClientResponse> {
+    return this.client.delete(`organizations/${organizationId}/vaults/${vaultId}/keys/${keyId}`);
+  }
+
+  public fetchOrganizationVaultSecrets(organizationId: string, vaultId: string, params: object): Promise<ApiClientResponse> {
+    return this.client.get(`organizations/${organizationId}/vaults/${vaultId}/secrets`, params);
+  }
+
+  public createOrganizationVaultSecret(organizationId: string, vaultId: string, params: object): Promise<ApiClientResponse> {
+    return this.client.post(`organizations/${organizationId}/vaults/${vaultId}/secrets`, params);
+  }
+
+  public deleteOrganizationVaultSecret(organizationId: string, vaultId: string, secretId: string): Promise<ApiClientResponse> {
+    return this.client.delete(`organizations/${organizationId}/vaults/${vaultId}/secrets/${secretId}`);
+  }
+
   public fetchTokens(params: object): Promise<ApiClientResponse> {
     return this.client.get('tokens', params);
   }
@@ -171,6 +199,38 @@ export class Ident {
 
   public updateUser(userId: string, params: object): Promise<ApiClientResponse> {
     return this.client.put(`users/${userId}`, params);
+  }
+
+  public createVault(params: object): Promise<ApiClientResponse> {
+    return this.client.post('vaults', params);
+  }
+
+  public fetchVaults(params: object): Promise<ApiClientResponse> {
+    return this.client.get('vaults', params);
+  }
+
+  public fetchVaultKeys(vaultId: string, params: object): Promise<ApiClientResponse> {
+    return this.client.get(`vaults/${vaultId}/keys`, params);
+  }
+
+  public createVaultKey(vaultId: string, params: object): Promise<ApiClientResponse> {
+    return this.client.post(`vaults/${vaultId}/keys`, params);
+  }
+
+  public deleteVaultKey(vaultId: string, keyId: string): Promise<ApiClientResponse> {
+    return this.client.delete(`vaults/${vaultId}/keys/${keyId}`);
+  }
+
+  public fetchVaultSecrets(vaultId: string, params: object): Promise<ApiClientResponse> {
+    return this.client.get(`vaults/${vaultId}/secrets`, params);
+  }
+
+  public createVaultSecret(vaultId: string, params: object): Promise<ApiClientResponse> {
+    return this.client.post(`vaults/${vaultId}/secrets`, params);
+  }
+
+  public deleteVaultSecret(vaultId: string, secretId: string): Promise<ApiClientResponse> {
+    return this.client.delete(`vaults/${vaultId}/secrets/${secretId}`);
   }
 }
 
