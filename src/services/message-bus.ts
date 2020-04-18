@@ -475,7 +475,7 @@ export class MessageBus {
       // tslint:disable-next-line: no-non-null-assertion
       const application = this.application!;
       const params = {
-        name: `${name} message bus ${type} connector - ${connectorConfig.region}`,
+        name: `${application.name} ${type} connector - ${connectorConfig.region}`,
         application_id: application.id,
         network_id: application.networkId,
         type: type,
