@@ -157,6 +157,20 @@ export class Ident {
     return this.client.delete(`organizations/${organizationId}/vaults/${vaultId}/keys/${keyId}`);
   }
 
+  public organizationVaultKeySignMessage(organizationId: string, vaultId: string, keyId: string, msg: string): Promise<ApiClientResponse> {
+    return this.client.post(`organizations/${organizationId}/vaults/${vaultId}/keys/${keyId}/sign`, { message: msg });
+  }
+
+  public organizationVaultKeyVerifySignature(
+    organizationId: string,
+    vaultId: string,
+    keyId: string,
+    msg: string,
+    sig: string,
+  ): Promise<ApiClientResponse> {
+    return this.client.post(`organizations/${organizationId}/vaults/${vaultId}/keys/${keyId}/verify`, { message: msg, signature: sig });
+  }
+
   public fetchOrganizationVaultSecrets(organizationId: string, vaultId: string, params: object): Promise<ApiClientResponse> {
     return this.client.get(`organizations/${organizationId}/vaults/${vaultId}/secrets`, params);
   }
@@ -219,6 +233,14 @@ export class Ident {
 
   public deleteVaultKey(vaultId: string, keyId: string): Promise<ApiClientResponse> {
     return this.client.delete(`vaults/${vaultId}/keys/${keyId}`);
+  }
+
+  public signMessage(vaultId: string, keyId: string, msg: string): Promise<ApiClientResponse> {
+    return this.client.post(`vaults/${vaultId}/keys/${keyId}/sign`, { message: msg });
+  }
+
+  public verifySignature(vaultId: string, keyId: string, msg: string, sig: string): Promise<ApiClientResponse> {
+    return this.client.post(`vaults/${vaultId}/keys/${keyId}/verify`, { message: msg, signature: sig });
   }
 
   public fetchVaultSecrets(vaultId: string, params: object): Promise<ApiClientResponse> {
