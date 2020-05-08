@@ -1,6 +1,5 @@
 import { Model, unmarshal } from '@provide/types';
 
-
 export class ApiClientResponse {
 
   public readonly requestBody: string;

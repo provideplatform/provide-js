@@ -4,7 +4,6 @@ import { lookup as mimelookup } from 'mime-types';
 import { ApiClient } from './api-client';
 import { ApiClientResponse } from './api-client-response';
 
-
 export class IpfsClient {
 
   public static readonly DEFAULT_SCHEME = 'http';

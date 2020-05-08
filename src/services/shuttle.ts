@@ -21,11 +21,14 @@ import {
   unmarshal,
 } from '@provide/types';
 
-
 /*
- * Message bus client.
+ * Shuttle client.
+ *
+ * This class needs to be refactored and cleaned up
+ * quite a bit. Support for Baseline should be
+ * included here as well.
  */
-export class MessageBus {
+export class Shuttle {
 
   public static readonly ADDRESS_ZERO_PATTERNS = ['0x0000000000000000000000000000000000000000'];
   public static readonly APPLICATION_TYPE_MESSAGE_BUS = 'message_bus';
@@ -65,7 +68,7 @@ export class MessageBus {
     goldmineHost?: string,
     identScheme?: string,
     identHost?: string,
-  ): Promise<MessageBus> {
+  ): Promise<Shuttle> {
     return new Promise((resolve, reject) => {
       if (!token) {
         reject('must provide valid bearer token');
@@ -87,7 +90,7 @@ export class MessageBus {
       ident.createApplication({
         name: name,
         network_id: networkId,
-        type: MessageBus.APPLICATION_TYPE_MESSAGE_BUS,
+        type: Shuttle.APPLICATION_TYPE_MESSAGE_BUS,
         config: config,
       }).then(
         (response: ApiClientResponse) => {
@@ -104,7 +107,7 @@ export class MessageBus {
           console.log(`created message bus application: ${application.id}`);
 
           goldmine.createWallet({
-            purpose: MessageBus.APPLICATION_HD_WALLET_DEFAULT_PURPOSE,
+            purpose: Shuttle.APPLICATION_HD_WALLET_DEFAULT_PURPOSE,
           }).then(
             (hdWalletResponse: ApiClientResponse) => {
               const applicationHdWallet = unmarshal(hdWalletResponse.responseBody, Wallet) as Wallet;
@@ -121,7 +124,7 @@ export class MessageBus {
                     name: registryContract.name,
                     network_id: networkId,
                     application_id: application.id,
-                    type: MessageBus.CONTRACT_TYPE_REGISTRY,
+                    type: Shuttle.CONTRACT_TYPE_REGISTRY,
                     address: '0x',
                     params: {
                       // tslint:disable-next-line: no-non-null-assertion
@@ -139,10 +142,10 @@ export class MessageBus {
 
                       connectorConfigs.forEach((connectorConfig) => {
                         goldmine.createConnector({
-                          name: `${name} message bus ${MessageBus.CONNECTOR_TYPE_IPFS} connector - ${connectorConfig.region}`,
+                          name: `${name} message bus ${Shuttle.CONNECTOR_TYPE_IPFS} connector - ${connectorConfig.region}`,
                           application_id: application.id,
                           network_id: networkId,
-                          type: MessageBus.CONNECTOR_TYPE_IPFS,
+                          type: Shuttle.CONNECTOR_TYPE_IPFS,
                           config: connectorConfig,
                         }).then(
                           (connectorResponse: ApiClientResponse) => {
@@ -151,7 +154,7 @@ export class MessageBus {
 
                             if (connectorConfigs.indexOf(connectorConfig) === connectorConfigs.length - 1) {
                               // tslint:disable-next-line: no-non-null-assertion
-                              const mb = new MessageBus(applicationToken.token!, goldmine, ident);
+                              const mb = new Shuttle(applicationToken.token!, goldmine, ident);
                               mb.application = application;
                               resolve(mb);
                             }
@@ -194,17 +197,17 @@ export class MessageBus {
     });
   }
 
-  public static factory(token: string, goldmine?: Goldmine, ident?: Ident): Promise<MessageBus> {
-    return new MessageBus(token, goldmine, ident).initialize();
+  public static factory(token: string, goldmine?: Goldmine, ident?: Ident): Promise<Shuttle> {
+    return new Shuttle(token, goldmine, ident).initialize();
   }
 
-  public static unmarshal(token: string, json: string): Promise<MessageBus> {
+  public static unmarshal(token: string, json: string): Promise<Shuttle> {
     const msgbus = JSON.parse(json);
     if (!msgbus) {
       return Promise.reject();
     }
 
-    const bus = new MessageBus(token);
+    const bus = new Shuttle(token);
     bus.application = msgbus.application;
     bus.connectors = msgbus.connectors;
     bus.organizations = msgbus.organizations;
@@ -234,7 +237,7 @@ export class MessageBus {
     this.token = payload;
   }
 
-  private initialize(): Promise<MessageBus> {
+  private initialize(): Promise<Shuttle> {
     return new Promise((resolve, reject) => {
       this.resolveApplication().then(
         (application: Application) => {
@@ -399,7 +402,7 @@ export class MessageBus {
 
   private resolveRegistryContract(): Promise<Contract> {
     return new Promise((resolve, reject) => {
-      this.goldmine.fetchContracts({ type: MessageBus.CONTRACT_TYPE_REGISTRY }).then(
+      this.goldmine.fetchContracts({ type: Shuttle.CONTRACT_TYPE_REGISTRY }).then(
         (response: ApiClientResponse) => {
           const contracts = unmarshal(response.responseBody, Contract) as Contract[];
           contracts.forEach(
@@ -578,7 +581,7 @@ export class MessageBus {
 
           // tslint:disable-next-line: no-non-null-assertion
           this.goldmine.executeContract(this.registryContract!.id!, {
-              method: MessageBus.CONTRACT_REGISTRY_DEFAULT_PUBLISH_METHOD,
+              method: Shuttle.CONTRACT_REGISTRY_DEFAULT_PUBLISH_METHOD,
               params: [subject, hash],
               value: 0,
               account_address: accountAddress,
@@ -598,7 +601,7 @@ export class MessageBus {
 
   public readRegistryContract(
       page: number = 1,
-      rpp: number = MessageBus.CONTRACT_REGISTRY_DEFAULT_LIST_RESULTS_PER_PAGE,
+      rpp: number = Shuttle.CONTRACT_REGISTRY_DEFAULT_LIST_RESULTS_PER_PAGE,
   ): Promise<Message[]> {
     if (typeof this.registryContract === 'undefined') {
       return Promise.reject('unable to read registry without configured registry contract');
@@ -625,7 +628,7 @@ export class MessageBus {
     return new Promise<Message[]>((resolve, reject) => {
       // tslint:disable-next-line: no-non-null-assertion
       this.goldmine.executeContract(this.registryContract!.id!, {
-        method: MessageBus.CONTRACT_REGISTRY_DEFAULT_LIST_METHOD,
+        method: Shuttle.CONTRACT_REGISTRY_DEFAULT_LIST_METHOD,
         params: [page, rpp],
         value: 0,
         // tslint:disable-next-line: no-non-null-assertion
@@ -640,7 +643,7 @@ export class MessageBus {
 
           const messagesList = JSON.parse(response.responseBody).response as any[];
           for (const msg of messagesList) {
-            if (msg.sender && MessageBus.ADDRESS_ZERO_PATTERNS.indexOf(msg.sender) === -1) {
+            if (msg.sender && Shuttle.ADDRESS_ZERO_PATTERNS.indexOf(msg.sender) === -1) {
               const message = new Message();
               message.sender = msg.sender;
               message.timestamp = new Date(msg.timestamp * 1000).toUTCString();

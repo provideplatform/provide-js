@@ -64,7 +64,7 @@ export class NatsClientFacade {
     if (!this.service) {
       return;
     }
-    this.service.unsubscribe(subject)
+    this.service.unsubscribe(subject);
   }
 
   public request({subject, timeout, payload}): Promise<any> {

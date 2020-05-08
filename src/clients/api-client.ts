@@ -1,13 +1,12 @@
 import { ApiClientResponse } from './api-client-response';
 
-
 export class ApiClient {
 
   public static readonly DEFAULT_SCHEME = 'https';
   public static readonly DEFAULT_HOST = 'provide.services';
   public static readonly DEFAULT_PATH = 'api/v1';
 
-  private readonly token?: string;
+  private readonly token?: string | undefined;
   private readonly baseUrl: string;
 
   /**

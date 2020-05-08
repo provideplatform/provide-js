@@ -1,6 +1,5 @@
 import { ApiClient, ApiClientResponse } from '../clients';
 
-
 /*
  * Goldmine microservice; provides access to functionality
  * exposed by the Provide blockchain APIs.
