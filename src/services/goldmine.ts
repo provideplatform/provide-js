@@ -61,6 +61,14 @@ export class Goldmine {
     return this.client.get(`connectors/${connectorId}`, (params || {}));
   }
 
+  public fetchConnectorLoadBalancers(connectorId: string, params?: object): Promise<ApiClientResponse> {
+    return this.client.get(`connectors/${connectorId}/load_balancers`, (params || {}));
+  }
+
+  public fetchConnectorNodes(connectorId: string, params?: object): Promise<ApiClientResponse> {
+    return this.client.get(`connectors/${connectorId}/nodes`, (params || {}));
+  }
+
   public createConnector(params: object): Promise<ApiClientResponse> {
     return this.client.post('connectors', params);
   }
