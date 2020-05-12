@@ -173,8 +173,8 @@ export class Goldmine {
     return this.client.get(`networks/${networkId}/nodes/${nodeId}`, {});
   }
 
-  public fetchNetworkNodeLogs(networkId: string, nodeId: string): Promise<ApiClientResponse> {
-    return this.client.get(`networks/${networkId}/nodes/${nodeId}/logs`, {});
+  public fetchNetworkNodeLogs(networkId: string, nodeId: string, params?: object): Promise<ApiClientResponse> {
+    return this.client.get(`networks/${networkId}/nodes/${nodeId}/logs`, (params || {}));
   }
 
   public deleteNetworkNode(networkId: string, nodeId: string): Promise<ApiClientResponse> {
