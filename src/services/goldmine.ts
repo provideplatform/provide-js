@@ -77,6 +77,10 @@ export class Goldmine {
     return this.client.delete(`connectors/${connectorId}`);
   }
 
+  public authorizeConnectorSubscription(connectorId: string, params: object): Promise<ApiClientResponse> {
+    return this.client.post(`connectors/${connectorId}/subscriptions`, params);
+  }
+
   public authorizeContractSubscription(contractId: string, params: object): Promise<ApiClientResponse> {
     return this.client.post(`contracts/${contractId}/subscriptions`, params);
   }
