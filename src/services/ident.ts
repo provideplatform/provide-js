@@ -182,6 +182,10 @@ export class Ident {
     return this.client.delete(`organizations/${organizationId}/vaults/${vaultId}/secrets/${secretId}`);
   }
 
+  public createToken(params: object): Promise<ApiClientResponse> {
+    return this.client.post('tokens', params);
+  }
+
   public fetchTokens(params: object): Promise<ApiClientResponse> {
     return this.client.get('tokens', params);
   }
