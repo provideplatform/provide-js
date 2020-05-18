@@ -85,6 +85,26 @@ export class Goldmine {
     return this.client.post(`contracts/${contractId}/subscriptions`, params);
   }
 
+  public createConnectedEntity(connectorId: string, params: object): Promise<ApiClientResponse> {
+    return this.client.post(`connectors/${connectorId}/entities`, params);
+  }
+
+  public fetchConnectedEntities(connectorId: string, params: object): Promise<ApiClientResponse> {
+    return this.client.get(`connectors/${connectorId}/entities`, params);
+  }
+
+  public fetchConnectedEntityDetails(connectorId: string, entityId: string, params?: object): Promise<ApiClientResponse> {
+    return this.client.get(`connectors/${connectorId}/entities/${entityId}`, (params || {}));
+  }
+
+  public updateConnectedEntity(connectorId: string, entityId: string, params: object): Promise<ApiClientResponse> {
+    return this.client.put(`connectors/${connectorId}/entities/${entityId}`, params);
+  }
+
+  public deleteConnectedEntity(connectorId: string, entityId: string): Promise<ApiClientResponse> {
+    return this.client.delete(`connectors/${connectorId}/entities/${entityId}`);
+  }
+
   public fetchContracts(params?: object): Promise<ApiClientResponse> {
     return this.client.get('contracts', (params || {}));
   }
