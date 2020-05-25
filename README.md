@@ -4,7 +4,7 @@ a Javascript library to help you use Provide's Goldmine, Ident, and InterPlaneta
 
 ## License
 
-MIT © 2018 Provide Technologies Inc.
+MIT © 2020 Provide Technologies Inc.
 
 ## Table of contents
 1. [Install](#Install)
