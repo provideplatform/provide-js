@@ -306,12 +306,10 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
-"@provide/nats.ws@^0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@provide/nats.ws/-/nats.ws-0.1.5.tgz#1994cf8a81021e7bfebf85677ee4cf0b1a74257c"
-  integrity sha512-WtRek7eiKNyM8YM+znwPhkHlfEy9VjEP6+16IPh8ge5tYBF2ARyd0993mFwNBWiAkO9cc2DVUPdvxVa92f+DtQ==
-  dependencies:
-    js-nuid "^1.1.1-4"
+"@provide/nats.ws@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@provide/nats.ws/-/nats.ws-1.0.6.tgz#0f4cd9fb892beebf0786b6a6451564dcccd60cb6"
+  integrity sha512-gUn7rBuCCmQlPGDK9hee6Pp0NRRAr2tsBOHN6YIv30L/ytZ2VHiCo1BtbQgoBesaMu3qK3/+GBhmpr2dd+YcXA==
 
 "@provide/types@^0.1.2":
   version "0.1.2"
@@ -3241,11 +3239,6 @@ jest@^24.9.0:
     import-local "^2.0.0"
     jest-cli "^24.9.0"
 
-js-nuid@^1.1.1-4:
-  version "1.1.1-4"
-  resolved "https://registry.yarnpkg.com/js-nuid/-/js-nuid-1.1.1-4.tgz#bf8f72f2b10980e0d11abad3a929c7b20be16adb"
-  integrity sha512-AVzfCb0jR72OJY7TeCI6IXpHxGq5mRYpex9IOePmHJAHvYTm2CRtwFoD7oReKwI6awbkdClsKxrG1U6pTo4yuw==
-
 js-sha3@0.5.7:
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/js-sha3/-/js-sha3-0.5.7.tgz#0d4ffd8002d5333aabaf4a23eed2f6374c9f28e7"
@@ -3359,7 +3352,7 @@ jsonfile@^4.0.0:
   optionalDependencies:
     graceful-fs "^4.1.6"
 
-jsonwebtoken@^8.5.1:
+jsonwebtoken@8.5.1, jsonwebtoken@^8.5.1:
   version "8.5.1"
   resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-8.5.1.tgz#00e71e0b8df54c2121a1f26137df2280673bcc0d"
   integrity sha512-XjwVfRS6jTMsqYs0EsuJ4LGxXV14zQybNd4L2r0UvbVnSF9Af8x7p5MzbJ90Ioz/9TI41/hTCvznF/loiSzn8w==
@@ -3956,7 +3949,7 @@ node-modules-regexp@^1.0.0:
   resolved "https://registry.yarnpkg.com/node-modules-regexp/-/node-modules-regexp-1.0.0.tgz#8d9dbe28964a4ac5712e9131642107c71e90ec40"
   integrity sha1-jZ2+KJZKSsVxLpExZCEHxx6Q7EA=
 
-node-nats-streaming@^0.2.6:
+node-nats-streaming@0.2.6:
   version "0.2.6"
   resolved "https://registry.yarnpkg.com/node-nats-streaming/-/node-nats-streaming-0.2.6.tgz#c5db3c58a034a5cb61a284691b1fe19b60bc4c4d"
   integrity sha512-UTS/tHextk+qdXl0fiSKFPU12eWsRkeRzbzo1zk6ZbXu/PnszKtnSwzxhVRYveU7VjDebYsAFpde1MjC5Y3Nvw==
@@ -4009,6 +4002,11 @@ nuid@^1.0.0, nuid@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/nuid/-/nuid-1.1.0.tgz#e0c5746350a25562f58283197f34c50861f44675"
   integrity sha512-C/JdZ6PtCqKsCEs4ni76nhBsdmuQgLAT/CTLNprkcLViDAnkk7qx5sSA8PVC2vmSsdBlSsFuGb52v6pwn1oaeg==
+
+nuid@^1.1.2:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/nuid/-/nuid-1.1.4.tgz#6145710b6cc9ef0df7b94af09c6d750925939097"
+  integrity sha512-PXiYyHhGfrq8H4g5HyC8enO1lz6SBe5z6x1yx/JG4tmADzDGJVQy3l1sRf3VtEvPsN8dGn9hRFRwDKWL62x0BA==
 
 nwsapi@^2.0.7:
   version "2.2.0"
@@ -5271,25 +5269,33 @@ ts-loader@^7.0.5:
     micromatch "^4.0.0"
     semver "^6.0.0"
 
-ts-nats@^1.2.4:
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/ts-nats/-/ts-nats-1.2.4.tgz#be04c05bce305f586d6ac6a9b12b7d6cf6580502"
-  integrity sha512-bIC+PlwHplRqhooa9kE+QPcQ9RPGUXD2ruvdf6LoFpP6MjE6exVoRhYSydm0e5wk7VfuXpTbH1NoopTKHwlOKA==
+ts-nats@1.2.14-2:
+  version "1.2.14-2"
+  resolved "https://registry.yarnpkg.com/ts-nats/-/ts-nats-1.2.14-2.tgz#4edfa5a99cb983b727b4e03d3280e9f851929b37"
+  integrity sha512-b0nPczfd8Z4+LQ5C7xWW391qiPsWNidhZRB9yrumQ0hfRHAos4NVwodPIZd78e/so3zBW5LRifejaAJE/UzNXA==
   dependencies:
-    nuid "^1.1.0"
-    ts-nkeys "^1.0.12"
+    nuid "^1.1.2"
+    ts-nkeys "^1.0.16"
 
-ts-natsutil@^0.1.11:
-  version "0.1.12"
-  resolved "https://registry.yarnpkg.com/ts-natsutil/-/ts-natsutil-0.1.12.tgz#fca7d387457157e62748b5b5cc5d992ede20af1a"
-  integrity sha512-8wVAXW0QL0T7pIrRYkFo4AO11b6voBBpMPrAqfuRAmb4KPNRHRvFNV981pO9Gl9VnxiEiHieisgQc/knyR9lrQ==
+ts-natsutil@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/ts-natsutil/-/ts-natsutil-1.0.6.tgz#f9bba156feadb0e074fccdcbc507fb07d10a2bb9"
+  integrity sha512-uds06U0oXs9Nq5IoXci9hhlxLneYGOgwRM6HnVRTNMPwLw97f4YEnH387QPeS0fOjZNwntopEN9ReZT0wIke2w==
   dependencies:
-    "@provide/nats.ws" "^0.1.5"
-    node-nats-streaming "^0.2.6"
-    ts-nats "^1.2.4"
-    uuid "^3.3.2"
+    "@provide/nats.ws" "^1.0.6"
+    jsonwebtoken "8.5.1"
+    node-nats-streaming "0.2.6"
+    ts-nats "1.2.14-2"
+    uuid "3.4.0"
 
-ts-nkeys@^1.0.12, ts-nkeys@^1.0.8:
+ts-nkeys@^1.0.16:
+  version "1.0.16"
+  resolved "https://registry.yarnpkg.com/ts-nkeys/-/ts-nkeys-1.0.16.tgz#b0c6e7c4f16f976c7e7ddb6982fc789a2f971248"
+  integrity sha512-1qrhAlavbm36wtW+7NtKOgxpzl+70NTF8xlz9mEhiA5zHMlMxjj3sEVKWm3pGZhHXE0Q3ykjrj+OSRVaYw+Dqg==
+  dependencies:
+    tweetnacl "^1.0.3"
+
+ts-nkeys@^1.0.8:
   version "1.0.14"
   resolved "https://registry.yarnpkg.com/ts-nkeys/-/ts-nkeys-1.0.14.tgz#3d4b61b6aa4fa952c649ecfafacdce1a4831ba57"
   integrity sha512-WIPykDjpnOvVn5zDNv1uu6o1+Uj+CXaQOM4Od6k2SRiUF4rmhjk7nAHC0mGrWjj0GxeQnwKQv++65qtm1O6kiA==
@@ -5416,7 +5422,7 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
   integrity sha1-WuaBd/GS1EViadEIr6k/+HQ/T2Q=
 
-tweetnacl@^1.0.1:
+tweetnacl@^1.0.1, tweetnacl@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-1.0.3.tgz#ac0af71680458d8a6378d0d0d050ab1407d35596"
   integrity sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==
@@ -5539,7 +5545,7 @@ uuid@2.0.1:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-2.0.1.tgz#c2a30dedb3e535d72ccf82e343941a50ba8533ac"
   integrity sha1-wqMN7bPlNdcsz4LjQ5QaULqFM6w=
 
-uuid@^3.3.2:
+uuid@3.4.0, uuid@^3.3.2:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
