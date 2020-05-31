@@ -42,7 +42,7 @@
   },
   "homepage": "https://github.com/provideservices/provide-js#readme",
   "dependencies": {
-    "@provide/types": "^0.1.1",
+    "@provide/types": "^0.1.2",
     "@types/jsonwebtoken": "^8.3.5",
     "@types/node": "^12.12.14",
     "ipfs-http-client": "^42.0.0",
