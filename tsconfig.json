@@ -1,38 +1,34 @@
 {
+  "include": ["./src/**/*"],
   "compilerOptions": {
     "allowJs": false,
+    "allowSyntheticDefaultImports": true,
+    "alwaysStrict": true,
     "declaration": true,
     "declarationMap": true,
     "emitDecoratorMetadata": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
-    "lib": [
-      "es2017",
-      "dom",
-      "esnext.asynciterable"
-    ],
+    "lib": ["es2017", "dom", "esnext.asynciterable"],
     "module": "esnext",
     "moduleResolution": "node",
     "noImplicitAny": false,
     "noImplicitReturns": true,
     "noImplicitThis": true,
+    "noFallthroughCasesInSwitch": true,
     "noLib": false,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "outDir": "./dist",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "outDir": "./dist/cjs",
     "removeComments": true,
     "resolveJsonModule": true,
+    "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
+    "strictNullChecks": true,
     "strictFunctionTypes": true,
-    "target": "es2017",
-    "typeRoots": [
-      "./node_modules/@types"
-    ]
-  },
-  "exclude": ["node_modules", "**/*.spec.ts"],
-  "files": [
-    "src/index.ts"
-  ]
+    "strictPropertyInitialization": true,
+    "target": "es2017"
+  }
 }
