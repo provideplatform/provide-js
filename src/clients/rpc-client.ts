@@ -4,8 +4,7 @@ import { ApiClientResponse } from './api-client-response';
 export class RpcClient {
 
   public static readonly DEFAULT_SCHEME = 'http';
-  public static readonly DEFAULT_HOST = 'localhost';
-  public static readonly DEFAULT_PORT = 8545;
+  public static readonly DEFAULT_HOST = 'localhost:8545';
   public static readonly DEFAULT_PATH = '/';
   public static readonly DEFAULT_VERSION = '2.0';
 
@@ -31,7 +30,7 @@ export class RpcClient {
     version = RpcClient.DEFAULT_VERSION,
   ) {
     this.apiClient = new ApiClient(undefined, scheme, host, path);
-    this.id = 0;
+    this.id = 1;
     this.version = version;
   }
 
