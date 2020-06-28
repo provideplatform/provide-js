@@ -34,7 +34,7 @@ export class RpcClient {
     this.version = version;
   }
 
-  call(method: string, params: any[]): Promise<ApiClientResponse> {
+  call(method: string, params: any[]): Promise<any> {
     return new Promise((resolve, reject) => {
       this.apiClient.post('', {
         id: this.id++,
