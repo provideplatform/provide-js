@@ -35,11 +35,26 @@ export class RpcClient {
   }
 
   call(method: string, params: any[]): Promise<ApiClientResponse> {
-    return this.apiClient.post('', {
-      id: this.id++,
-      version: this.version,
-      method: method,
-      params: params,
+    return new Promise((resolve, reject) => {
+      this.apiClient.post('', {
+        id: this.id++,
+        version: this.version,
+        method: method,
+        params: params,
+      }).then((resp) => {
+        if (resp && resp.xhr && resp.responseBody && resp.xhr.status === 200) {
+          const response = JSON.parse(resp.responseBody);
+          if (response && response.result) {
+            resolve(response.result);
+          } else if (response && response.error) {
+            reject(response);
+          }
+        } else {
+          reject(resp);
+        }
+      }).catch((err) => {
+        reject(err);
+      });
     });
   }
 }
