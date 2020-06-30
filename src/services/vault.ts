@@ -46,6 +46,14 @@ export class Vault {
     return this.client.delete(`vaults/${vaultId}/keys/${keyId}`);
   }
 
+  public encrypt(vaultId: string, keyId: string, msg: string): Promise<ApiClientResponse> {
+    return this.client.post(`vaults/${vaultId}/keys/${keyId}/encrypt`, { message: msg });
+  }
+
+  public decrypt(vaultId: string, keyId: string, msg: string): Promise<ApiClientResponse> {
+    return this.client.post(`vaults/${vaultId}/keys/${keyId}/decrypt`, { message: msg });
+  }
+
   public signMessage(vaultId: string, keyId: string, msg: string): Promise<ApiClientResponse> {
     return this.client.post(`vaults/${vaultId}/keys/${keyId}/sign`, { message: msg });
   }
