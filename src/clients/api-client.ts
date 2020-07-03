@@ -117,7 +117,7 @@ export class ApiClient {
       return new ApiClientResponse(
         query,
         requestBody,
-        resp.headers,
+        requestHeaders,
         resp.data,
         resp.headers,
         resp.request?.xhr,
