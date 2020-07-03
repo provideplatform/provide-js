@@ -55,23 +55,23 @@ export class ApiClient {
   }
 
   async get(uri: string, params: object): Promise<ApiClientResponse> {
-    return this.sendRequest('GET', uri, params);
+    return await this.sendRequest('GET', uri, params);
   }
 
   async patch(uri: string, params: object): Promise<ApiClientResponse> {
-    return this.sendRequest('PATCH', uri, params);
+    return await this.sendRequest('PATCH', uri, params);
   }
 
   async post(uri: string, params: object): Promise<ApiClientResponse> {
-    return this.sendRequest('POST', uri, params);
+    return await this.sendRequest('POST', uri, params);
   }
 
   async put(uri: string, params: object): Promise<ApiClientResponse> {
-    return this.sendRequest('PUT', uri, params);
+    return await this.sendRequest('PUT', uri, params);
   }
 
   async delete(uri: string): Promise<ApiClientResponse> {
-    return this.sendRequest('DELETE', uri, null);
+    return await this.sendRequest('DELETE', uri, null);
   }
 
   private async sendRequest(
@@ -123,14 +123,7 @@ export class ApiClient {
         resp.request?.xhr,
       );
     } catch (err) {
-      return new ApiClientResponse(
-        query,
-        requestBody,
-        resp.headers,
-        resp.data,
-        resp.headers,
-        resp.request?.xhr,
-      );
+      return Promise.reject(err);
     }
   }
 }
