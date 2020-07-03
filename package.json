@@ -1,6 +1,6 @@
 {
   "name": "provide-js",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "Provide javascript client library",
   "license": "MIT",
   "main": "./dist/cjs/index.js",
@@ -45,6 +45,7 @@
     "@provide/types": "^0.1.2",
     "@types/jsonwebtoken": "^8.3.5",
     "@types/node": "^12.12.14",
+    "axios": "^0.19.2",
     "ipfs-http-client": "^42.0.0",
     "jsonwebtoken": "^8.5.1",
     "mime-types": "^2.1.24",

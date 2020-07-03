@@ -1,3 +1,4 @@
+import axios, { Method } from 'axios';
 import { ApiClientResponse } from './api-client-response';
 
 export class ApiClient {
@@ -53,87 +54,83 @@ export class ApiClient {
     return '';
   }
 
-  public get(uri: string, params: object): Promise<ApiClientResponse> {
+  async get(uri: string, params: object): Promise<ApiClientResponse> {
     return this.sendRequest('GET', uri, params);
   }
 
-  public patch(uri: string, params: object): Promise<ApiClientResponse> {
+  async patch(uri: string, params: object): Promise<ApiClientResponse> {
     return this.sendRequest('PATCH', uri, params);
   }
 
-  public post(uri: string, params: object): Promise<ApiClientResponse> {
+  async post(uri: string, params: object): Promise<ApiClientResponse> {
     return this.sendRequest('POST', uri, params);
   }
 
-  public put(uri: string, params: object): Promise<ApiClientResponse> {
+  async put(uri: string, params: object): Promise<ApiClientResponse> {
     return this.sendRequest('PUT', uri, params);
   }
 
-  public delete(uri: string): Promise<ApiClientResponse> {
+  async delete(uri: string): Promise<ApiClientResponse> {
     return this.sendRequest('DELETE', uri, null);
   }
 
-  private sendRequest(
+  private async sendRequest(
     method: string,
     uri: string,
     params: any = null,
   ): Promise<ApiClientResponse> {
+    let query = '';
+    let requestBody: any;
 
-    return new Promise((resolve, reject) => {
-      let query = '';
-      let requestBody: any;
+    if (params === null) {
+      requestBody = undefined;
+    } else if (method === 'GET' && Object.keys(params).length > 0) {
+      query = `?${ApiClient.toQuery(params)}`;
+    } else {
+      requestBody = JSON.stringify(params);
+    }
 
-      if (params === null) {
-        requestBody = undefined;
-      } else if (method === 'GET' && Object.keys(params).length > 0) {
-        query = `?${ApiClient.toQuery(params)}`;
-      } else {
-        requestBody = JSON.stringify(params);
-      }
+    const requestHeaders = new Map<string, string>();
+    if (this.token) {
+      requestHeaders.set('Authorization', `bearer ${this.token}`);
+    }
 
-      const xhr = new XMLHttpRequest();
-      xhr.open(method, this.baseUrl + uri + query);
+    if (['POST', 'PUT'].indexOf(method) !== -1) {
+      requestHeaders.set('Content-Type', 'application/json');
+    }
 
-      const requestHeaders = new Map<string, string>();
-      if (this.token) {
-        requestHeaders.set('Authorization', `bearer ${this.token}`);
-      }
+    const cfg = {
+      url: this.baseUrl + uri + query,
+      method: method as Method,
+      headers: requestHeaders,
+      data: null,
+    };
 
-      if (['POST', 'PUT'].indexOf(method) !== -1) {
-        requestHeaders.set('Content-Type', 'application/json');
-      }
+    if (['POST', 'PUT'].indexOf(method) !== -1) {
+      cfg.data = requestBody;
+    }
 
-      requestHeaders.forEach((value, header) => {
-        xhr.setRequestHeader(header, value);
-      });
+    let resp;
 
-      xhr.onload = () => resolve(
-        new ApiClientResponse(
-          query,
-          requestBody,
-          requestHeaders,
-          xhr.response,
-          xhr.getAllResponseHeaders(),
-          xhr,
-        )
+    try {
+      resp = await axios.request(cfg);
+      return new ApiClientResponse(
+        query,
+        requestBody,
+        resp.headers,
+        resp.data,
+        resp.headers,
+        resp.request?.xhr,
       );
-
-      xhr.onerror = () => reject(
-        new ApiClientResponse(
-          query,
-          requestBody,
-          requestHeaders,
-          xhr.response,
-          xhr.getAllResponseHeaders(),
-          xhr,
-        )
+    } catch (err) {
+      return new ApiClientResponse(
+        query,
+        requestBody,
+        resp.headers,
+        resp.data,
+        resp.headers,
+        resp.request?.xhr,
       );
-
-      if (requestBody === undefined) {
-        xhr.send();
-      } else {
-        xhr.send(requestBody);
-      }
-    });
+    }
   }
 }

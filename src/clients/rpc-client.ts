@@ -1,5 +1,4 @@
 import { ApiClient } from './api-client';
-import { ApiClientResponse } from './api-client-response';
 
 export class RpcClient {
 
