@@ -24,6 +24,13 @@ export class Capabilities {
     });
   }
 
+  getBaselineRegistryContracts(): any {
+    if (this.capabilities) {
+      return this.capabilities.baseline?.contracts;
+    }
+    return undefined;
+  }
+
   getRegistryContracts(): any {
     if (this.capabilities) {
       return this.capabilities.message_bus?.registry_contracts;
