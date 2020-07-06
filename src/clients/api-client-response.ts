@@ -24,8 +24,8 @@ export class ApiClientResponse {
     this.xhr = xhr;
 
     let requestHeadersString = '';
-    requestHeaders.forEach((value, header) => {
-      requestHeadersString += `${header}: ${value}\n`;
+    Object.keys(requestHeaders).forEach((header) => {
+      requestHeadersString += `${header}: ${requestHeaders[header]}\n`;
     });
 
     if (requestHeadersString !== '') {
