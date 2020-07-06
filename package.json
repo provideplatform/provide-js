@@ -1,6 +1,6 @@
 {
   "name": "provide-js",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "Provide javascript client library",
   "license": "MIT",
   "main": "./dist/cjs/index.js",

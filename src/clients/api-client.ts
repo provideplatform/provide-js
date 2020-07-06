@@ -90,13 +90,13 @@ export class ApiClient {
       requestBody = JSON.stringify(params);
     }
 
-    const requestHeaders = new Map<string, string>();
+    const requestHeaders = {};
     if (this.token) {
-      requestHeaders.set('Authorization', `bearer ${this.token}`);
+      requestHeaders['Authorization'] = `bearer ${this.token}`;
     }
 
     if (['POST', 'PUT'].indexOf(method) !== -1) {
-      requestHeaders.set('Content-Type', 'application/json');
+      requestHeaders['Content-Type'] = 'application/json';
     }
 
     const cfg = {

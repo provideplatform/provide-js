@@ -12,7 +12,7 @@ export class ApiClientResponse {
   constructor(
     query: string,
     requestBody: string,
-    requestHeaders: Map<string, string>,
+    requestHeaders: any,
     responseBody: string,
     responseHeaders: string,
     xhr: XMLHttpRequest,
