@@ -1,28 +1,28 @@
 import { ApiClient, ApiClientResponse } from '../clients';
 
 /*
- * Goldmine microservice; provides access to functionality
- * exposed by the Provide blockchain APIs.
+ * NChain microservice; provides access to functionality
+ * exposed by the Provide container runtime & blockchain APIs.
  */
-export class Goldmine {
+export class NChain {
 
-  private static readonly DEFAULT_HOST = 'goldmine.provide.services';
+  private static readonly DEFAULT_HOST = 'nchain.provide.services';
 
   private readonly client: ApiClient;
 
   constructor(token: string, scheme?: string, host?: string, path?: string) {
     if (!host) {
-      host = Goldmine.DEFAULT_HOST;
+      host = NChain.DEFAULT_HOST;
     }
 
     this.client = new ApiClient(token, scheme, host, path);
   }
 
-  public static clientFactory(token: string, scheme?: string, host?: string, path?: string): Goldmine {
-    const _scheme = scheme ? scheme : (process.env['GOLDMINE_API_SCHEME'] || 'https');
-    const _host = host ? host : (process.env['GOLDMINE_API_HOST'] || Goldmine.DEFAULT_HOST);
-    const _path = path ? path : (process.env['GOLDMINE_API_PATH'] || ApiClient.DEFAULT_PATH);
-    return new Goldmine(token, _scheme, _host, _path);
+  public static clientFactory(token: string, scheme?: string, host?: string, path?: string): NChain {
+    const _scheme = scheme ? scheme : (process.env['NCHAIN_API_SCHEME'] || 'https');
+    const _host = host ? host : (process.env['NCHAIN_API_HOST'] || NChain.DEFAULT_HOST);
+    const _path = path ? path : (process.env['NCHAIN_API_PATH'] || ApiClient.DEFAULT_PATH);
+    return new NChain(token, _scheme, _host, _path);
   }
 
   public fetchAccounts(params?: object): Promise<ApiClientResponse> {
@@ -254,6 +254,6 @@ export class Goldmine {
   }
 }
 
-export const goldmineClientFactory = (token: string, scheme?: string, host?: string, path?: string): Goldmine => {
-  return Goldmine.clientFactory(token, scheme, host, path);
+export const nchainClientFactory = (token: string, scheme?: string, host?: string, path?: string): NChain => {
+  return NChain.clientFactory(token, scheme, host, path);
 };
