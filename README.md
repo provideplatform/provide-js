@@ -1,6 +1,6 @@
 # provide-js
 
-a Javascript library to help you use Provide's Goldmine, Ident, and InterPlanetaryFileSystem APIs
+a Javascript library to help you use Provide's NChain, Ident, and InterPlanetaryFileSystem APIs
 
 ## License
 
@@ -9,11 +9,11 @@ MIT © 2020 Provide Technologies Inc.
 ## Table of contents
 1. [Install](#Install)
 1. [WebPack](#WebPack)
-1. [Goldmine](#Goldmine)
-    1. [Goldmine with JavaScript and Promise](#GoldmineJavaScriptPromise)
-    1. [Goldmine with JavaScript and RxJS](#GoldmineJavaScriptRxJS)
-    1. [Goldmine with TypeScript and Promise](#GoldmineTypeScriptPromise)
-    1. [Goldmine with TypeScript and RxJS](#GoldmineTypeScriptRxJS)
+1. [NChain](#NChain)
+    1. [NChain with JavaScript and Promise](#NChainJavaScriptPromise)
+    1. [NChain with JavaScript and RxJS](#NChainJavaScriptRxJS)
+    1. [NChain with TypeScript and Promise](#NChainTypeScriptPromise)
+    1. [NChain with TypeScript and RxJS](#NChainTypeScriptRxJS)
 1. [Ident](#Ident)
     1. [Ident with JavaScript and Promise](#IdentJavaScriptPromise)
     1. [Ident with JavaScript and RxJS](#IdentJavaScriptRxJS)
@@ -63,29 +63,29 @@ module.exports = {
 };
 ```
 
-<a name="Goldmine"></a>
-## Goldmine
+<a name="NChain"></a>
+## NChain
 
-Here are usage examples for 2 of the 50+ Goldmine methods. The others have similar usage.
+Here are usage examples for 2 of the 50+ NChain methods. The others have similar usage.
 
-<a name="GoldmineJavaScriptPromise"></a>
-### Goldmine with JavaScript and Promise
+<a name="NChainJavaScriptPromise"></a>
+### NChain with JavaScript and Promise
 
 ##### Fetch connectors
 
 ```javascript
-import { Goldmine } from 'provide-js';
+import { NChain } from 'provide-js';
 
 const token = 'myapitoken';
 const dappId = 'mydappid';
 const networkId = 'mynetworkid';
-const goldmine = new Goldmine(token);
+const NChain = new NChain(token);
 const params = {
   application_id: dappId,
   network_id: networkId,
 };
 
-goldmine.fetchConnectors(params).then(
+NChain.fetchConnectors(params).then(
   (response) => {
     console.log(response.requestBody);
     console.log(response.requestHeaders);
@@ -106,7 +106,7 @@ goldmine.fetchConnectors(params).then(
 ##### Execute a contract
 
 ```javascript
-import { Goldmine } from 'provide-js';
+import { NChain } from 'provide-js';
 
 const token = 'myapitoken';
 const methodParams = ["1stparamvalue","2ndparamvalue"];
@@ -117,9 +117,9 @@ const executionParams = {
     wallet_id: 'mywalletid',
 };
 const contractId = 'mycontractid';
-const goldmine = new Goldmine(token);
+const NChain = new NChain(token);
 
-goldmine.executeContract(contractId, executionParams).then(
+NChain.executeContract(contractId, executionParams).then(
   (response) => {
     console.log(response.requestBody);
     console.log(response.requestHeaders);
@@ -135,25 +135,25 @@ goldmine.executeContract(contractId, executionParams).then(
 );
 ```
 
-<a name="GoldmineJavaScriptRxJS"></a>
-### Goldmine with JavaScript and RxJS
+<a name="NChainJavaScriptRxJS"></a>
+### NChain with JavaScript and RxJS
 
 ##### Fetch connectors
 
 ```javascript
-import { Goldmine } from 'provide-js';
+import { NChain } from 'provide-js';
 import { from } from 'rxjs';
 import { first } from 'rxjs/operators';
 
 const token = 'myapitoken';
 const dappId = 'mydappid';
 const networkId = 'mynetworkid';
-const goldmine = new Goldmine(token);
+const NChain = new NChain(token);
 const params = {
   application_id: dappId,
   network_id: networkId,
 };
-const observable = from(goldmine.fetchConnectors(params));
+const observable = from(NChain.fetchConnectors(params));
 
 observable.pipe(first()).subscribe(
   (response) => {
@@ -175,7 +175,7 @@ observable.pipe(first()).subscribe(
 ##### Execute a contract
 
 ```javascript
-import { Goldmine } from 'provide-js';
+import { NChain } from 'provide-js';
 import { from } from 'rxjs';
 import { first } from 'rxjs/operators';
 
@@ -188,8 +188,8 @@ const executionParams = {
     wallet_id: 'mywalletid',
 };
 const contractId = 'mycontractid';
-const goldmine = new Goldmine(token);
-const observable = from(goldmine.executeContract(contractId, executionParams));
+const NChain = new NChain(token);
+const observable = from(NChain.executeContract(contractId, executionParams));
 
 observable.pipe(first()).subscribe(
   (response) => {
@@ -206,24 +206,24 @@ observable.pipe(first()).subscribe(
 );
 ```
 
-<a name="GoldmineTypeScriptPromise"></a>
-### Goldmine with TypeScript and Promise
+<a name="NChainTypeScriptPromise"></a>
+### NChain with TypeScript and Promise
 
 ##### Fetch connectors
 
 ```typescript
-import { ApiClientResponse, Goldmine } from 'provide-js';
+import { ApiClientResponse, NChain } from 'provide-js';
 
 const token: string = 'myapitoken';
 const dappId: string = 'mydappid';
 const networkId: string = 'mynetworkid';
-const goldmine = new Goldmine(token);
+const NChain = new NChain(token);
 const params = {
   application_id: dappId,
   network_id: networkId,
 };
 
-goldmine.fetchConnectors(params).then(
+NChain.fetchConnectors(params).then(
   (response: ApiClientResponse) => {
     console.log(response.requestBody);
     console.log(response.requestHeaders);
@@ -244,7 +244,7 @@ goldmine.fetchConnectors(params).then(
 ##### Execute a contract
 
 ```typescript
-import { ApiClientResponse, Goldmine } from 'provide-js';
+import { ApiClientResponse, NChain } from 'provide-js';
 
 const token: string = 'myapitoken';
 const methodParams: (number|string)[] = ["1stparamvalue","2ndparamvalue"];
@@ -255,9 +255,9 @@ const executionParams: object = {
     wallet_id: 'mywalletid',
 };
 const contractId: string = 'mycontractid';
-const goldmine: Goldmine = new Goldmine(token);
+const NChain: NChain = new NChain(token);
 
-goldmine.executeContract(contractId, executionParams).then(
+NChain.executeContract(contractId, executionParams).then(
   (response: ApiClientResponse) => {
     console.log(response.requestBody);
     console.log(response.requestHeaders);
@@ -273,25 +273,25 @@ goldmine.executeContract(contractId, executionParams).then(
 );
 ```
 
-<a name="GoldmineTypeScriptRxJS"></a>
-### Goldmine with TypeScript and RxJS
+<a name="NChainTypeScriptRxJS"></a>
+### NChain with TypeScript and RxJS
 
 ##### Fetch connectors
 
 ```typescript
-import { ApiClientResponse, Goldmine } from 'provide-js';
+import { ApiClientResponse, NChain } from 'provide-js';
 import { from, Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 
 const token: string = 'myapitoken';
 const dappId: string = 'mydappid';
 const networkId: string = 'mynetworkid';
-const goldmine = new Goldmine(token);
+const NChain = new NChain(token);
 const params = {
   application_id: dappId,
   network_id: networkId,
 };
-const observable: Observable<ApiClientResponse> = from(goldmine.fetchConnectors(params));
+const observable: Observable<ApiClientResponse> = from(NChain.fetchConnectors(params));
 
 observable.pipe(first()).subscribe(
   (response: ApiClientResponse) => {
@@ -313,7 +313,7 @@ observable.pipe(first()).subscribe(
 ##### Execute a contract
 
 ```typescript
-import { ApiClientResponse, Goldmine } from 'provide-js';
+import { ApiClientResponse, NChain } from 'provide-js';
 import { from, Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 
@@ -326,8 +326,8 @@ const executionParams = {
     wallet_id: 'mywalletid',
 };
 const contractId: string = 'mycontractid';
-const goldmine: Goldmine = new Goldmine(token);
-const observable: Observable<ApiClientResponse> = from<ApiClientResponse>(goldmine.executeContract(contractId, executionParams));
+const NChain: NChain = new NChain(token);
+const observable: Observable<ApiClientResponse> = from<ApiClientResponse>(NChain.executeContract(contractId, executionParams));
 
 observable.pipe(first()).subscribe(
   (response: ApiClientResponse) => {

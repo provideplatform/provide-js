@@ -41,8 +41,8 @@ export class RpcClient {
         method: method,
         params: params,
       }).then((resp) => {
-        if (resp && resp.xhr && resp.responseBody && resp.xhr.status === 200) {
-          const response = JSON.parse(resp.responseBody);
+        if (resp && resp.data && resp.status === 200) {
+          const response = JSON.parse(resp.data);
           if (response && typeof response.result !== 'undefined' && typeof response.error === 'undefined') {
             resolve(response.result);
           } else if (response && response.error) {

@@ -1,4 +1,5 @@
-import { ApiClient, ApiClientResponse } from '../clients';
+import { ApiClient } from '../clients';
+import { Application, Key as VaultKey, Organization, Secret as VaultSecret, Token, User, Vault } from '@provide/types';
 
 /*
  * Ident microservice; provides access to functionality
@@ -32,190 +33,190 @@ export class Ident {
     return new ApiClient(token, _scheme, _host, _path);
   }
 
-  public static authenticate(params: object, scheme?: string, host?: string, path?: string): Promise<ApiClientResponse> {
-    return Ident.unauthenticatedClientFactory(undefined, scheme, host, path).post('authenticate', params);
+  public static async authenticate(params: object, scheme?: string, host?: string, path?: string): Promise<any> {
+    return ApiClient.handleResponse(await Ident.unauthenticatedClientFactory(undefined, scheme, host, path).post('authenticate', params));
   }
 
-  public static createUser(params: object, scheme?: string, host?: string, path?: string): Promise<ApiClientResponse> {
-    return Ident.unauthenticatedClientFactory(undefined, scheme, host, path).post('users', params);
+  public static async createUser(params: object, scheme?: string, host?: string, path?: string): Promise<User> {
+    return ApiClient.handleResponse(await Ident.unauthenticatedClientFactory(undefined, scheme, host, path).post('users', params)) as User;
   }
 
-  public static requestPasswordReset(email: string, scheme?: string, host?: string, path?: string): Promise<ApiClientResponse> {
-    return Ident.unauthenticatedClientFactory(undefined, scheme, host, path).post('reset_password', { email });
+  public static async requestPasswordReset(email: string, scheme?: string, host?: string, path?: string): Promise<any> {
+    return ApiClient.handleResponse(await Ident.unauthenticatedClientFactory(undefined, scheme, host, path).post('reset_password', { email }));
   }
 
-  public static resetPassword(token: string, password: string, scheme?: string, host?: string, path?: string): Promise<ApiClientResponse> {
-    return Ident.unauthenticatedClientFactory(undefined, scheme, host, path).post(`reset_password/${token}`, { password });
+  public static async resetPassword(token: string, password: string, scheme?: string, host?: string, path?: string): Promise<any> {
+    return ApiClient.handleResponse(await Ident.unauthenticatedClientFactory(undefined, scheme, host, path).post(`reset_password/${token}`, { password }));
   }
 
-  public createApplication(params: object): Promise<ApiClientResponse> {
-    return this.client.post('applications', params);
+  public async createApplication(params: object): Promise<Application> {
+    return ApiClient.handleResponse(await this.client.post('applications', params)) as Application;
   }
 
-  public updateApplication(appId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.put(`applications/${appId}`, params);
+  public async updateApplication(appId: string, params: object): Promise<void> {
+    return ApiClient.handleResponse(await this.client.put(`applications/${appId}`, params));
   }
 
-  public fetchApplications(params: object): Promise<ApiClientResponse> {
-    return this.client.get('applications', params);
+  public async fetchApplications(params: object): Promise<Application[]> {
+    return ApiClient.handleResponse(await this.client.get('applications', params)) as Application[];
   }
 
-  public fetchApplicationDetails(appId: string): Promise<ApiClientResponse> {
-    return this.client.get(`applications/${appId}`, {});
+  public async fetchApplicationDetails(appId: string): Promise<Application> {
+    return ApiClient.handleResponse(await this.client.get(`applications/${appId}`, {})) as Application;
   }
 
-  public fetchApplicationOrganizations(appId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.get(`applications/${appId}/organizations`, params);
+  public async fetchApplicationOrganizations(appId: string, params: object): Promise<Organization[]> {
+    return ApiClient.handleResponse(await this.client.get(`applications/${appId}/organizations`, params)) as Organization[];
   }
 
-  public createApplicationOrganization(appId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.post(`applications/${appId}/organizations`, params);
+  public async createApplicationOrganization(appId: string, params: object): Promise<Organization> {
+    return ApiClient.handleResponse(await this.client.post(`applications/${appId}/organizations`, params)) as Organization;
   }
 
-  public updateApplicationOrganization(appId: string, organizationId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.put(`applications/${appId}/organizations/${organizationId}`, params);
+  public async updateApplicationOrganization(appId: string, organizationId: string, params: object): Promise<void> {
+    return ApiClient.handleResponse(await this.client.put(`applications/${appId}/organizations/${organizationId}`, params));
   }
 
-  public deleteApplicationOrganization(appId: string, organizationId: string): Promise<ApiClientResponse> {
-    return this.client.delete(`applications/${appId}/organizations/${organizationId}`);
+  public async deleteApplicationOrganization(appId: string, organizationId: string): Promise<Organization> {
+    return ApiClient.handleResponse(await this.client.delete(`applications/${appId}/organizations/${organizationId}`));
   }
 
-  public fetchApplicationInvitations(appId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.get(`applications/${appId}/invitations`, params);
+  public async fetchApplicationInvitations(appId: string, params: object): Promise<any> {
+    return ApiClient.handleResponse(await this.client.get(`applications/${appId}/invitations`, params));
   }
 
-  public fetchApplicationTokens(appId: string): Promise<ApiClientResponse> {
-    return this.client.get(`applications/${appId}/tokens`, {});
+  public async fetchApplicationTokens(appId: string): Promise<Token> {
+    return ApiClient.handleResponse(await this.client.get(`applications/${appId}/tokens`, {})) as Token;
   }
 
-  public fetchApplicationUsers(appId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.get(`applications/${appId}/users`, params);
+  public async fetchApplicationUsers(appId: string, params: object): Promise<User[]> {
+    return ApiClient.handleResponse(await this.client.get(`applications/${appId}/users`, params)) as User[];
   }
 
-  public createApplicationUser(appId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.post(`applications/${appId}/users`, params);
+  public async createApplicationUser(appId: string, params: object): Promise<User> {
+    return ApiClient.handleResponse(await this.client.post(`applications/${appId}/users`, params)) as User;
   }
 
-  public updateApplicationUser(appId: string, userId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.put(`applications/${appId}/users/${userId}`, params);
+  public async updateApplicationUser(appId: string, userId: string, params: object): Promise<User> {
+    return ApiClient.handleResponse(await this.client.put(`applications/${appId}/users/${userId}`, params)) as User;
   }
 
-  public deleteApplicationUser(appId: string, userId: string): Promise<ApiClientResponse> {
-    return this.client.delete(`applications/${appId}/users/${userId}`);
+  public async deleteApplicationUser(appId: string, userId: string): Promise<void> {
+    return ApiClient.handleResponse(await this.client.delete(`applications/${appId}/users/${userId}`));
   }
 
-  public createOrganization(params: object): Promise<ApiClientResponse> {
-    return this.client.post('organizations', params);
+  public async createOrganization(params: object): Promise<Organization> {
+    return ApiClient.handleResponse(await this.client.post('organizations', params)) as Organization;
   }
 
-  public fetchOrganizations(params: object): Promise<ApiClientResponse> {
-    return this.client.get('organizations', params);
+  public async fetchOrganizations(params: object): Promise<Organization[]> {
+    return ApiClient.handleResponse(await this.client.get('organizations', params)) as Organization[];
   }
 
-  public fetchOrganizationDetails(organizationId: string): Promise<ApiClientResponse> {
-    return this.client.get(`organizations/${organizationId}`, {});
+  public async fetchOrganizationDetails(organizationId: string): Promise<Organization> {
+    return ApiClient.handleResponse(await this.client.get(`organizations/${organizationId}`, {})) as Organization;
   }
 
-  public updateOrganization(organizationId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.put(`organizations/${organizationId}`, params);
+  public async updateOrganization(organizationId: string, params: object): Promise<void> {
+    return ApiClient.handleResponse(await this.client.put(`organizations/${organizationId}`, params));
   }
 
-  public fetchOrganizationInvitations(organizationId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.get(`organizations/${organizationId}/invitations`, params);
+  public async fetchOrganizationInvitations(organizationId: string, params: object): Promise<any> {
+    return ApiClient.handleResponse(await this.client.get(`organizations/${organizationId}/invitations`, params));
   }
 
-  public fetchOrganizationUsers(organizationId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.get(`organizations/${organizationId}/users`, params);
+  public async fetchOrganizationUsers(organizationId: string, params: object): Promise<User[]> {
+    return ApiClient.handleResponse(await this.client.get(`organizations/${organizationId}/users`, params)) as User[];
   }
 
-  public createOrganizationUser(organizationId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.post(`organizations/${organizationId}/users`, params);
+  public async createOrganizationUser(organizationId: string, params: object): Promise<User> {
+    return ApiClient.handleResponse(await this.client.post(`organizations/${organizationId}/users`, params)) as User;
   }
 
-  public updateOrganizationUser(organizationId: string, userId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.put(`organizations/${organizationId}/users/${userId}`, params);
+  public async updateOrganizationUser(organizationId: string, userId: string, params: object): Promise<User> {
+    return ApiClient.handleResponse(await this.client.put(`organizations/${organizationId}/users/${userId}`, params));
   }
 
-  public deleteOrganizationUser(organizationId: string, userId: string): Promise<ApiClientResponse> {
-    return this.client.delete(`organizations/${organizationId}/users/${userId}`);
+  public async deleteOrganizationUser(organizationId: string, userId: string): Promise<void> {
+    return ApiClient.handleResponse(await this.client.delete(`organizations/${organizationId}/users/${userId}`));
   }
 
-  public fetchOrganizationVaults(organizationId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.get(`organizations/${organizationId}/vaults`, params);
+  public async fetchOrganizationVaults(organizationId: string, params: object): Promise<Vault[]> {
+    return ApiClient.handleResponse(await this.client.get(`organizations/${organizationId}/vaults`, params)) as Vault[];
   }
 
-  public fetchOrganizationVaultKeys(organizationId: string, vaultId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.get(`organizations/${organizationId}/vaults/${vaultId}/keys`, params);
+  public async fetchOrganizationVaultKeys(organizationId: string, vaultId: string, params: object): Promise<VaultKey[]> {
+    return ApiClient.handleResponse(await this.client.get(`organizations/${organizationId}/vaults/${vaultId}/keys`, params)) as VaultKey[];
   }
 
-  public createOrganizationVaultKey(organizationId: string, vaultId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.post(`organizations/${organizationId}/vaults/${vaultId}/keys`, params);
+  public async createOrganizationVaultKey(organizationId: string, vaultId: string, params: object): Promise<VaultKey> {
+    return ApiClient.handleResponse(await this.client.post(`organizations/${organizationId}/vaults/${vaultId}/keys`, params)) as VaultKey;
   }
 
-  public deleteOrganizationVaultKey(organizationId: string, vaultId: string, keyId: string): Promise<ApiClientResponse> {
-    return this.client.delete(`organizations/${organizationId}/vaults/${vaultId}/keys/${keyId}`);
+  public async deleteOrganizationVaultKey(organizationId: string, vaultId: string, keyId: string): Promise<VaultKey[]> {
+    return ApiClient.handleResponse(await this.client.delete(`organizations/${organizationId}/vaults/${vaultId}/keys/${keyId}`));
   }
 
-  public organizationVaultKeySignMessage(organizationId: string, vaultId: string, keyId: string, msg: string): Promise<ApiClientResponse> {
-    return this.client.post(`organizations/${organizationId}/vaults/${vaultId}/keys/${keyId}/sign`, { message: msg });
+  public async organizationVaultKeySignMessage(organizationId: string, vaultId: string, keyId: string, msg: string): Promise<any> {
+    return ApiClient.handleResponse(await this.client.post(`organizations/${organizationId}/vaults/${vaultId}/keys/${keyId}/sign`, { message: msg }));
   }
 
-  public organizationVaultKeyVerifySignature(
+  public async organizationVaultKeyVerifySignature(
     organizationId: string,
     vaultId: string,
     keyId: string,
     msg: string,
     sig: string,
-  ): Promise<ApiClientResponse> {
-    return this.client.post(`organizations/${organizationId}/vaults/${vaultId}/keys/${keyId}/verify`, { message: msg, signature: sig });
+  ): Promise<any> {
+    return ApiClient.handleResponse(await this.client.post(`organizations/${organizationId}/vaults/${vaultId}/keys/${keyId}/verify`, { message: msg, signature: sig }));
   }
 
-  public fetchOrganizationVaultSecrets(organizationId: string, vaultId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.get(`organizations/${organizationId}/vaults/${vaultId}/secrets`, params);
+  public async fetchOrganizationVaultSecrets(organizationId: string, vaultId: string, params: object): Promise<VaultSecret[]> {
+    return ApiClient.handleResponse(await this.client.get(`organizations/${organizationId}/vaults/${vaultId}/secrets`, params)) as VaultSecret[];
   }
 
-  public createOrganizationVaultSecret(organizationId: string, vaultId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.post(`organizations/${organizationId}/vaults/${vaultId}/secrets`, params);
+  public async createOrganizationVaultSecret(organizationId: string, vaultId: string, params: object): Promise<VaultSecret> {
+    return ApiClient.handleResponse(await this.client.post(`organizations/${organizationId}/vaults/${vaultId}/secrets`, params)) as VaultSecret;
   }
 
-  public deleteOrganizationVaultSecret(organizationId: string, vaultId: string, secretId: string): Promise<ApiClientResponse> {
-    return this.client.delete(`organizations/${organizationId}/vaults/${vaultId}/secrets/${secretId}`);
+  public async deleteOrganizationVaultSecret(organizationId: string, vaultId: string, secretId: string): Promise<VaultSecret> {
+    return ApiClient.handleResponse(await this.client.delete(`organizations/${organizationId}/vaults/${vaultId}/secrets/${secretId}`)) as VaultSecret;
   }
 
-  public createToken(params: object): Promise<ApiClientResponse> {
-    return this.client.post('tokens', params);
+  public async createToken(params: object): Promise<Token> {
+    return ApiClient.handleResponse(await this.client.post('tokens', params)) as Token;
   }
 
-  public fetchTokens(params: object): Promise<ApiClientResponse> {
-    return this.client.get('tokens', params);
+  public async fetchTokens(params: object): Promise<Token[]> {
+    return ApiClient.handleResponse(await this.client.get('tokens', params)) as Token[];
   }
 
-  public fetchTokenDetails(tokenId: string): Promise<ApiClientResponse> {
-    return this.client.get(`tokens/${tokenId}`, {});
+  public async fetchTokenDetails(tokenId: string): Promise<Token> {
+    return ApiClient.handleResponse(await this.client.get(`tokens/${tokenId}`, {})) as Token;
   }
 
-  public deleteToken(tokenId: string): Promise<ApiClientResponse> {
-    return this.client.delete(`tokens/${tokenId}`);
+  public async deleteToken(tokenId: string): Promise<void> {
+    return ApiClient.handleResponse(await this.client.delete(`tokens/${tokenId}`));
   }
 
-  public createInvitation(params: object): Promise<ApiClientResponse> {
-    return this.client.post('invitations', params);
+  public async createInvitation(params: object): Promise<any> {
+    return ApiClient.handleResponse(await this.client.post('invitations', params));
   }
 
-  public createUser(params: object): Promise<ApiClientResponse> {
-    return this.client.post('users', params);
+  public async createUser(params: object): Promise<User> {
+    return ApiClient.handleResponse(await this.client.post('users', params)) as User;
   }
 
-  public fetchUsers(): Promise<ApiClientResponse> {
-    return this.client.get('users', {});
+  public async fetchUsers(): Promise<User[]> {
+    return ApiClient.handleResponse(await this.client.get('users', {})) as User[];
   }
 
-  public fetchUserDetails(userId: string): Promise<ApiClientResponse> {
-    return this.client.get(`users/${userId}`, {});
+  public async fetchUserDetails(userId: string): Promise<User> {
+    return ApiClient.handleResponse(await this.client.get(`users/${userId}`, {})) as User;
   }
 
-  public updateUser(userId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.put(`users/${userId}`, params);
+  public async updateUser(userId: string, params: object): Promise<void> {
+    return ApiClient.handleResponse(await this.client.put(`users/${userId}`, params));
   }
 }
 

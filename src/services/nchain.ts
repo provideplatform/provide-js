@@ -1,4 +1,5 @@
-import { ApiClient, ApiClientResponse } from '../clients';
+import { ApiClient } from '../clients';
+import { Account, Bridge, Connector, Contract, LoadBalancer, Network, NetworkStats, Node, Oracle, Token, Transaction, Wallet } from '@provide/types';
 
 /*
  * NChain microservice; provides access to functionality
@@ -25,232 +26,232 @@ export class NChain {
     return new NChain(token, _scheme, _host, _path);
   }
 
-  public fetchAccounts(params?: object): Promise<ApiClientResponse> {
-    return this.client.get('accounts', (params || {}));
+  public async fetchAccounts(params?: object): Promise<Account[]> {
+    return ApiClient.handleResponse(await this.client.get('accounts', (params || {}))) as Account[];
   }
 
-  public fetchAccountDetails(accountId: string): Promise<ApiClientResponse> {
-    return this.client.get(`accounts/${accountId}`, {});
+  public async fetchAccountDetails(accountId: string): Promise<Account> {
+    return ApiClient.handleResponse(await this.client.get(`accounts/${accountId}`, {}));
   }
 
-  public fetchAccountBalance(accountId: string, tokenId: string): Promise<ApiClientResponse> {
-    return this.client.get(`accounts/${accountId}/balances/${tokenId}`, {});
+  public async fetchAccountBalance(accountId: string, tokenId: string): Promise<any> {
+    return ApiClient.handleResponse(await this.client.get(`accounts/${accountId}/balances/${tokenId}`, {}));
   }
 
-  public createAccount(params: object): Promise<ApiClientResponse> {
-    return this.client.post('accounts', params);
+  public async createAccount(params: object): Promise<Account> {
+    return ApiClient.handleResponse(await this.client.post('accounts', params)) as Account;
   }
 
-  public fetchBridges(params?: object): Promise<ApiClientResponse> {
-    return this.client.get('bridges', (params || {}));
+  public async fetchBridges(params?: object): Promise<Bridge[]> {
+    return ApiClient.handleResponse(await this.client.get('bridges', (params || {}))) as Bridge[];
   }
 
-  public fetchBridgeDetails(bridgeId: string): Promise<ApiClientResponse> {
-    return this.client.get(`bridges/${bridgeId}`, {});
+  public async fetchBridgeDetails(bridgeId: string): Promise<Bridge> {
+    return ApiClient.handleResponse(await this.client.get(`bridges/${bridgeId}`, {})) as Bridge;
   }
 
-  public createBridge(params: object): Promise<ApiClientResponse> {
-    return this.client.post('bridges', params);
+  public async createBridge(params: object): Promise<Bridge> {
+    return ApiClient.handleResponse(await this.client.post('bridges', params)) as Bridge;
   }
 
-  public fetchConnectors(params?: object): Promise<ApiClientResponse> {
-    return this.client.get('connectors', (params || {}));
+  public async fetchConnectors(params?: object): Promise<Connector[]> {
+    return ApiClient.handleResponse(await this.client.get('connectors', (params || {}))) as Connector[];
   }
 
-  public fetchConnectorDetails(connectorId: string, params?: object): Promise<ApiClientResponse> {
-    return this.client.get(`connectors/${connectorId}`, (params || {}));
+  public async fetchConnectorDetails(connectorId: string, params?: object): Promise<Connector> {
+    return ApiClient.handleResponse(await this.client.get(`connectors/${connectorId}`, (params || {}))) as Connector;
   }
 
-  public fetchConnectorLoadBalancers(connectorId: string, params?: object): Promise<ApiClientResponse> {
-    return this.client.get(`connectors/${connectorId}/load_balancers`, (params || {}));
+  public async fetchConnectorLoadBalancers(connectorId: string, params?: object): Promise<LoadBalancer[]> {
+    return ApiClient.handleResponse(await this.client.get(`connectors/${connectorId}/load_balancers`, (params || {}))) as LoadBalancer[];
   }
 
-  public fetchConnectorNodes(connectorId: string, params?: object): Promise<ApiClientResponse> {
-    return this.client.get(`connectors/${connectorId}/nodes`, (params || {}));
+  public async fetchConnectorNodes(connectorId: string, params?: object): Promise<Node[]> {
+    return ApiClient.handleResponse(await this.client.get(`connectors/${connectorId}/nodes`, (params || {}))) as Node[];
   }
 
-  public createConnector(params: object): Promise<ApiClientResponse> {
-    return this.client.post('connectors', params);
+  public async createConnector(params: object): Promise<Connector> {
+    return ApiClient.handleResponse(await this.client.post('connectors', params)) as Connector;
   }
 
-  public deleteConnector(connectorId: string): Promise<ApiClientResponse> {
-    return this.client.delete(`connectors/${connectorId}`);
+  public async deleteConnector(connectorId: string): Promise<void> {
+    return ApiClient.handleResponse(await this.client.delete(`connectors/${connectorId}`));
   }
 
-  public authorizeConnectorSubscription(connectorId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.post(`connectors/${connectorId}/subscriptions`, params);
+  public async authorizeConnectorSubscription(connectorId: string, params: object): Promise<any> {
+    return ApiClient.handleResponse(await this.client.post(`connectors/${connectorId}/subscriptions`, params));
   }
 
-  public authorizeContractSubscription(contractId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.post(`contracts/${contractId}/subscriptions`, params);
+  public async authorizeContractSubscription(contractId: string, params: object): Promise<any> {
+    return ApiClient.handleResponse(await this.client.post(`contracts/${contractId}/subscriptions`, params));
   }
 
-  public createConnectedEntity(connectorId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.post(`connectors/${connectorId}/entities`, params);
+  public async createConnectedEntity(connectorId: string, params: object): Promise<any> {
+    return ApiClient.handleResponse(await this.client.post(`connectors/${connectorId}/entities`, params));
   }
 
-  public fetchConnectedEntities(connectorId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.get(`connectors/${connectorId}/entities`, params);
+  public async fetchConnectedEntities(connectorId: string, params: object): Promise<any> {
+    return ApiClient.handleResponse(await this.client.get(`connectors/${connectorId}/entities`, params));
   }
 
-  public fetchConnectedEntityDetails(connectorId: string, entityId: string, params?: object): Promise<ApiClientResponse> {
-    return this.client.get(`connectors/${connectorId}/entities/${entityId}`, (params || {}));
+  public async fetchConnectedEntityDetails(connectorId: string, entityId: string, params?: object): Promise<any> {
+    return ApiClient.handleResponse(await this.client.get(`connectors/${connectorId}/entities/${entityId}`, (params || {})));
   }
 
-  public updateConnectedEntity(connectorId: string, entityId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.put(`connectors/${connectorId}/entities/${entityId}`, params);
+  public async updateConnectedEntity(connectorId: string, entityId: string, params: object): Promise<any> {
+    return ApiClient.handleResponse(await this.client.put(`connectors/${connectorId}/entities/${entityId}`, params));
   }
 
-  public deleteConnectedEntity(connectorId: string, entityId: string): Promise<ApiClientResponse> {
-    return this.client.delete(`connectors/${connectorId}/entities/${entityId}`);
+  public async deleteConnectedEntity(connectorId: string, entityId: string): Promise<void> {
+    return ApiClient.handleResponse(await this.client.delete(`connectors/${connectorId}/entities/${entityId}`));
   }
 
-  public fetchContracts(params?: object): Promise<ApiClientResponse> {
-    return this.client.get('contracts', (params || {}));
+  public async fetchContracts(params?: object): Promise<Contract[]> {
+    return ApiClient.handleResponse(await this.client.get('contracts', (params || {}))) as Contract[];
   }
 
-  public fetchContractDetails(contractId: string): Promise<ApiClientResponse> {
-    return this.client.get(`contracts/${contractId}`, {});
+  public async fetchContractDetails(contractId: string): Promise<Contract> {
+    return ApiClient.handleResponse(await this.client.get(`contracts/${contractId}`, {})) as Contract;
   }
 
-  public createContract(params: object): Promise<ApiClientResponse> {
-    return this.client.post('contracts', params);
+  public async createContract(params: object): Promise<Contract> {
+    return ApiClient.handleResponse(await this.client.post('contracts', params)) as Contract;
   }
 
-  public executeContract(contractId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.post(`contracts/${contractId}/execute`, params);
+  public async executeContract(contractId: string, params: object): Promise<void> {
+    return ApiClient.handleResponse(await this.client.post(`contracts/${contractId}/execute`, params));
   }
 
-  public fetchNetworks(params?: object): Promise<ApiClientResponse> {
-    return this.client.get('networks', (params || {}));
+  public async fetchNetworks(params?: object): Promise<Network> {
+    return ApiClient.handleResponse(await this.client.get('networks', (params || {}))) as Network;
   }
 
-  public createNetwork(params: object): Promise<ApiClientResponse> {
-    return this.client.post('networks', params);
+  public async createNetwork(params: object): Promise<Network> {
+    return ApiClient.handleResponse(await this.client.post('networks', params)) as Network;
   }
 
-  public updateNetwork(networkId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.put(`networks/${networkId}`, params);
+  public async updateNetwork(networkId: string, params: object): Promise<void> {
+    return ApiClient.handleResponse(await this.client.put(`networks/${networkId}`, params));
   }
 
-  public fetchNetworkDetails(networkId: string): Promise<ApiClientResponse> {
-    return this.client.get(`networks/${networkId}`, {});
+  public async fetchNetworkDetails(networkId: string): Promise<Network> {
+    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}`, {})) as Network;
   }
 
-  public fetchNetworkAccounts(networkId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.get(`networks/${networkId}/accounts`, params);
+  public async fetchNetworkAccounts(networkId: string, params: object): Promise<Account[]> {
+    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/accounts`, params)) as Account[];
   }
 
-  public fetchNetworkBlocks(networkId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.get(`networks/${networkId}/blocks`, params);
+  public async fetchNetworkBlocks(networkId: string, params: object): Promise<any> {
+    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/blocks`, params));
   }
 
-  public fetchNetworkBridges(networkId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.get(`networks/${networkId}/bridges`, params);
+  public async fetchNetworkBridges(networkId: string, params: object): Promise<Bridge[]> {
+    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/bridges`, params)) as Bridge[];
   }
 
-  public fetchNetworkConnectors(networkId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.get(`networks/${networkId}/connectors`, params);
+  public async fetchNetworkConnectors(networkId: string, params: object): Promise<Connector> {
+    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/connectors`, params)) as Connector;
   }
 
-  public fetchNetworkContracts(networkId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.get(`networks/${networkId}/contracts`, params);
+  public async fetchNetworkContracts(networkId: string, params: object): Promise<Contract[]> {
+    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/contracts`, params)) as Contract[];
   }
 
-  public fetchNetworkContractDetails(networkId: string, contractId: string): Promise<ApiClientResponse> {
-    return this.client.get(`networks/${networkId}/contracts/${contractId}`, {});
+  public async fetchNetworkContractDetails(networkId: string, contractId: string): Promise<Contract> {
+    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/contracts/${contractId}`, {})) as Contract;
   }
 
-  public fetchNetworkOracles(networkId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.get(`networks/${networkId}/oracles`, params);
+  public async fetchNetworkOracles(networkId: string, params: object): Promise<Oracle[]> {
+    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/oracles`, params)) as Oracle[];
   }
 
-  public fetchNetworkTokens(networkId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.get(`networks/${networkId}/tokens`, params);
+  public async fetchNetworkTokens(networkId: string, params: object): Promise<Token[]> {
+    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/tokens`, params)) as Token[];
   }
 
-  public network_transactions(networkId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.get(`networks/${networkId}/transactions`, params);
+  public async fetchNetworkTransactions(networkId: string, params: object): Promise<Transaction[]> {
+    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/transactions`, params)) as Transaction[];
   }
 
-  public fetchNetworkTransactionDetails(networkId: string, transactionId: string): Promise<ApiClientResponse> {
-    return this.client.get(`networks/${networkId}/transactions/${transactionId}`, {});
+  public async fetchNetworkTransactionDetails(networkId: string, transactionId: string): Promise<Transaction> {
+    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/transactions/${transactionId}`, {})) as Transaction;
   }
 
-  public fetchNetworkStatus(networkId: string): Promise<ApiClientResponse> {
-    return this.client.get(`networks/${networkId}/status`, {});
+  public async fetchNetworkStatus(networkId: string): Promise<NetworkStats> {
+    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/status`, {})) as NetworkStats;
   }
 
-  public fetchNetworkNodes(networkId: string, params?: object): Promise<ApiClientResponse> {
-    return this.client.get(`networks/${networkId}/nodes`, (params || {}));
+  public async fetchNetworkNodes(networkId: string, params?: object): Promise<Node[]> {
+    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/nodes`, (params || {}))) as Node[];
   }
 
-  public createNetworkNode(networkId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.post(`networks/${networkId}/nodes`, params);
+  public async createNetworkNode(networkId: string, params: object): Promise<Node> {
+    return ApiClient.handleResponse(await this.client.post(`networks/${networkId}/nodes`, params)) as Node;
   }
 
-  public fetchNetworkNodeDetails(networkId: string, nodeId: string): Promise<ApiClientResponse> {
-    return this.client.get(`networks/${networkId}/nodes/${nodeId}`, {});
+  public async fetchNetworkNodeDetails(networkId: string, nodeId: string): Promise<Node> {
+    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/nodes/${nodeId}`, {})) as Node;
   }
 
-  public fetchNetworkNodeLogs(networkId: string, nodeId: string, params?: object): Promise<ApiClientResponse> {
-    return this.client.get(`networks/${networkId}/nodes/${nodeId}/logs`, (params || {}));
+  public async fetchNetworkNodeLogs(networkId: string, nodeId: string, params?: object): Promise<any> {
+    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/nodes/${nodeId}/logs`, (params || {})));
   }
 
-  public deleteNetworkNode(networkId: string, nodeId: string): Promise<ApiClientResponse> {
-    return this.client.delete(`networks/${networkId}/nodes/${nodeId}`);
+  public async deleteNetworkNode(networkId: string, nodeId: string): Promise<void> {
+    return ApiClient.handleResponse(await this.client.delete(`networks/${networkId}/nodes/${nodeId}`));
   }
 
-  public fetchOracles(params?: object): Promise<ApiClientResponse> {
-    return this.client.get('oracles', (params || {}));
+  public async fetchOracles(params?: object): Promise<Oracle[]> {
+    return ApiClient.handleResponse(await this.client.get('oracles', (params || {}))) as Oracle[];
   }
 
-  public fetchOracleDetails(oracleId: string): Promise<ApiClientResponse> {
-    return this.client.get(`oracles/${oracleId}`, {});
+  public async fetchOracleDetails(oracleId: string): Promise<Oracle> {
+    return ApiClient.handleResponse(await this.client.get(`oracles/${oracleId}`, {})) as Oracle;
   }
 
-  public createOracle(params: object): Promise<ApiClientResponse> {
-    return this.client.post('oracles', params);
+  public async createOracle(params: object): Promise<Oracle> {
+    return ApiClient.handleResponse(await this.client.post('oracles', params)) as Oracle;
   }
 
-  public fetchTokens(params?: object): Promise<ApiClientResponse> {
-    return this.client.get('tokens', (params || {}));
+  public async fetchTokens(params?: object): Promise<Token[]> {
+    return ApiClient.handleResponse(await this.client.get('tokens', (params || {}))) as Token[];
   }
 
-  public fetchTokenDetails(tokenId: string): Promise<ApiClientResponse> {
-    return this.client.get(`tokens/${tokenId}`, {});
+  public async fetchTokenDetails(tokenId: string): Promise<Token> {
+    return ApiClient.handleResponse(await this.client.get(`tokens/${tokenId}`, {})) as Token;
   }
 
-  public createToken(params: object): Promise<ApiClientResponse> {
-    return this.client.post('tokens', params);
+  public async createToken(params: object): Promise<Token> {
+    return ApiClient.handleResponse(await this.client.post('tokens', params)) as Token;
   }
 
-  public createTransaction(params: object): Promise<ApiClientResponse> {
-    return this.client.post('transactions', params);
+  public async createTransaction(params: object): Promise<Transaction> {
+    return ApiClient.handleResponse(await this.client.post('transactions', params)) as Transaction;
   }
 
-  public fetchTransactions(params?: object): Promise<ApiClientResponse> {
-    return this.client.get('transactions', (params || {}));
+  public async fetchTransactions(params?: object): Promise<Transaction[]> {
+    return ApiClient.handleResponse(await this.client.get('transactions', (params || {}))) as Transaction[];
   }
 
-  public fetchTransactionDetails(transactionId: string): Promise<ApiClientResponse> {
-    return this.client.get(`transactions/${transactionId}`, {});
+  public async fetchTransactionDetails(transactionId: string): Promise<Transaction> {
+    return ApiClient.handleResponse(await this.client.get(`transactions/${transactionId}`, {})) as Transaction;
   }
 
-  public fetchWallets(params?: object): Promise<ApiClientResponse> {
-    return this.client.get('wallets', (params || {}));
+  public async fetchWallets(params?: object): Promise<Wallet[]> {
+    return ApiClient.handleResponse(await this.client.get('wallets', (params || {}))) as Wallet[];
   }
 
-  public fetchWalletAccounts(walletId: string): Promise<ApiClientResponse> {
-    return this.client.get(`wallets/${walletId}/accounts`, {});
+  public async fetchWalletAccounts(walletId: string): Promise<Account[]> {
+    return ApiClient.handleResponse(await this.client.get(`wallets/${walletId}/accounts`, {})) as Account[];
   }
 
-  public fetchWalletDetails(walletId: string): Promise<ApiClientResponse> {
-    return this.client.get(`wallets/${walletId}`, {});
+  public async fetchWalletDetails(walletId: string): Promise<Wallet> {
+    return ApiClient.handleResponse(await this.client.get(`wallets/${walletId}`, {})) as Wallet;
   }
 
-  public createWallet(params: object): Promise<ApiClientResponse> {
-    return this.client.post('wallets', params);
+  public async createWallet(params: object): Promise<Wallet> {
+    return ApiClient.handleResponse(await this.client.post('wallets', params)) as Wallet;
   }
 }
 

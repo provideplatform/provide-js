@@ -1,4 +1,5 @@
-import { ApiClient, ApiClientResponse } from '../clients';
+import { ApiClient } from '../clients';
+import { Key, Secret, Vault as ProvideVault} from '@provide/types';
 
 /*
  * Vault microservice; provides advanced privacy and messaging capabilities
@@ -26,52 +27,52 @@ export class Vault {
     return new Vault(token, _scheme, _host, _path);
   }
 
-  public createVault(params: object): Promise<ApiClientResponse> {
-    return this.client.post('vaults', params);
+  public async createVault(params: object): Promise<ProvideVault> {
+    return ApiClient.handleResponse(await this.client.post('vaults', params)) as ProvideVault;
   }
 
-  public fetchVaults(params: object): Promise<ApiClientResponse> {
-    return this.client.get('vaults', params);
+  public async fetchVaults(params: object): Promise<ProvideVault[]> {
+    return ApiClient.handleResponse(await this.client.get('vaults', params)) as ProvideVault[];
   }
 
-  public fetchVaultKeys(vaultId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.get(`vaults/${vaultId}/keys`, params);
+  public async fetchVaultKeys(vaultId: string, params: object): Promise<Key[]> {
+    return ApiClient.handleResponse(await this.client.get(`vaults/${vaultId}/keys`, params)) as Key[];
   }
 
-  public createVaultKey(vaultId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.post(`vaults/${vaultId}/keys`, params);
+  public async createVaultKey(vaultId: string, params: object): Promise<Key> {
+    return ApiClient.handleResponse(await this.client.post(`vaults/${vaultId}/keys`, params)) as Key;
   }
 
-  public deleteVaultKey(vaultId: string, keyId: string): Promise<ApiClientResponse> {
-    return this.client.delete(`vaults/${vaultId}/keys/${keyId}`);
+  public async deleteVaultKey(vaultId: string, keyId: string): Promise<Key> {
+    return ApiClient.handleResponse(await this.client.delete(`vaults/${vaultId}/keys/${keyId}`)) as Key;
   }
 
-  public encrypt(vaultId: string, keyId: string, msg: string): Promise<ApiClientResponse> {
-    return this.client.post(`vaults/${vaultId}/keys/${keyId}/encrypt`, { message: msg });
+  public async encrypt(vaultId: string, keyId: string, msg: string): Promise<any> {
+    return ApiClient.handleResponse(await this.client.post(`vaults/${vaultId}/keys/${keyId}/encrypt`, { message: msg }));
   }
 
-  public decrypt(vaultId: string, keyId: string, msg: string): Promise<ApiClientResponse> {
-    return this.client.post(`vaults/${vaultId}/keys/${keyId}/decrypt`, { message: msg });
+  public async decrypt(vaultId: string, keyId: string, msg: string): Promise<any> {
+    return ApiClient.handleResponse(await this.client.post(`vaults/${vaultId}/keys/${keyId}/decrypt`, { message: msg }));
   }
 
-  public signMessage(vaultId: string, keyId: string, msg: string): Promise<ApiClientResponse> {
-    return this.client.post(`vaults/${vaultId}/keys/${keyId}/sign`, { message: msg });
+  public async signMessage(vaultId: string, keyId: string, msg: string): Promise<any> {
+    return ApiClient.handleResponse(await this.client.post(`vaults/${vaultId}/keys/${keyId}/sign`, { message: msg }));
   }
 
-  public verifySignature(vaultId: string, keyId: string, msg: string, sig: string): Promise<ApiClientResponse> {
-    return this.client.post(`vaults/${vaultId}/keys/${keyId}/verify`, { message: msg, signature: sig });
+  public async verifySignature(vaultId: string, keyId: string, msg: string, sig: string): Promise<any> {
+    return ApiClient.handleResponse(await this.client.post(`vaults/${vaultId}/keys/${keyId}/verify`, { message: msg, signature: sig }));
   }
 
-  public fetchVaultSecrets(vaultId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.get(`vaults/${vaultId}/secrets`, params);
+  public async fetchVaultSecrets(vaultId: string, params: object): Promise<Secret[]> {
+    return ApiClient.handleResponse(await this.client.get(`vaults/${vaultId}/secrets`, params)) as Secret[];
   }
 
-  public createVaultSecret(vaultId: string, params: object): Promise<ApiClientResponse> {
-    return this.client.post(`vaults/${vaultId}/secrets`, params);
+  public async createVaultSecret(vaultId: string, params: object): Promise<Secret> {
+    return ApiClient.handleResponse(await this.client.post(`vaults/${vaultId}/secrets`, params)) as Secret;
   }
 
-  public deleteVaultSecret(vaultId: string, secretId: string): Promise<ApiClientResponse> {
-    return this.client.delete(`vaults/${vaultId}/secrets/${secretId}`);
+  public async deleteVaultSecret(vaultId: string, secretId: string): Promise<Secret> {
+    return ApiClient.handleResponse(await this.client.delete(`vaults/${vaultId}/secrets/${secretId}`));
   }
 }
 

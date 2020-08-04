@@ -1,5 +1,5 @@
-import axios, { Method } from 'axios';
-import { ApiClientResponse } from './api-client-response';
+import axios, { AxiosResponse, Method } from 'axios';
+import { Model } from '@provide/types';
 
 export class ApiClient {
 
@@ -30,6 +30,34 @@ export class ApiClient {
     this.baseUrl = `${scheme}://${host}/${path}/`;
   }
 
+  static handleResponse(resp: AxiosResponse<any>): any {
+    if (['PATCH', 'UPDATE', 'DELETE'].indexOf(resp.request?.method) !== -1 || resp.headers['content-length'] === 0) {
+      if (resp.status >= 400) {
+        return Promise.reject(`failed with ${resp.status} status`);
+      }
+      return Promise.resolve();
+    }
+
+    try {
+      if (resp.data instanceof Array) {
+        const arr = [];
+        (resp.data as any[]).forEach((item: any) => {
+          const inst = new Model();
+          inst.unmarshal(JSON.stringify(item));
+          (arr as any[]).push(inst);
+        });
+        return arr;
+      }
+    
+      const instance = new Model();
+      const json = JSON.stringify(resp.data); // HACK!!
+      instance.unmarshal(json);
+      return instance;
+    } catch (err) {
+      return Promise.reject('failed to parse response as JSON');
+    }
+  }
+
   private static toQuery(params: object): string {
     const paramList: string[] = [];
 
@@ -54,23 +82,23 @@ export class ApiClient {
     return '';
   }
 
-  async get(uri: string, params: object): Promise<ApiClientResponse> {
+  async get(uri: string, params: object): Promise<AxiosResponse<any>> {
     return await this.sendRequest('GET', uri, params);
   }
 
-  async patch(uri: string, params: object): Promise<ApiClientResponse> {
+  async patch(uri: string, params: object): Promise<AxiosResponse<any>> {
     return await this.sendRequest('PATCH', uri, params);
   }
 
-  async post(uri: string, params: object): Promise<ApiClientResponse> {
+  async post(uri: string, params: object): Promise<AxiosResponse<any>> {
     return await this.sendRequest('POST', uri, params);
   }
 
-  async put(uri: string, params: object): Promise<ApiClientResponse> {
+  async put(uri: string, params: object): Promise<AxiosResponse<any>> {
     return await this.sendRequest('PUT', uri, params);
   }
 
-  async delete(uri: string): Promise<ApiClientResponse> {
+  async delete(uri: string): Promise<AxiosResponse<any>> {
     return await this.sendRequest('DELETE', uri, null);
   }
 
@@ -78,7 +106,7 @@ export class ApiClient {
     method: string,
     uri: string,
     params: any = null,
-  ): Promise<ApiClientResponse> {
+  ): Promise<AxiosResponse<any>> {
     let query = '';
     let requestBody: any;
 
@@ -110,18 +138,8 @@ export class ApiClient {
       cfg.data = requestBody;
     }
 
-    let resp;
-
     try {
-      resp = await axios.request(cfg);
-      return new ApiClientResponse(
-        query,
-        requestBody,
-        requestHeaders,
-        resp.data,
-        resp.headers,
-        resp.request?.xhr,
-      );
+      return axios.request(cfg);
     } catch (err) {
       return Promise.reject(err);
     }

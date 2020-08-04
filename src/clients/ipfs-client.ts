@@ -1,8 +1,8 @@
+import { AxiosResponse } from 'axios';
 import IpfsHttpClient from 'ipfs-http-client';
 import { lookup as mimelookup } from 'mime-types';
 
 import { ApiClient } from './api-client';
-import { ApiClientResponse } from './api-client-response';
 
 export class IpfsClient {
 
@@ -118,9 +118,9 @@ export class IpfsClient {
    */
   public ls(hashes: string[]): Promise<any | Error> {
     return new Promise((resolve, reject) => {
-      this.apiClient.get('ls', {arg: hashes}).then((response: ApiClientResponse) => {
+      this.apiClient.get('ls', {arg: hashes}).then((response: AxiosResponse<any>) => {
         const links: any[] = [];
-        JSON.parse(response.responseBody)['Objects'].forEach((ipfsObject: object[]) => {
+        JSON.parse(response.data)['Objects'].forEach((ipfsObject: object[]) => {
           ipfsObject['Links'].forEach((lnk: object) => {
             links.push({
               hash: lnk['Hash'],
