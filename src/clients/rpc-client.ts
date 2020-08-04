@@ -42,13 +42,12 @@ export class RpcClient {
         params: params,
       }).then((resp) => {
         if (resp && resp.data && resp.status === 200) {
-          const response = JSON.parse(resp.data);
-          if (response && typeof response.result !== 'undefined' && typeof response.error === 'undefined') {
-            resolve(response.result);
-          } else if (response && response.error) {
-            reject(response);
+          if (resp.data && typeof resp.data.result !== 'undefined' && typeof resp.data.error === 'undefined') {
+            resolve(resp.data.result);
+          } else if (resp.data && resp.data.error) {
+            reject(resp);
           } else {
-            reject(response);
+            reject(resp);
           }
         } else {
           reject(resp);

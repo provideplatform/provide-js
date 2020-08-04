@@ -120,7 +120,7 @@ export class IpfsClient {
     return new Promise((resolve, reject) => {
       this.apiClient.get('ls', {arg: hashes}).then((response: AxiosResponse<any>) => {
         const links: any[] = [];
-        JSON.parse(response.data)['Objects'].forEach((ipfsObject: object[]) => {
+        response.data['Objects'].forEach((ipfsObject: object[]) => {
           ipfsObject['Links'].forEach((lnk: object) => {
             links.push({
               hash: lnk['Hash'],
