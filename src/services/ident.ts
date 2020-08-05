@@ -1,5 +1,5 @@
 import { ApiClient } from '../clients';
-import { Application, Key as VaultKey, Organization, Secret as VaultSecret, Token, User, Vault } from '@provide/types';
+import { Application, Invite, Key as VaultKey, Organization, Secret as VaultSecret, Token, User, Vault } from '@provide/types';
 
 /*
  * Ident microservice; provides access to functionality
@@ -81,7 +81,7 @@ export class Ident {
     return ApiClient.handleResponse(await this.client.delete(`applications/${appId}/organizations/${organizationId}`));
   }
 
-  public async fetchApplicationInvitations(appId: string, params: object): Promise<any> {
+  public async fetchApplicationInvitations(appId: string, params: object): Promise<Invite> {
     return ApiClient.handleResponse(await this.client.get(`applications/${appId}/invitations`, params));
   }
 
@@ -121,7 +121,7 @@ export class Ident {
     return ApiClient.handleResponse(await this.client.put(`organizations/${organizationId}`, params));
   }
 
-  public async fetchOrganizationInvitations(organizationId: string, params: object): Promise<any> {
+  public async fetchOrganizationInvitations(organizationId: string, params: object): Promise<Invite> {
     return ApiClient.handleResponse(await this.client.get(`organizations/${organizationId}/invitations`, params));
   }
 
@@ -199,7 +199,7 @@ export class Ident {
     return ApiClient.handleResponse(await this.client.delete(`tokens/${tokenId}`));
   }
 
-  public async createInvitation(params: object): Promise<any> {
+  public async createInvitation(params: object): Promise<Invite> {
     return ApiClient.handleResponse(await this.client.post('invitations', params));
   }
 
