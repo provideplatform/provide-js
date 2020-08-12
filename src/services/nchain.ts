@@ -118,7 +118,7 @@ export class NChain {
     return ApiClient.handleResponse(await this.client.post('contracts', params)) as Contract;
   }
 
-  public async executeContract(contractId: string, params: object): Promise<void> {
+  public async executeContract(contractId: string, params: object): Promise<any> {
     return ApiClient.handleResponse(await this.client.post(`contracts/${contractId}/execute`, params));
   }
 
