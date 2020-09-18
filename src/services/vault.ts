@@ -74,6 +74,14 @@ export class Vault {
   public async deleteVaultSecret(vaultId: string, secretId: string): Promise<Secret> {
     return ApiClient.handleResponse(await this.client.delete(`vaults/${vaultId}/secrets/${secretId}`));
   }
+
+  public async seal(key: string): Promise<Secret> {
+    return ApiClient.handleResponse(await this.client.post('vaults/seal', { key: key }));
+  }
+
+  public async unseal(key: string): Promise<Secret> {
+    return ApiClient.handleResponse(await this.client.post('vaults/unseal', { key: key }));
+  }
 }
 
 export const vaultClientFactory = (token: string, scheme?: string, host?: string, path?: string): Vault => {
