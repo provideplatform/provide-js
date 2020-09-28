@@ -76,11 +76,11 @@ export class Vault {
   }
 
   public async seal(key: string): Promise<Secret> {
-    return ApiClient.handleResponse(await this.client.post('vaults/seal', { key: key }));
+    return ApiClient.handleResponse(await this.client.post('seal', { key: key }));
   }
 
   public async unseal(key: string): Promise<Secret> {
-    return ApiClient.handleResponse(await this.client.post('vaults/unseal', { key: key }));
+    return ApiClient.handleResponse(await this.client.post('unseal', { key: key }));
   }
 }
 
