@@ -93,6 +93,12 @@ export class Ident {
     return ApiClient.handleResponse(await this.client.get(`applications/${appId}/users`, params)) as User[];
   }
 
+  public async authenticateApplicationUser(email: string): Promise<any> {
+    return ApiClient.handleResponse(await this.client.post(`authenticate`, {
+      email: email,
+    }));
+  }
+
   public async createApplicationUser(appId: string, params: object): Promise<User> {
     return ApiClient.handleResponse(await this.client.post(`applications/${appId}/users`, params)) as User;
   }
