@@ -1,5 +1,5 @@
 import { ApiClient } from '../clients';
-import { Application, Invite, Key as VaultKey, Organization, Secret as VaultSecret, Token, User, Vault } from '@provide/types';
+import { Application, AuthenticationResponse, Invite, Key as VaultKey, Organization, Secret as VaultSecret, Token, User, Vault } from '@provide/types';
 
 /*
  * Ident microservice; provides access to functionality
@@ -33,7 +33,7 @@ export class Ident {
     return new ApiClient(token, _scheme, _host, _path);
   }
 
-  public static async authenticate(params: object, scheme?: string, host?: string, path?: string): Promise<any> {
+  public static async authenticate(params: object, scheme?: string, host?: string, path?: string): Promise<AuthenticationResponse> {
     return ApiClient.handleResponse(await Ident.unauthenticatedClientFactory(undefined, scheme, host, path).post('authenticate', params));
   }
 
