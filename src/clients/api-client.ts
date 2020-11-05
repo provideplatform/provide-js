@@ -27,7 +27,7 @@ export class ApiClient {
     path = ApiClient.DEFAULT_PATH,
   ) {
     this.token = token;
-    this.baseUrl = `${scheme}://${host}/${path}/`;
+    this.baseUrl = `${scheme}://${host}/${path && path !== '/' ? path : ''}/`;
   }
 
   static handleResponse(resp: AxiosResponse<any>): any {
