@@ -37,6 +37,14 @@ export class Ident {
     return ApiClient.handleResponse(await Ident.unauthenticatedClientFactory(undefined, scheme, host, path).post('authenticate', params));
   }
 
+  public static async fetchPrivacyPolicy(scheme?: string, host?: string, path?: string): Promise<any> {
+    return ApiClient.handleResponse(await Ident.unauthenticatedClientFactory(undefined, scheme, host, path).get('legal/privacy_policy', {}));
+  }
+
+  public static async fetchTermsOfService(scheme?: string, host?: string, path?: string): Promise<any> {
+    return ApiClient.handleResponse(await Ident.unauthenticatedClientFactory(undefined, scheme, host, path).get('legal/terms_of_service', {}));
+  }
+
   public static async createUser(params: object, scheme?: string, host?: string, path?: string): Promise<User> {
     return ApiClient.handleResponse(await Ident.unauthenticatedClientFactory(undefined, scheme, host, path).post('users', params)) as User;
   }
