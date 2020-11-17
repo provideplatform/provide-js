@@ -93,8 +93,8 @@ export class Ident {
     return ApiClient.handleResponse(await this.client.get(`applications/${appId}/invitations`, params));
   }
 
-  public async fetchApplicationTokens(appId: string, params: object): Promise<Token> {
-    return ApiClient.handleResponse(await this.client.get(`applications/${appId}/tokens`, params)) as Token;
+  public async fetchApplicationTokens(appId: string, params: object): Promise<Token[]> {
+    return ApiClient.handleResponse(await this.client.get(`applications/${appId}/tokens`, params)) as Token[];
   }
 
   public async fetchApplicationUsers(appId: string, params: object): Promise<User[]> {
