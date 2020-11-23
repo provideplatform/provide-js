@@ -1,5 +1,5 @@
 import { ApiClient } from '../clients';
-import { Account, Bridge, Connector, Contract, LoadBalancer, Network, NetworkStats, Node, Oracle, Token, Transaction, Wallet } from '@provide/types';
+import { Account, Bridge, Connector, Contract, LoadBalancer, LogsResponse, Network, NetworkStats, Node, Oracle, Token, Transaction, Wallet } from '@provide/types';
 
 /*
  * NChain microservice; provides access to functionality
@@ -194,7 +194,7 @@ export class NChain {
     return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/nodes/${nodeId}`, {})) as Node;
   }
 
-  public async fetchNetworkNodeLogs(networkId: string, nodeId: string, params?: object): Promise<any> {
+  public async fetchNetworkNodeLogs(networkId: string, nodeId: string, params?: object): Promise<LogsResponse> {
     return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/nodes/${nodeId}/logs`, (params || {})));
   }
 
