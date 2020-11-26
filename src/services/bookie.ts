@@ -54,6 +54,10 @@ export class Bookie {
     return ApiClient.handleResponse(await this.client.post('kyc_applicatons', params)) as KycApplication;
   }
 
+  public async updateKycApplication(kycApplicationId: string, params: KycApplicationParams): Promise<void> {
+    return ApiClient.handleResponse(await this.client.put(`kyc_applicatons/${kycApplicationId}`, params));
+  }
+
   public async createPayment(params: any): Promise<KycApplication> {
     return ApiClient.handleResponse(await this.client.post('payments', params)) as KycApplication;
   }
