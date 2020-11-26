@@ -30,7 +30,7 @@ export class Bookie {
     return ApiClient.handleResponse(await this.client.get('billing_accounts', params || {})) as BillingAccount[];
   }
 
-  public async fetchBillingAccount(billingAccountId: string, params?: any): Promise<BillingAccount> {
+  public async fetchBillingAccountDetails(billingAccountId: string, params?: any): Promise<BillingAccount> {
     return ApiClient.handleResponse(await this.client.get(`billing_accounts/${billingAccountId}`, params || {})) as BillingAccount;
   }
 
@@ -46,7 +46,7 @@ export class Bookie {
     return ApiClient.handleResponse(await this.client.get(`kyc_applicatons`, params || {})) as KycApplication[];
   }
 
-  public async fetchKycApplication(kycApplicationId: string, params?: any): Promise<KycApplication> {
+  public async fetchKycApplicationDetails(kycApplicationId: string, params?: any): Promise<KycApplication> {
     return ApiClient.handleResponse(await this.client.get(`kyc_applicatons/${kycApplicationId}`, params || {})) as KycApplication;
   }
 
