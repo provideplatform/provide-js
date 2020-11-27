@@ -1,5 +1,5 @@
 import { ApiClient } from '../clients';
-import { Account, Bridge, Connector, Contract, LoadBalancer, LogsResponse, Network, NetworkStats, Node, Oracle, Token, Transaction, Wallet } from '@provide/types';
+import { Account, Bridge, Connector, Contract, LoadBalancer, LogsResponse, Network, NetworkStats, Node, Oracle, TokenContract, Transaction, Wallet } from '@provide/types';
 
 /*
  * NChain microservice; provides access to functionality
@@ -166,8 +166,8 @@ export class NChain {
     return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/oracles`, params)) as Oracle[];
   }
 
-  public async fetchNetworkTokens(networkId: string, params: object): Promise<Token[]> {
-    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/tokens`, params)) as Token[];
+  public async fetchNetworkTokenContracts(networkId: string, params: object): Promise<TokenContract[]> {
+    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/tokens`, params)) as TokenContract[];
   }
 
   public async fetchNetworkTransactions(networkId: string, params: object): Promise<Transaction[]> {
@@ -214,16 +214,16 @@ export class NChain {
     return ApiClient.handleResponse(await this.client.post('oracles', params)) as Oracle;
   }
 
-  public async fetchTokens(params?: object): Promise<Token[]> {
-    return ApiClient.handleResponse(await this.client.get('tokens', (params || {}))) as Token[];
+  public async fetchTokenContracts(params?: object): Promise<TokenContract[]> {
+    return ApiClient.handleResponse(await this.client.get('tokens', (params || {}))) as TokenContract[];
   }
 
-  public async fetchTokenDetails(tokenId: string): Promise<Token> {
-    return ApiClient.handleResponse(await this.client.get(`tokens/${tokenId}`, {})) as Token;
+  public async fetchTokenContractDetails(tokenId: string): Promise<TokenContract> {
+    return ApiClient.handleResponse(await this.client.get(`tokens/${tokenId}`, {})) as TokenContract;
   }
 
-  public async createToken(params: object): Promise<Token> {
-    return ApiClient.handleResponse(await this.client.post('tokens', params)) as Token;
+  public async createTokenContract(params: object): Promise<TokenContract> {
+    return ApiClient.handleResponse(await this.client.post('tokens', params)) as TokenContract;
   }
 
   public async createTransaction(params: object): Promise<Transaction> {
