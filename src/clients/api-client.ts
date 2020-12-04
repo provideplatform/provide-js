@@ -55,7 +55,6 @@ export class ApiClient {
       }
 
       const instance = new Model();
-      instance.totalResultsCount = resp.headers['x-total-results-count'];
       const json = JSON.stringify(resp.data); // HACK!!
       instance.unmarshal(json);
       return instance;
