@@ -89,7 +89,7 @@ export class Ident {
     return ApiClient.handleResponse(await this.client.delete(`applications/${appId}/organizations/${organizationId}`));
   }
 
-  public async fetchApplicationInvitations(appId: string, params: object): Promise<Invite> {
+  public async fetchApplicationInvitations(appId: string, params: object): Promise<Invite[]> {
     return ApiClient.handleResponse(await this.client.get(`applications/${appId}/invitations`, params));
   }
 
@@ -135,7 +135,7 @@ export class Ident {
     return ApiClient.handleResponse(await this.client.put(`organizations/${organizationId}`, params));
   }
 
-  public async fetchOrganizationInvitations(organizationId: string, params: object): Promise<Invite> {
+  public async fetchOrganizationInvitations(organizationId: string, params: object): Promise<Invite[]> {
     return ApiClient.handleResponse(await this.client.get(`organizations/${organizationId}/invitations`, params));
   }
 
