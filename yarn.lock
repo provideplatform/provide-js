@@ -369,10 +369,10 @@
   resolved "https://registry.yarnpkg.com/@provide/nats.ws/-/nats.ws-1.0.6.tgz#0f4cd9fb892beebf0786b6a6451564dcccd60cb6"
   integrity sha512-gUn7rBuCCmQlPGDK9hee6Pp0NRRAr2tsBOHN6YIv30L/ytZ2VHiCo1BtbQgoBesaMu3qK3/+GBhmpr2dd+YcXA==
 
-"@provide/types@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@provide/types/-/types-1.0.3.tgz#dfd8fdfd31d2f248fdbf79b6aa166cba75553be9"
-  integrity sha512-rf5+39uD5zjcImiegodHoBDQPhw0x95hA6bFWQaiheAdWekLZODh74D42ui3VQgASOIhzWqpLojjKAVoSPX6Pw==
+"@provide/types@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@provide/types/-/types-1.1.0.tgz#a539e3cdeaf5a3beba8e11bebf91d15a1a7ab78e"
+  integrity sha512-mK2Q/djHInzWNfXHB2bg2j/vXazWUnnchZ4G+sQdsEDtBBh3ogHSgkGDhs9hfzY+48KfMHTMNoydC66gQdnJ3A==
   dependencies:
     ethers "4.0.38"
 
