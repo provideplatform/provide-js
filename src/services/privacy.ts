@@ -1,5 +1,5 @@
 import { ApiClient } from '../clients';
-import { Circuit } from '@provide/types';
+import { Circuit, ProveResponse, VerifyResponse } from '@provide/types';
 
 /*
  * Privacy microservice; provides access to protocol-agnostic functionality
@@ -38,7 +38,11 @@ export class Privacy {
     return ApiClient.handleResponse(await this.client.post('circuits', params));
   }
 
-  public async verify(circuitId: string, params: object): Promise<boolean> {
+  public async prove(circuitId: string, params: object): Promise<ProveResponse> {
+    return ApiClient.handleResponse(await this.client.post(`circuits/${circuitId}/prove`, params));
+  }
+
+  public async verify(circuitId: string, params: object): Promise<VerifyResponse> {
     return ApiClient.handleResponse(await this.client.post(`circuits/${circuitId}/verify`, params));
   }
 }
