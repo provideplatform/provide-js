@@ -67,6 +67,10 @@ export class Vault {
     return ApiClient.handleResponse(await this.client.get(`vaults/${vaultId}/secrets`, params)) as Secret[];
   }
 
+  public async fetchVaultSecret(vaultId: string, secretId: string): Promise<Secret> {
+    return ApiClient.handleResponse(await this.client.get(`vaults/${vaultId}/secrets/${secretId}`, {})) as Secret;
+  }
+
   public async createVaultSecret(vaultId: string, params: object): Promise<Secret> {
     return ApiClient.handleResponse(await this.client.post(`vaults/${vaultId}/secrets`, params)) as Secret;
   }
