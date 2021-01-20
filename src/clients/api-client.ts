@@ -27,12 +27,14 @@ export class ApiClient {
     path = ApiClient.DEFAULT_PATH,
   ) {
     this.token = token;
+
     this.baseUrl = `${scheme}://${host}`;
     if (path && path !== '/') {
       this.baseUrl = `${this.baseUrl}/${path}/`;
     } else {
       this.baseUrl = `${this.baseUrl}/`;
     }
+    this.baseUrl = this.baseUrl.replace(/\/+$/, '');
   }
 
   static handleResponse(resp: AxiosResponse<any>): any {
