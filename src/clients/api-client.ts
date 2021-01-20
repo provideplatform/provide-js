@@ -34,7 +34,7 @@ export class ApiClient {
     } else {
       this.baseUrl = `${this.baseUrl}/`;
     }
-    this.baseUrl = `${this.baseUrl.replace(/\/+$/, '')}`;
+    this.baseUrl = `${this.baseUrl.replace(/\/+$/, '')}/`;
   }
 
   static handleResponse(resp: AxiosResponse<any>): any {
