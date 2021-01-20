@@ -135,7 +135,7 @@ export class ApiClient {
     }
 
     const cfg = {
-      url: this.baseUrl + uri + query,
+      url: (this.baseUrl + uri).replace(/\/+$/, '') + query,
       method: method as Method,
       headers: requestHeaders,
       data: null,
