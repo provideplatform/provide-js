@@ -1,5 +1,5 @@
 import { ApiClient } from '../clients';
-import { BillingAccount, KycApplication, KycApplicationParams } from '@provide/types';
+import { BillingAccount, KycApplication, KycApplicationParams, Payment } from '@provide/types';
 
 /*
  * Bookie microservice; provides access to functionality
@@ -58,8 +58,8 @@ export class Bookie {
     return ApiClient.handleResponse(await this.client.put(`kyc_applicatons/${kycApplicationId}`, params));
   }
 
-  public async createPayment(params: any): Promise<KycApplication> {
-    return ApiClient.handleResponse(await this.client.post('payments', params)) as KycApplication;
+  public async createPayment(params: any): Promise<Payment> {
+    return ApiClient.handleResponse(await this.client.post('payments', params)) as Payment;
   }
 }
 
