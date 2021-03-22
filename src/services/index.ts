@@ -1,3 +1,4 @@
+export { Baseline, baselineClientFactory } from './baseline';
 export { Bookie, bookieClientFactory } from './bookie';
 export { Capabilities, capabilitiesFactory } from './capabilities';
 export { Ident, identClientFactory } from './ident';
