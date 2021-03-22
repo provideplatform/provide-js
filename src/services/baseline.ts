@@ -26,7 +26,7 @@ export class Baseline {
   }
 
   public async configureProxy(params: any): Promise<void> {
-    return ApiClient.handleResponse(await this.client.put('configure', params));
+    return ApiClient.handleResponse(await this.client.put('config', params));
   }
 
   public async createBusinessObject(params: any): Promise<BaselineResponse> {
