@@ -1,5 +1,5 @@
 import { ApiClient } from '../clients';
-import { BillingAccount, KycApplication, KycApplicationParams, Payment } from '@provide/types';
+import { BillingAccount, KycApplication, KycApplicationParams, Payment, Facility, Agreement } from '@provide/types';
 
 /*
  * Bookie microservice; provides access to functionality
@@ -60,6 +60,30 @@ export class Bookie {
 
   public async createPayment(params: any): Promise<Payment> {
     return ApiClient.handleResponse(await this.client.post('payments', params)) as Payment;
+  }
+
+  public async createFacility(params: any): Promise<Facility> {
+    return ApiClient.handleResponse(await this.client.post('facilities', params)) as Facility;  
+  }
+
+  public async fetchFacilities(params?: any): Promise<Facility[]> {
+    return ApiClient.handleResponse(await this.client.get('facilities', params || {})) as Facility[];
+  }
+
+  public async fetchFacilityDetails(facilityId: string, params?: any): Promise<Facility> {
+    return ApiClient.handleResponse(await this.client.get(`facilities/${facilityId}`, params || {})) as Facility;
+  }
+
+  public async createAgreement(facilityId: string, params: any): Promise<Agreement> {
+    return ApiClient.handleResponse(await this.client.post(`facilities/${facilityId}/agreements`, params)) as Agreement;  
+  }
+
+  public async fetchAgreements(facilityId: string, params?: any): Promise<Agreement[]> {
+    return ApiClient.handleResponse(await this.client.get(`facilities/${facilityId}/agreements`, params || {})) as Agreement[];  
+  }
+
+  public async fetchAgreementDetails(facilityId: string, agreementId: string, params?: any): Promise<Agreement> {
+    return ApiClient.handleResponse(await this.client.get(`facilities/${facilityId}/agreements/${agreementId}`, params || {})) as Agreement;
   }
 }
 
