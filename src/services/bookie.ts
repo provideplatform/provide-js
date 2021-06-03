@@ -1,5 +1,5 @@
 import { ApiClient } from '../clients';
-import { BillingAccount, KycApplication, KycApplicationParams, Payment, Facility, Agreement } from '@provide/types';
+import { BillingAccount, KycApplication, KycApplicationParams, Payment, Facility, Agreement, TokenizationPolicy } from '@provide/types';
 
 /*
  * Bookie microservice; provides access to functionality
@@ -84,6 +84,18 @@ export class Bookie {
 
   public async fetchAgreementDetails(facilityId: string, agreementId: string, params?: any): Promise<Agreement> {
     return ApiClient.handleResponse(await this.client.get(`facilities/${facilityId}/agreements/${agreementId}`, params || {})) as Agreement;
+  }
+
+  public async createTokenizationPolicy(params: any): Promise<TokenizationPolicy> {
+    return ApiClient.handleResponse(await this.client.post('tokenization_policies', params)) as TokenizationPolicy;  
+  }
+
+  public async fetchTokenizationPolicies(params?: any): Promise<TokenizationPolicy[]> {
+    return ApiClient.handleResponse(await this.client.get('tokenization_policies', params || {})) as TokenizationPolicy[];
+  }
+
+  public async fetchTokenizationPolicyDetails(tokenizationPolicyId: string, params?: any): Promise<TokenizationPolicy> {
+    return ApiClient.handleResponse(await this.client.get(`tokenization_policies/${tokenizationPolicyId}`, params || {})) as TokenizationPolicy;
   }
 }
 
