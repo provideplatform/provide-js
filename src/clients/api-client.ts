@@ -37,7 +37,9 @@ export class ApiClient {
     this.baseUrl = `${this.baseUrl.replace(/\/+$/, '')}/`;
   }
 
-  static handleResponse(resp: AxiosResponse<any>): any {
+  // tmp way of including total count to be used on server side pagination on front end side
+  // discuss and find better solution, this is used by skos for developing for now
+  static handleResponse(resp: AxiosResponse<any>, includeTotalCount: boolean = false): any {
     if (['PATCH', 'UPDATE', 'DELETE'].indexOf(resp.request?.method) !== -1 || resp.headers['content-length'] === 0) {
       if (resp.status >= 400) {
         return Promise.reject(`failed with ${resp.status} status`);
@@ -53,7 +55,10 @@ export class ApiClient {
           inst.unmarshal(JSON.stringify(item));
           (arr as any[]).push(inst);
         });
-        return arr;
+        return includeTotalCount ? {
+          items: arr,
+          totalCount: +resp.headers["x-total-results-count"]
+        } : arr;
       }
 
       const instance = new Model();

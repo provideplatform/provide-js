@@ -111,8 +111,8 @@ export class Bookie {
     return ApiClient.handleResponse(await this.client.post(`billing_accounts/${billingAccountId}/transactions`, params)) as Transaction;  
   }
 
-  public async fetchBillingAccountTransactions(billingAccountId: string, params?: any): Promise<Transaction[]> {
-    return ApiClient.handleResponse(await this.client.get(`billing_accounts/${billingAccountId}/transactions`, params || {})) as Transaction[];
+  public async fetchBillingAccountTransactions(billingAccountId: string, params?: any): Promise<{ items: Transaction[], totalCount: number}> {
+    return ApiClient.handleResponse(await this.client.get(`billing_accounts/${billingAccountId}/transactions`, params || {}), true) as { items: Transaction[], totalCount: number};
   }
 
   public async fetchBillingAccountTransactionDetails(billingAccountId: string, transactionId: string, params?: any): Promise<Transaction> {
