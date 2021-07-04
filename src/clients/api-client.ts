@@ -38,7 +38,7 @@ export class ApiClient {
   }
 
   // tmp way of including total count to be used on server side pagination on front end side
-  // discuss and find better solution, this is used by skos for developing for now
+  // should we add more flexibility to this?
   static handleResponse(resp: AxiosResponse<any>, includeTotalCount: boolean = false): any {
     if (['PATCH', 'UPDATE', 'DELETE'].indexOf(resp.request?.method) !== -1 || resp.headers['content-length'] === 0) {
       if (resp.status >= 400) {

@@ -75,8 +75,8 @@ export class Bookie {
     return ApiClient.handleResponse(await this.client.post('facilities', params)) as Facility;  
   }
 
-  public async fetchFacilities(params?: any): Promise<Facility[]> {
-    return ApiClient.handleResponse(await this.client.get('facilities', params || {}), true) as Facility[];
+  public async fetchFacilities(params?: any, includeTotalCount = false): Promise<Facility[]> {
+    return ApiClient.handleResponse(await this.client.get('facilities', params || {}), includeTotalCount) as Facility[];
   }
 
   public async fetchFacilityDetails(facilityId: string, params?: any): Promise<Facility> {
@@ -111,8 +111,8 @@ export class Bookie {
     return ApiClient.handleResponse(await this.client.post(`billing_accounts/${billingAccountId}/transactions`, params)) as Transaction;  
   }
 
-  public async fetchBillingAccountTransactions(billingAccountId: string, params?: any): Promise<{ items: Transaction[], totalCount: number}> {
-    return ApiClient.handleResponse(await this.client.get(`billing_accounts/${billingAccountId}/transactions`, params || {}), true) as { items: Transaction[], totalCount: number};
+  public async fetchBillingAccountTransactions(billingAccountId: string, params?: any, includeTotalCount = false): Promise<{ items: Transaction[], totalCount: number}> {
+    return ApiClient.handleResponse(await this.client.get(`billing_accounts/${billingAccountId}/transactions`, params || {}), includeTotalCount) as { items: Transaction[], totalCount: number};
   }
 
   public async fetchBillingAccountTransactionDetails(billingAccountId: string, transactionId: string, params?: any): Promise<Transaction> {
