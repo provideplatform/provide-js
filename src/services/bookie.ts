@@ -76,7 +76,7 @@ export class Bookie {
   }
 
   public async fetchFacilities(params?: any): Promise<Facility[]> {
-    return ApiClient.handleResponse(await this.client.get('facilities', params || {})) as Facility[];
+    return ApiClient.handleResponse(await this.client.get('facilities', params || {}), true) as Facility[];
   }
 
   public async fetchFacilityDetails(facilityId: string, params?: any): Promise<Facility> {
