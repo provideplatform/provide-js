@@ -1,5 +1,6 @@
 import { ApiClient } from '../clients';
-import { Account, Bridge, Connector, Contract, LoadBalancer, LogsResponse, Network, NetworkStats, Node, Oracle, TokenContract, Transaction, Wallet } from '@provide/types';
+import { Account, Bridge, Connector, Contract, LoadBalancer, LogsResponse, Network, NetworkStats, Node, Oracle, Token, TokenContract, Transaction, Wallet } from '@provide/types';
+import { ApiClientResponse, PaginatedResponse } from '../clients/api-client-response';
 
 /*
  * NChain microservice; provides access to functionality
@@ -26,12 +27,12 @@ export class NChain {
     return new NChain(token, _scheme, _host, _path);
   }
 
-  public async fetchAccounts(params?: object): Promise<Account[]> {
-    return ApiClient.handleResponse(await this.client.get('accounts', (params || {}))) as Account[];
+  public async fetchAccounts(params?: object): Promise<PaginatedResponse<Account>> {
+    return ApiClient.handleResponse(await this.client.get('accounts', (params || {}))) as PaginatedResponse<Account>;
   }
 
   public async fetchAccountDetails(accountId: string): Promise<Account> {
-    return ApiClient.handleResponse(await this.client.get(`accounts/${accountId}`, {}));
+    return ApiClient.handleResponse(await this.client.get(`accounts/${accountId}`, {})) as Account;
   }
 
   public async fetchAccountBalance(accountId: string, tokenId: string): Promise<any> {
@@ -42,8 +43,8 @@ export class NChain {
     return ApiClient.handleResponse(await this.client.post('accounts', params)) as Account;
   }
 
-  public async fetchBridges(params?: object): Promise<Bridge[]> {
-    return ApiClient.handleResponse(await this.client.get('bridges', (params || {}))) as Bridge[];
+  public async fetchBridges(params?: object): Promise<PaginatedResponse<Bridge>> {
+    return ApiClient.handleResponse(await this.client.get('bridges', (params || {}))) as PaginatedResponse<Bridge>;
   }
 
   public async fetchBridgeDetails(bridgeId: string): Promise<Bridge> {
@@ -54,20 +55,20 @@ export class NChain {
     return ApiClient.handleResponse(await this.client.post('bridges', params)) as Bridge;
   }
 
-  public async fetchConnectors(params?: object): Promise<Connector[]> {
-    return ApiClient.handleResponse(await this.client.get('connectors', (params || {}))) as Connector[];
+  public async fetchConnectors(params?: object): Promise<PaginatedResponse<Connector>> {
+    return ApiClient.handleResponse(await this.client.get('connectors', (params || {}))) as PaginatedResponse<Connector>;
   }
 
   public async fetchConnectorDetails(connectorId: string, params?: object): Promise<Connector> {
     return ApiClient.handleResponse(await this.client.get(`connectors/${connectorId}`, (params || {}))) as Connector;
   }
 
-  public async fetchConnectorLoadBalancers(connectorId: string, params?: object): Promise<LoadBalancer[]> {
-    return ApiClient.handleResponse(await this.client.get(`connectors/${connectorId}/load_balancers`, (params || {}))) as LoadBalancer[];
+  public async fetchConnectorLoadBalancers(connectorId: string, params?: object): Promise<PaginatedResponse<LoadBalancer>> {
+    return ApiClient.handleResponse(await this.client.get(`connectors/${connectorId}/load_balancers`, (params || {}))) as PaginatedResponse<LoadBalancer>;
   }
 
-  public async fetchConnectorNodes(connectorId: string, params?: object): Promise<Node[]> {
-    return ApiClient.handleResponse(await this.client.get(`connectors/${connectorId}/nodes`, (params || {}))) as Node[];
+  public async fetchConnectorNodes(connectorId: string, params?: object): Promise<PaginatedResponse<Node>> {
+    return ApiClient.handleResponse(await this.client.get(`connectors/${connectorId}/nodes`, (params || {}))) as PaginatedResponse<Node>;
   }
 
   public async createConnector(params: object): Promise<Connector> {
@@ -106,8 +107,8 @@ export class NChain {
     return ApiClient.handleResponse(await this.client.delete(`connectors/${connectorId}/entities/${entityId}`));
   }
 
-  public async fetchContracts(params?: object): Promise<Contract[]> {
-    return ApiClient.handleResponse(await this.client.get('contracts', (params || {}))) as Contract[];
+  public async fetchContracts(params?: object): Promise<PaginatedResponse<Contract>> {
+    return ApiClient.handleResponse(await this.client.get('contracts', (params || {}))) as PaginatedResponse<Contract>;
   }
 
   public async fetchContractDetails(contractId: string): Promise<Contract> {
@@ -138,40 +139,40 @@ export class NChain {
     return ApiClient.handleResponse(await this.client.get(`networks/${networkId}`, {})) as Network;
   }
 
-  public async fetchNetworkAccounts(networkId: string, params: object): Promise<Account[]> {
-    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/accounts`, params)) as Account[];
+  public async fetchNetworkAccounts(networkId: string, params: object): Promise<PaginatedResponse<Account>> {
+    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/accounts`, params)) as PaginatedResponse<Account>;
   }
 
   public async fetchNetworkBlocks(networkId: string, params: object): Promise<any> {
     return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/blocks`, params));
   }
 
-  public async fetchNetworkBridges(networkId: string, params: object): Promise<Bridge[]> {
-    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/bridges`, params)) as Bridge[];
+  public async fetchNetworkBridges(networkId: string, params: object): Promise<PaginatedResponse<Bridge>> {
+    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/bridges`, params)) as PaginatedResponse<Bridge>;
   }
 
   public async fetchNetworkConnectors(networkId: string, params: object): Promise<Connector> {
     return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/connectors`, params)) as Connector;
   }
 
-  public async fetchNetworkContracts(networkId: string, params: object): Promise<Contract[]> {
-    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/contracts`, params)) as Contract[];
+  public async fetchNetworkContracts(networkId: string, params: object): Promise<PaginatedResponse<Contract>> {
+    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/contracts`, params)) as PaginatedResponse<Contract>;
   }
 
   public async fetchNetworkContractDetails(networkId: string, contractId: string): Promise<Contract> {
     return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/contracts/${contractId}`, {})) as Contract;
   }
 
-  public async fetchNetworkOracles(networkId: string, params: object): Promise<Oracle[]> {
-    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/oracles`, params)) as Oracle[];
+  public async fetchNetworkOracles(networkId: string, params: object): Promise<PaginatedResponse<Oracle>> {
+    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/oracles`, params)) as PaginatedResponse<Oracle>;
   }
 
-  public async fetchNetworkTokenContracts(networkId: string, params: object): Promise<TokenContract[]> {
-    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/tokens`, params)) as TokenContract[];
+  public async fetchNetworkTokenContracts(networkId: string, params: object): Promise<PaginatedResponse<TokenContract>> {
+    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/tokens`, params)) as PaginatedResponse<TokenContract>;
   }
 
-  public async fetchNetworkTransactions(networkId: string, params: object): Promise<Transaction[]> {
-    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/transactions`, params)) as Transaction[];
+  public async fetchNetworkTransactions(networkId: string, params: object): Promise<ApiClientResponse<Transaction>> {
+    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/transactions`, params)) as ApiClientResponse<Transaction>;
   }
 
   public async fetchNetworkTransactionDetails(networkId: string, transactionId: string): Promise<Transaction> {
@@ -182,8 +183,8 @@ export class NChain {
     return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/status`, {})) as NetworkStats;
   }
 
-  public async fetchNetworkNodes(networkId: string, params?: object): Promise<Node[]> {
-    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/nodes`, (params || {}))) as Node[];
+  public async fetchNetworkNodes(networkId: string, params?: object): Promise<PaginatedResponse<Node>> {
+    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/nodes`, (params || {}))) as PaginatedResponse<Node>;
   }
 
   public async createNetworkNode(networkId: string, params: object): Promise<Node> {
@@ -202,8 +203,8 @@ export class NChain {
     return ApiClient.handleResponse(await this.client.delete(`networks/${networkId}/nodes/${nodeId}`));
   }
 
-  public async fetchOracles(params?: object): Promise<Oracle[]> {
-    return ApiClient.handleResponse(await this.client.get('oracles', (params || {}))) as Oracle[];
+  public async fetchOracles(params?: object): Promise<PaginatedResponse<Oracle>> {
+    return ApiClient.handleResponse(await this.client.get('oracles', (params || {}))) as PaginatedResponse<Oracle>;
   }
 
   public async fetchOracleDetails(oracleId: string): Promise<Oracle> {
@@ -214,8 +215,8 @@ export class NChain {
     return ApiClient.handleResponse(await this.client.post('oracles', params)) as Oracle;
   }
 
-  public async fetchTokenContracts(params?: object): Promise<TokenContract[]> {
-    return ApiClient.handleResponse(await this.client.get('tokens', (params || {}))) as TokenContract[];
+  public async fetchTokenContracts(params?: object): Promise<PaginatedResponse<TokenContract>> {
+    return ApiClient.handleResponse(await this.client.get('tokens', (params || {}))) as PaginatedResponse<TokenContract>;
   }
 
   public async fetchTokenContractDetails(tokenId: string): Promise<TokenContract> {
@@ -230,20 +231,20 @@ export class NChain {
     return ApiClient.handleResponse(await this.client.post('transactions', params)) as Transaction;
   }
 
-  public async fetchTransactions(params?: object): Promise<Transaction[]> {
-    return ApiClient.handleResponse(await this.client.get('transactions', (params || {}))) as Transaction[];
+  public async fetchTransactions(params?: object): Promise<PaginatedResponse<Transaction>> {
+    return ApiClient.handleResponse(await this.client.get('transactions', (params || {}))) as PaginatedResponse<Transaction>;
   }
 
   public async fetchTransactionDetails(transactionId: string): Promise<Transaction> {
     return ApiClient.handleResponse(await this.client.get(`transactions/${transactionId}`, {})) as Transaction;
   }
 
-  public async fetchWallets(params?: object): Promise<Wallet[]> {
-    return ApiClient.handleResponse(await this.client.get('wallets', (params || {}))) as Wallet[];
+  public async fetchWallets(params?: object): Promise<PaginatedResponse<Wallet>> {
+    return ApiClient.handleResponse(await this.client.get('wallets', (params || {}))) as PaginatedResponse<Wallet>;
   }
 
-  public async fetchWalletAccounts(walletId: string): Promise<Account[]> {
-    return ApiClient.handleResponse(await this.client.get(`wallets/${walletId}/accounts`, {})) as Account[];
+  public async fetchWalletAccounts(walletId: string): Promise<PaginatedResponse<Account>> {
+    return ApiClient.handleResponse(await this.client.get(`wallets/${walletId}/accounts`, {})) as PaginatedResponse<Account>;
   }
 
   public async fetchWalletDetails(walletId: string): Promise<Wallet> {

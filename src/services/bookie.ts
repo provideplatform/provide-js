@@ -9,6 +9,7 @@ import {
   TokenizationPolicy,
   Transaction
 } from '@provide/types';
+import { PaginatedResponse } from '../clients/api-client-response';
 
 /*
  * Bookie microservice; provides access to functionality
@@ -35,8 +36,8 @@ export class Bookie {
     return new Bookie(token, _scheme, _host, _path);
   }
 
-  public async fetchBillingAccounts(params?: any): Promise<BillingAccount[]> {
-    return ApiClient.handleResponse(await this.client.get('billing_accounts', params || {})) as BillingAccount[];
+  public async fetchBillingAccounts(params?: any): Promise<PaginatedResponse<BillingAccount>> {
+    return ApiClient.handleResponse(await this.client.get('billing_accounts', params || {})) as PaginatedResponse<BillingAccount>;
   }
 
   public async fetchBillingAccountDetails(billingAccountId: string, params?: any): Promise<BillingAccount> {
@@ -51,8 +52,8 @@ export class Bookie {
     return ApiClient.handleResponse(await this.client.delete(`kyc_applicatons/${billingAccountId}`));
   }
 
-  public async fetchKycApplications(params?: any): Promise<KycApplication[]> {
-    return ApiClient.handleResponse(await this.client.get(`kyc_applicatons`, params || {})) as KycApplication[];
+  public async fetchKycApplications(params?: any): Promise<PaginatedResponse<KycApplication>> {
+    return ApiClient.handleResponse(await this.client.get(`kyc_applicatons`, params || {})) as PaginatedResponse<KycApplication>;
   }
 
   public async fetchKycApplicationDetails(kycApplicationId: string, params?: any): Promise<KycApplication> {
@@ -75,8 +76,8 @@ export class Bookie {
     return ApiClient.handleResponse(await this.client.post('facilities', params)) as Facility;  
   }
 
-  public async fetchFacilities(params?: any, includeTotalCount = false): Promise<Facility[]> {
-    return ApiClient.handleResponse(await this.client.get('facilities', params || {}), includeTotalCount) as Facility[];
+  public async fetchFacilities(params?: any): Promise<PaginatedResponse<Facility>> {
+    return ApiClient.handleResponse(await this.client.get('facilities', params || {})) as PaginatedResponse<Facility>;
   }
 
   public async fetchFacilityDetails(facilityId: string, params?: any): Promise<Facility> {
@@ -87,8 +88,8 @@ export class Bookie {
     return ApiClient.handleResponse(await this.client.post(`facilities/${facilityId}/agreements`, params)) as Agreement;  
   }
 
-  public async fetchAgreements(facilityId: string, params?: any): Promise<Agreement[]> {
-    return ApiClient.handleResponse(await this.client.get(`facilities/${facilityId}/agreements`, params || {})) as Agreement[];  
+  public async fetchAgreements(facilityId: string, params?: any): Promise<PaginatedResponse<Agreement>> {
+    return ApiClient.handleResponse(await this.client.get(`facilities/${facilityId}/agreements`, params || {})) as PaginatedResponse<Agreement>;  
   }
 
   public async fetchAgreementDetails(facilityId: string, agreementId: string, params?: any): Promise<Agreement> {
@@ -99,8 +100,8 @@ export class Bookie {
     return ApiClient.handleResponse(await this.client.post('tokenization_policies', params)) as TokenizationPolicy;  
   }
 
-  public async fetchTokenizationPolicies(params?: any): Promise<TokenizationPolicy[]> {
-    return ApiClient.handleResponse(await this.client.get('tokenization_policies', params || {})) as TokenizationPolicy[];
+  public async fetchTokenizationPolicies(params?: any): Promise<PaginatedResponse<TokenizationPolicy>> {
+    return ApiClient.handleResponse(await this.client.get('tokenization_policies', params || {})) as PaginatedResponse<TokenizationPolicy>;
   }
 
   public async fetchTokenizationPolicyDetails(tokenizationPolicyId: string, params?: any): Promise<TokenizationPolicy> {
@@ -111,8 +112,8 @@ export class Bookie {
     return ApiClient.handleResponse(await this.client.post(`billing_accounts/${billingAccountId}/transactions`, params)) as Transaction;  
   }
 
-  public async fetchBillingAccountTransactions(billingAccountId: string, params?: any, includeTotalCount = false): Promise<{ items: Transaction[], totalCount: number}> {
-    return ApiClient.handleResponse(await this.client.get(`billing_accounts/${billingAccountId}/transactions`, params || {}), includeTotalCount) as { items: Transaction[], totalCount: number};
+  public async fetchBillingAccountTransactions(billingAccountId: string, params?: any): Promise<PaginatedResponse<Transaction>> {
+    return ApiClient.handleResponse(await this.client.get(`billing_accounts/${billingAccountId}/transactions`, params || {})) as PaginatedResponse<Transaction>;
   }
 
   public async fetchBillingAccountTransactionDetails(billingAccountId: string, transactionId: string, params?: any): Promise<Transaction> {

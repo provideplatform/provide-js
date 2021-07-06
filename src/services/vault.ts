@@ -1,5 +1,6 @@
 import { ApiClient } from '../clients';
 import { Key, Secret, Vault as ProvideVault} from '@provide/types';
+import { PaginatedResponse } from '../clients/api-client-response';
 
 /*
  * Vault microservice; provides advanced privacy and messaging capabilities
@@ -31,12 +32,12 @@ export class Vault {
     return ApiClient.handleResponse(await this.client.post('vaults', params)) as ProvideVault;
   }
 
-  public async fetchVaults(params: object): Promise<ProvideVault[]> {
-    return ApiClient.handleResponse(await this.client.get('vaults', params)) as ProvideVault[];
+  public async fetchVaults(params: object): Promise<PaginatedResponse<ProvideVault>> {
+    return ApiClient.handleResponse(await this.client.get('vaults', params)) as PaginatedResponse<ProvideVault>;
   }
 
-  public async fetchVaultKeys(vaultId: string, params: object): Promise<Key[]> {
-    return ApiClient.handleResponse(await this.client.get(`vaults/${vaultId}/keys`, params)) as Key[];
+  public async fetchVaultKeys(vaultId: string, params: object): Promise<PaginatedResponse<Key>> {
+    return ApiClient.handleResponse(await this.client.get(`vaults/${vaultId}/keys`, params)) as PaginatedResponse<Key>;
   }
 
   public async createVaultKey(vaultId: string, params: object): Promise<Key> {
@@ -63,8 +64,8 @@ export class Vault {
     return ApiClient.handleResponse(await this.client.post(`vaults/${vaultId}/keys/${keyId}/verify`, { message: msg, signature: sig }));
   }
 
-  public async fetchVaultSecrets(vaultId: string, params: object): Promise<Secret[]> {
-    return ApiClient.handleResponse(await this.client.get(`vaults/${vaultId}/secrets`, params)) as Secret[];
+  public async fetchVaultSecrets(vaultId: string, params: object): Promise<PaginatedResponse<Secret>> {
+    return ApiClient.handleResponse(await this.client.get(`vaults/${vaultId}/secrets`, params)) as PaginatedResponse<Secret>;
   }
 
   public async fetchVaultSecret(vaultId: string, secretId: string): Promise<Secret> {

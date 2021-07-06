@@ -1,5 +1,6 @@
 import axios, { AxiosResponse, Method } from 'axios';
 import { Model } from '@provide/types';
+import { ApiClientResponse } from './api-client-response';
 
 export class ApiClient {
 
@@ -39,7 +40,7 @@ export class ApiClient {
 
   // tmp way of including total count to be used on server side pagination on front end side
   // should we add more flexibility to this?
-  static handleResponse(resp: AxiosResponse<any>, includeTotalCount: boolean = false): any {
+  static handleResponse(resp: AxiosResponse<any>): ApiClientResponse<Model> {
     if (['PATCH', 'UPDATE', 'DELETE'].indexOf(resp.request?.method) !== -1 || resp.headers['content-length'] === 0) {
       if (resp.status >= 400) {
         return Promise.reject(`failed with ${resp.status} status`);
@@ -55,10 +56,10 @@ export class ApiClient {
           inst.unmarshal(JSON.stringify(item));
           (arr as any[]).push(inst);
         });
-        return includeTotalCount ? {
-          items: arr,
-          totalCount: +resp.headers["x-total-results-count"]
-        } : arr;
+        return {
+          results: arr,
+          totalResultsCount: +resp.headers["x-total-results-count"]
+        }
       }
 
       const instance = new Model();

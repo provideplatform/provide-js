@@ -1,5 +1,6 @@
 import { ApiClient } from '../clients';
 import { Application, AuthenticationResponse, Invite, Key as VaultKey, Organization, Secret as VaultSecret, Token, User, Vault } from '@provide/types';
+import { PaginatedResponse } from '../clients/api-client-response';
 
 /*
  * Ident microservice; provides access to functionality
@@ -65,16 +66,16 @@ export class Ident {
     return ApiClient.handleResponse(await this.client.put(`applications/${appId}`, params));
   }
 
-  public async fetchApplications(params: object): Promise<Application[]> {
-    return ApiClient.handleResponse(await this.client.get('applications', params)) as Application[];
+  public async fetchApplications(params: object): Promise<PaginatedResponse<Application>> {
+    return ApiClient.handleResponse(await this.client.get('applications', params)) as PaginatedResponse<Application>;
   }
 
   public async fetchApplicationDetails(appId: string): Promise<Application> {
     return ApiClient.handleResponse(await this.client.get(`applications/${appId}`, {})) as Application;
   }
 
-  public async fetchApplicationOrganizations(appId: string, params: object): Promise<Organization[]> {
-    return ApiClient.handleResponse(await this.client.get(`applications/${appId}/organizations`, params)) as Organization[];
+  public async fetchApplicationOrganizations(appId: string, params: object): Promise<PaginatedResponse<Organization>> {
+    return ApiClient.handleResponse(await this.client.get(`applications/${appId}/organizations`, params)) as PaginatedResponse<Organization>;
   }
 
   public async createApplicationOrganization(appId: string, params: object): Promise<Organization> {
@@ -93,12 +94,12 @@ export class Ident {
     return ApiClient.handleResponse(await this.client.get(`applications/${appId}/invitations`, params));
   }
 
-  public async fetchApplicationTokens(appId: string, params: object): Promise<Token[]> {
-    return ApiClient.handleResponse(await this.client.get(`applications/${appId}/tokens`, params)) as Token[];
+  public async fetchApplicationTokens(appId: string, params: object): Promise<PaginatedResponse<Token>> {
+    return ApiClient.handleResponse(await this.client.get(`applications/${appId}/tokens`, params)) as PaginatedResponse<Token>;
   }
 
-  public async fetchApplicationUsers(appId: string, params: object): Promise<User[]> {
-    return ApiClient.handleResponse(await this.client.get(`applications/${appId}/users`, params)) as User[];
+  public async fetchApplicationUsers(appId: string, params: object): Promise<PaginatedResponse<User>> {
+    return ApiClient.handleResponse(await this.client.get(`applications/${appId}/users`, params)) as PaginatedResponse<User>;
   }
 
   public async authenticateApplicationUser(email: string): Promise<any> {
@@ -123,8 +124,8 @@ export class Ident {
     return ApiClient.handleResponse(await this.client.post('organizations', params)) as Organization;
   }
 
-  public async fetchOrganizations(params: object): Promise<Organization[]> {
-    return ApiClient.handleResponse(await this.client.get('organizations', params)) as Organization[];
+  public async fetchOrganizations(params: object): Promise<PaginatedResponse<Organization>> {
+    return ApiClient.handleResponse(await this.client.get('organizations', params)) as PaginatedResponse<Organization>;
   }
 
   public async fetchOrganizationDetails(organizationId: string): Promise<Organization> {
@@ -139,8 +140,8 @@ export class Ident {
     return ApiClient.handleResponse(await this.client.get(`organizations/${organizationId}/invitations`, params));
   }
 
-  public async fetchOrganizationUsers(organizationId: string, params: object): Promise<User[]> {
-    return ApiClient.handleResponse(await this.client.get(`organizations/${organizationId}/users`, params)) as User[];
+  public async fetchOrganizationUsers(organizationId: string, params: object): Promise<PaginatedResponse<User>> {
+    return ApiClient.handleResponse(await this.client.get(`organizations/${organizationId}/users`, params)) as PaginatedResponse<User>;
   }
 
   public async createOrganizationUser(organizationId: string, params: object): Promise<User> {
@@ -155,12 +156,12 @@ export class Ident {
     return ApiClient.handleResponse(await this.client.delete(`organizations/${organizationId}/users/${userId}`));
   }
 
-  public async fetchOrganizationVaults(organizationId: string, params: object): Promise<Vault[]> {
-    return ApiClient.handleResponse(await this.client.get(`organizations/${organizationId}/vaults`, params)) as Vault[];
+  public async fetchOrganizationVaults(organizationId: string, params: object): Promise<PaginatedResponse<Vault>> {
+    return ApiClient.handleResponse(await this.client.get(`organizations/${organizationId}/vaults`, params)) as PaginatedResponse<Vault>;
   }
 
-  public async fetchOrganizationVaultKeys(organizationId: string, vaultId: string, params: object): Promise<VaultKey[]> {
-    return ApiClient.handleResponse(await this.client.get(`organizations/${organizationId}/vaults/${vaultId}/keys`, params)) as VaultKey[];
+  public async fetchOrganizationVaultKeys(organizationId: string, vaultId: string, params: object): Promise<PaginatedResponse<VaultKey>> {
+    return ApiClient.handleResponse(await this.client.get(`organizations/${organizationId}/vaults/${vaultId}/keys`, params)) as PaginatedResponse<VaultKey>;
   }
 
   public async createOrganizationVaultKey(organizationId: string, vaultId: string, params: object): Promise<VaultKey> {
@@ -185,8 +186,8 @@ export class Ident {
     return ApiClient.handleResponse(await this.client.post(`organizations/${organizationId}/vaults/${vaultId}/keys/${keyId}/verify`, { message: msg, signature: sig }));
   }
 
-  public async fetchOrganizationVaultSecrets(organizationId: string, vaultId: string, params: object): Promise<VaultSecret[]> {
-    return ApiClient.handleResponse(await this.client.get(`organizations/${organizationId}/vaults/${vaultId}/secrets`, params)) as VaultSecret[];
+  public async fetchOrganizationVaultSecrets(organizationId: string, vaultId: string, params: object): Promise<PaginatedResponse<VaultSecret>> {
+    return ApiClient.handleResponse(await this.client.get(`organizations/${organizationId}/vaults/${vaultId}/secrets`, params)) as PaginatedResponse<VaultSecret>;
   }
 
   public async createOrganizationVaultSecret(organizationId: string, vaultId: string, params: object): Promise<VaultSecret> {
@@ -201,8 +202,8 @@ export class Ident {
     return ApiClient.handleResponse(await this.client.post('tokens', params)) as Token;
   }
 
-  public async fetchTokens(params: object): Promise<Token[]> {
-    return ApiClient.handleResponse(await this.client.get('tokens', params)) as Token[];
+  public async fetchTokens(params: object): Promise<PaginatedResponse<Token>> {
+    return ApiClient.handleResponse(await this.client.get('tokens', params)) as PaginatedResponse<Token>;
   }
 
   public async fetchTokenDetails(tokenId: string): Promise<Token> {
@@ -221,8 +222,8 @@ export class Ident {
     return ApiClient.handleResponse(await this.client.post('users', params)) as User;
   }
 
-  public async fetchUsers(): Promise<User[]> {
-    return ApiClient.handleResponse(await this.client.get('users', {})) as User[];
+  public async fetchUsers(): Promise<PaginatedResponse<User>> {
+    return ApiClient.handleResponse(await this.client.get('users', {})) as PaginatedResponse<User>;
   }
 
   public async fetchUserDetails(userId: string): Promise<User> {
