@@ -1,6 +1,20 @@
 import { ApiClient } from '../clients';
-import { Account, Bridge, Connector, Contract, LoadBalancer, LogsResponse, Network, NetworkStats, Node, Oracle, Token, TokenContract, Transaction, Wallet } from '@provide/types';
-import { ApiClientResponse, PaginatedResponse } from '../clients/api-client-response';
+import {
+  Account,
+  Bridge,
+  Connector,
+  Contract,
+  LoadBalancer,
+  LogsResponse,
+  Network,
+  NetworkStats,
+  Node,
+  Oracle,
+  PaginatedResponse,
+  TokenContract,
+  Transaction,
+  Wallet
+} from '@provide/types';
 
 /*
  * NChain microservice; provides access to functionality
@@ -171,8 +185,8 @@ export class NChain {
     return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/tokens`, params)) as PaginatedResponse<TokenContract>;
   }
 
-  public async fetchNetworkTransactions(networkId: string, params: object): Promise<ApiClientResponse<Transaction>> {
-    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/transactions`, params)) as ApiClientResponse<Transaction>;
+  public async fetchNetworkTransactions(networkId: string, params: object): Promise<PaginatedResponse<Transaction>> {
+    return ApiClient.handleResponse(await this.client.get(`networks/${networkId}/transactions`, params)) as PaginatedResponse<Transaction>;
   }
 
   public async fetchNetworkTransactionDetails(networkId: string, transactionId: string): Promise<Transaction> {

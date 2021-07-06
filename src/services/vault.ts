@@ -1,6 +1,5 @@
 import { ApiClient } from '../clients';
-import { Key, Secret, Vault as ProvideVault} from '@provide/types';
-import { PaginatedResponse } from '../clients/api-client-response';
+import { Key, PaginatedResponse, Secret, Vault as ProvideVault} from '@provide/types';
 
 /*
  * Vault microservice; provides advanced privacy and messaging capabilities

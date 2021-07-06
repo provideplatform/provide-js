@@ -1,6 +1,16 @@
 import { ApiClient } from '../clients';
-import { Application, AuthenticationResponse, Invite, Key as VaultKey, Organization, Secret as VaultSecret, Token, User, Vault } from '@provide/types';
-import { PaginatedResponse } from '../clients/api-client-response';
+import {
+  Application,
+  AuthenticationResponse,
+  Invite,
+  Key as VaultKey,
+  Organization,
+  PaginatedResponse,
+  Secret as VaultSecret,
+  Token,
+  User,
+  Vault
+} from '@provide/types';
 
 /*
  * Ident microservice; provides access to functionality

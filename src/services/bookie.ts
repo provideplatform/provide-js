@@ -7,9 +7,9 @@ import {
   Facility,
   Agreement,
   TokenizationPolicy,
-  Transaction
+  Transaction,
+  PaginatedResponse
 } from '@provide/types';
-import { PaginatedResponse } from '../clients/api-client-response';
 
 /*
  * Bookie microservice; provides access to functionality

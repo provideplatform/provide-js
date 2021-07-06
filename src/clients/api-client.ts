@@ -1,6 +1,5 @@
 import axios, { AxiosResponse, Method } from 'axios';
-import { Model } from '@provide/types';
-import { ApiClientResponse } from './api-client-response';
+import { ApiClientResponse, Model } from '@provide/types';
 
 export class ApiClient {
 
