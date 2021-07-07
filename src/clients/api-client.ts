@@ -1,5 +1,5 @@
 import axios, { AxiosResponse, Method } from 'axios';
-import { ApiClientResponse, Model } from '@provide/types';
+import { ApiClientResponse, Model, PaginatedResponse } from '@provide/types';
 
 export class ApiClient {
 
@@ -37,8 +37,6 @@ export class ApiClient {
     this.baseUrl = `${this.baseUrl.replace(/\/+$/, '')}/`;
   }
 
-  // tmp way of including total count to be used on server side pagination on front end side
-  // should we add more flexibility to this?
   static handleResponse(resp: AxiosResponse<any>): ApiClientResponse<Model> {
     if (['PATCH', 'UPDATE', 'DELETE'].indexOf(resp.request?.method) !== -1 || resp.headers['content-length'] === 0) {
       if (resp.status >= 400) {
@@ -58,7 +56,7 @@ export class ApiClient {
         return {
           results: arr,
           totalResultsCount: +resp.headers["x-total-results-count"]
-        }
+        } as PaginatedResponse<Model>;
       }
 
       const instance = new Model();
