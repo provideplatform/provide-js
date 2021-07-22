@@ -1,5 +1,5 @@
 import { ApiClient } from '../clients';
-import { Object as BaselineObject } from '@provide/types';
+import { BaselineResponse, Object as BaselineObject } from '@provide/types';
 
 /*
  * Baseline proxy microservice.
@@ -29,8 +29,8 @@ export class Baseline {
     return ApiClient.handleResponse(await this.client.put('config', params));
   }
 
-  public async createObject(params: any): Promise<BaselineObject> {
-    return ApiClient.handleResponse(await this.client.post('objects', params)) as BaselineObject;
+  public async createObject(params: any): Promise<BaselineResponse> {
+    return ApiClient.handleResponse(await this.client.post('objects', params)) as BaselineResponse;
   }
 
   public async status(): Promise<number> {
@@ -38,8 +38,8 @@ export class Baseline {
     return resp.status;
   }
 
-  public async updateObject(id: string, params: any): Promise<BaselineObject> {
-    return ApiClient.handleResponse(await this.client.put(`objects/${id}`, params)) as BaselineObject;
+  public async updateObject(id: string, params: any): Promise<BaselineResponse> {
+    return ApiClient.handleResponse(await this.client.put(`objects/${id}`, params)) as BaselineResponse;
   }
 }
 
