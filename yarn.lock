@@ -369,10 +369,10 @@
   resolved "https://registry.npmjs.org/@provide/nats.ws/-/nats.ws-1.0.6.tgz"
   integrity sha512-gUn7rBuCCmQlPGDK9hee6Pp0NRRAr2tsBOHN6YIv30L/ytZ2VHiCo1BtbQgoBesaMu3qK3/+GBhmpr2dd+YcXA==
 
-"@provide/types@^1.2.4":
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/@provide/types/-/types-1.2.4.tgz#e0bbeef7c8df123840b559cc04ba8d80a51abff2"
-  integrity sha512-622VM5jTTOmqNwwqLjXW8BQw94lmkKIohyvvEdEV1pYNb1jvk9TIcs+qndwZivly4TA36ybEK6FHzTImXsRlDg==
+"@provide/types@^1.2.5":
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/@provide/types/-/types-1.2.5.tgz#6703cb53019d64dab54da881b65fa3f3121e3fbf"
+  integrity sha512-ASFu+09lFYcvghpPMYGc/7bw7Vvqmbwbv3oyzAlccBp/bjCoOYBG8q4gBd8CIdWW5vmj5DQi9BwxGKKhQLqKMQ==
   dependencies:
     ethers "4.0.38"
 
