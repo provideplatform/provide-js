@@ -1,5 +1,5 @@
 import { ApiClient } from '../clients';
-import { BaselineResponse, Object as BaselineObject } from '@provide/types';
+import { BaselineResponse, Mapping, Workflow, Workgroup } from '@provide/types';
 
 /*
  * Baseline proxy microservice.
@@ -31,6 +31,34 @@ export class Baseline {
 
   public async createObject(params: any): Promise<BaselineResponse> {
     return ApiClient.handleResponse(await this.client.post('objects', params)) as BaselineResponse;
+  }
+
+  public async createWorkflow(workgroupId: string, params: any): Promise<Workgroup> {
+    return ApiClient.handleResponse(await this.client.post(`workgroups/${workgroupId}/workflows`, params));
+  }
+
+  public async fetchWorkflows(workgroupId: string, params: any | undefined): Promise<Workflow[]> {
+    return ApiClient.handleResponse(await this.client.get(`workgroups/${workgroupId}/workflows`, params));
+  }
+
+  public async createWorkgroup(params: any): Promise<Workgroup> {
+    return ApiClient.handleResponse(await this.client.post('workgroups', params));
+  }
+
+  public async fetchWorkgroups(params: any | undefined): Promise<Workgroup[]> {
+    return ApiClient.handleResponse(await this.client.get('workgroups', params || {}));
+  }
+
+  public async fetchWorkgroupDetails(workgroupId: string): Promise<Workgroup> {
+    return ApiClient.handleResponse(await this.client.get(`workgroups/${workgroupId}`, {}));
+  }
+
+  public async fetchWorkgroupMappings(workgroupId: string, params: any | undefined): Promise<Mapping[]> {
+    return ApiClient.handleResponse(await this.client.get(`workgroups/${workgroupId}/mappings`, params || {}));
+  }
+
+  public async updateWorkgroupMapping(workgroupId: string, mappingId: string, params: any | undefined): Promise<void> {
+    return ApiClient.handleResponse(await this.client.put(`workgroups/${workgroupId}/mappings/${mappingId}`, params || {}));
   }
 
   public async status(): Promise<number> {
