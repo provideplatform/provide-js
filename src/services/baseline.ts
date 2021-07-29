@@ -57,6 +57,10 @@ export class Baseline {
     return ApiClient.handleResponse(await this.client.get(`workgroups/${workgroupId}/mappings`, params || {}));
   }
 
+  public async createWorkgroupMapping(workgroupId: string, mappingId: string, params: any | undefined): Promise<void> {
+    return ApiClient.handleResponse(await this.client.put(`workgroups/${workgroupId}/mappings/${mappingId}`, params || {}));
+  }
+
   public async updateWorkgroupMapping(workgroupId: string, mappingId: string, params: any | undefined): Promise<void> {
     return ApiClient.handleResponse(await this.client.put(`workgroups/${workgroupId}/mappings/${mappingId}`, params || {}));
   }
