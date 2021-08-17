@@ -25,6 +25,17 @@ export class Baseline {
     return new Baseline(token, _scheme, _host, _path);
   }
 
+  public static unauthenticatedClientFactory(token: string, scheme?: string, host?: string, path?: string): ApiClient {
+    const _scheme = scheme ? scheme : (process.env['BASELINE_API_SCHEME'] || 'https');
+    const _host = host ? host : (process.env['BASELINE_API_HOST'] || Baseline.DEFAULT_HOST);
+    const _path = path ? path : (process.env['BASELINE_API_PATH'] || ApiClient.DEFAULT_PATH);
+    return new ApiClient(token, _scheme, _host, _path);
+  }
+
+  public static async fetchStatus(scheme?: string, host?: string): Promise<any> {
+    return ApiClient.handleResponse(await Baseline.unauthenticatedClientFactory('', scheme, host, '/').get('status', {}));
+  }
+
   public async configureProxy(params: any): Promise<void> {
     return ApiClient.handleResponse(await this.client.put('config', params));
   }

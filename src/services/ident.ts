@@ -56,6 +56,10 @@ export class Ident {
     return ApiClient.handleResponse(await Ident.unauthenticatedClientFactory(undefined, scheme, host, '/').get('legal/terms_of_service', {}));
   }
 
+  public static async fetchStatus(scheme?: string, host?: string): Promise<any> {
+    return ApiClient.handleResponse(await Ident.unauthenticatedClientFactory(undefined, scheme, host, '/').get('status', {}));
+  }
+
   public static async createUser(params: object, scheme?: string, host?: string, path?: string): Promise<User> {
     return ApiClient.handleResponse(await Ident.unauthenticatedClientFactory(undefined, scheme, host, path).post('users', params)) as User;
   }
@@ -238,11 +242,6 @@ export class Ident {
 
   public async fetchUserDetails(userId: string): Promise<User> {
     return ApiClient.handleResponse(await this.client.get(`users/${userId}`, {})) as User;
-  }
-
-  public async status(): Promise<number> {
-    const resp = await identClientFactory('', undefined, undefined, '/').client.get('status', {});
-    return resp.status;
   }
 
   public async updateUser(userId: string, params: object): Promise<void> {
