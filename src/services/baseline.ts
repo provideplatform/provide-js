@@ -66,7 +66,7 @@ export class Baseline {
   }
 
   public async status(): Promise<number> {
-    const resp = await this.client.get('status', {});
+    const resp = await baselineClientFactory('', undefined, undefined, '/').client.get('status', {});
     return resp.status;
   }
 

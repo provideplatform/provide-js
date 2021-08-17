@@ -241,10 +241,10 @@ export class Ident {
   }
 
   public async status(): Promise<number> {
-    const resp = await this.client.get('status', {});
+    const resp = await identClientFactory('', undefined, undefined, '/').client.get('status', {});
     return resp.status;
   }
-  
+
   public async updateUser(userId: string, params: object): Promise<void> {
     return ApiClient.handleResponse(await this.client.put(`users/${userId}`, params));
   }
