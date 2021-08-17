@@ -240,6 +240,11 @@ export class Ident {
     return ApiClient.handleResponse(await this.client.get(`users/${userId}`, {})) as User;
   }
 
+  public async status(): Promise<number> {
+    const resp = await this.client.get('status', {});
+    return resp.status;
+  }
+  
   public async updateUser(userId: string, params: object): Promise<void> {
     return ApiClient.handleResponse(await this.client.put(`users/${userId}`, params));
   }
