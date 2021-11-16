@@ -36,20 +36,28 @@ export class Baseline {
     return ApiClient.handleResponse(await Baseline.unauthenticatedClientFactory('', scheme, host, '/').get('status', {}));
   }
 
-  public async configureProxy(params: any): Promise<void> {
+  public async configure(params: any): Promise<void> {
     return ApiClient.handleResponse(await this.client.put('config', params));
+  }
+
+  public async fetchMappings(params: any | undefined): Promise<Mapping[]> {
+    return ApiClient.handleResponse(await this.client.get(`mappings`, params || {}));
+  }
+
+  public async createMapping(mappingId: string, params: any | undefined): Promise<void> {
+    return ApiClient.handleResponse(await this.client.put(`mappings/${mappingId}`, params || {}));
+  }
+
+  public async updateMapping(mappingId: string, params: any | undefined): Promise<void> {
+    return ApiClient.handleResponse(await this.client.put(`mappings/${mappingId}`, params || {}));
+  }
+
+  public async deleteMapping(mappingId: string): Promise<void> {
+    return ApiClient.handleResponse(await this.client.delete(`mappings/${mappingId}`));
   }
 
   public async createObject(params: any): Promise<BaselineResponse> {
     return ApiClient.handleResponse(await this.client.post('objects', params)) as BaselineResponse;
-  }
-
-  public async createWorkflow(workgroupId: string, params: any): Promise<Workgroup> {
-    return ApiClient.handleResponse(await this.client.post(`workgroups/${workgroupId}/workflows`, params));
-  }
-
-  public async fetchWorkflows(workgroupId: string, params: any | undefined): Promise<Workflow[]> {
-    return ApiClient.handleResponse(await this.client.get(`workgroups/${workgroupId}/workflows`, params));
   }
 
   public async createWorkgroup(params: any): Promise<Workgroup> {
@@ -64,16 +72,36 @@ export class Baseline {
     return ApiClient.handleResponse(await this.client.get(`workgroups/${workgroupId}`, {}));
   }
 
-  public async fetchWorkgroupMappings(workgroupId: string, params: any | undefined): Promise<Mapping[]> {
-    return ApiClient.handleResponse(await this.client.get(`workgroups/${workgroupId}/mappings`, params || {}));
+  public async createWorkflow(params: any): Promise<Workgroup> {
+    return ApiClient.handleResponse(await this.client.post(`workflows`, params));
   }
 
-  public async createWorkgroupMapping(workgroupId: string, mappingId: string, params: any | undefined): Promise<void> {
-    return ApiClient.handleResponse(await this.client.put(`workgroups/${workgroupId}/mappings/${mappingId}`, params || {}));
+  public async updateWorkflow(workflowId: string, params: any): Promise<Workgroup> {
+    return ApiClient.handleResponse(await this.client.put(`workflows/${workflowId}`, params));
   }
 
-  public async updateWorkgroupMapping(workgroupId: string, mappingId: string, params: any | undefined): Promise<void> {
-    return ApiClient.handleResponse(await this.client.put(`workgroups/${workgroupId}/mappings/${mappingId}`, params || {}));
+  public async fetchWorkflows(params: any | undefined): Promise<Workflow[]> {
+    return ApiClient.handleResponse(await this.client.get(`workflows`, params));
+  }
+
+  public async fetchWorkflowDetails(workflowId: string, params: any | undefined): Promise<Workflow[]> {
+    return ApiClient.handleResponse(await this.client.get(`workflows/${workflowId}`, params));
+  }
+
+  public async createWorktep(workflowId: string, params: any): Promise<Workgroup> {
+    return ApiClient.handleResponse(await this.client.post(`workflows/${workflowId}/worksteps`, params));
+  }
+
+  public async updateWorkstep(workflowId: string, workstepId: string, params: any): Promise<Workgroup> {
+    return ApiClient.handleResponse(await this.client.put(`workflows/${workflowId}/worksteps/${workstepId}`, params));
+  }
+
+  public async fetchWorksteps(workflowId: string, params: any | undefined): Promise<Workflow[]> {
+    return ApiClient.handleResponse(await this.client.get(`workflows/${workflowId}/worksteps`, params));
+  }
+
+  public async fetchWorkstepDetails(workflowId: string, workstepId: string, params: any | undefined): Promise<Workflow[]> {
+    return ApiClient.handleResponse(await this.client.get(`workflows/${workflowId}/worksteps/${workstepId}`, params));
   }
 
   public async status(): Promise<number> {
