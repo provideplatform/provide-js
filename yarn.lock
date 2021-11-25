@@ -369,10 +369,10 @@
   "resolved" "https://registry.npmjs.org/@provide/nats.ws/-/nats.ws-1.0.6.tgz"
   "version" "1.0.6"
 
-"@provide/types@^1.2.6":
-  "integrity" "sha512-egiAITkz6pklmbmZQurOPwZEuep5YrfURaBY3wFd445f1GcMSpzptc6Pj4WCphU9Iq5+I6zf0Zn4snNlfTnKEQ=="
-  "resolved" "https://registry.npmjs.org/@provide/types/-/types-1.2.6.tgz"
-  "version" "1.2.6"
+"@provide/types@^1.2.7":
+  "integrity" "sha512-rzmNLPVO04fYaIf3xnMPqoeqpmkNz3LUoi2J6Dg2ZSf8VPmoFwAyFX5U+bnmdu3JVODd3CqiEzcRD2Mkx/oCBA=="
+  "resolved" "https://registry.npmjs.org/@provide/types/-/types-1.2.7.tgz"
+  "version" "1.2.7"
   dependencies:
     "ethers" "4.0.38"
 
