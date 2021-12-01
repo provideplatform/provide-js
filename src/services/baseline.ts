@@ -96,11 +96,12 @@ export class Baseline {
     return ApiClient.handleResponse(await this.client.put(`workflows/${workflowId}/worksteps/${workstepId}`, params));
   }
 
-  public async fetchWorksteps(workflowId: string, params?: any): Promise<Workflow[]> {
+
+  public async fetchWorksteps(workflowId: string, params?: any | undefined): Promise<Workstep[]> {
     return ApiClient.handleResponse(await this.client.get(`workflows/${workflowId}/worksteps`, params));
   }
 
-  public async fetchWorkstepDetails(workflowId: string, workstepId: string, params?: any): Promise<Workflow[]> {
+  public async fetchWorkstepDetails(workflowId: string, workstepId: string, params?: any | undefined): Promise<Workstep[]> {
     return ApiClient.handleResponse(await this.client.get(`workflows/${workflowId}/worksteps/${workstepId}`, params));
   }
 
