@@ -40,15 +40,15 @@ export class Baseline {
     return ApiClient.handleResponse(await this.client.put('config', params));
   }
 
-  public async fetchMappings(params: any | undefined): Promise<Mapping[]> {
+  public async fetchMappings(params?: any): Promise<Mapping[]> {
     return ApiClient.handleResponse(await this.client.get(`mappings`, params || {}));
   }
 
-  public async createMapping(params: any | undefined): Promise<void> {
+  public async createMapping(params?: any): Promise<void> {
     return ApiClient.handleResponse(await this.client.post('mappings', params || {}));
   }
 
-  public async updateMapping(mappingId: string, params: any | undefined): Promise<void> {
+  public async updateMapping(mappingId: string, params?: any): Promise<void> {
     return ApiClient.handleResponse(await this.client.put(`mappings/${mappingId}`, params || {}));
   }
 
@@ -64,7 +64,7 @@ export class Baseline {
     return ApiClient.handleResponse(await this.client.post('workgroups', params));
   }
 
-  public async fetchWorkgroups(params: any | undefined): Promise<Workgroup[]> {
+  public async fetchWorkgroups(params?: any): Promise<Workgroup[]> {
     return ApiClient.handleResponse(await this.client.get('workgroups', params || {}));
   }
 
@@ -80,15 +80,15 @@ export class Baseline {
     return ApiClient.handleResponse(await this.client.put(`workflows/${workflowId}`, params));
   }
 
-  public async fetchWorkflows(params: any | undefined): Promise<Workflow[]> {
+  public async fetchWorkflows(params?: any): Promise<Workflow[]> {
     return ApiClient.handleResponse(await this.client.get(`workflows`, params));
   }
 
-  public async fetchWorkflowDetails(workflowId: string, params: any | undefined): Promise<Workflow[]> {
+  public async fetchWorkflowDetails(workflowId: string, params?: any): Promise<Workflow[]> {
     return ApiClient.handleResponse(await this.client.get(`workflows/${workflowId}`, params));
   }
 
-  public async createWorktep(workflowId: string, params: any): Promise<Workgroup> {
+  public async createWorkstep(workflowId: string, params: any): Promise<Workgroup> {
     return ApiClient.handleResponse(await this.client.post(`workflows/${workflowId}/worksteps`, params));
   }
 
@@ -96,12 +96,17 @@ export class Baseline {
     return ApiClient.handleResponse(await this.client.put(`workflows/${workflowId}/worksteps/${workstepId}`, params));
   }
 
-  public async fetchWorksteps(workflowId: string, params: any | undefined): Promise<Workstep[]> {
+
+  public async fetchWorksteps(workflowId: string, params?: any | undefined): Promise<Workstep[]> {
     return ApiClient.handleResponse(await this.client.get(`workflows/${workflowId}/worksteps`, params));
   }
 
-  public async fetchWorkstepDetails(workflowId: string, workstepId: string, params: any | undefined): Promise<Workstep[]> {
+  public async fetchWorkstepDetails(workflowId: string, workstepId: string, params?: any | undefined): Promise<Workstep[]> {
     return ApiClient.handleResponse(await this.client.get(`workflows/${workflowId}/worksteps/${workstepId}`, params));
+  }
+
+  public async deleteWorkstep(workflowId: string, workstepId: string): Promise<void> {
+    return ApiClient.handleResponse(await this.client.delete(`workflows/${workflowId}/worksteps/${workstepId}`))
   }
 
   public async status(): Promise<number> {
