@@ -1,5 +1,5 @@
 import { ApiClient } from '../clients';
-import { BaselineResponse, Mapping, Workflow, Workgroup } from '@provide/types';
+import { BaselineResponse, Mapping, Workflow, Workgroup, Workstep } from '@provide/types';
 
 /*
  * Baseline proxy microservice.
@@ -95,7 +95,6 @@ export class Baseline {
   public async updateWorkstep(workflowId: string, workstepId: string, params: any): Promise<Workgroup> {
     return ApiClient.handleResponse(await this.client.put(`workflows/${workflowId}/worksteps/${workstepId}`, params));
   }
-
 
   public async fetchWorksteps(workflowId: string, params?: any | undefined): Promise<Workstep[]> {
     return ApiClient.handleResponse(await this.client.get(`workflows/${workflowId}/worksteps`, params));
