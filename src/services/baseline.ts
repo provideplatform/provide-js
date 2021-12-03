@@ -44,7 +44,7 @@ export class Baseline {
     return ApiClient.handleResponse(await this.client.get(`mappings`, params || {}));
   }
 
-  public async createMapping(params?: any): Promise<void> {
+  public async createMapping(params?: any): Promise<Mapping> {
     return ApiClient.handleResponse(await this.client.post('mappings', params || {}));
   }
 
