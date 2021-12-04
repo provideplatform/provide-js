@@ -72,11 +72,11 @@ export class Baseline {
     return ApiClient.handleResponse(await this.client.get(`workgroups/${workgroupId}`, {}));
   }
 
-  public async createWorkflow(params: any): Promise<Workgroup> {
+  public async createWorkflow(params: any): Promise<Workflow> {
     return ApiClient.handleResponse(await this.client.post(`workflows`, params));
   }
 
-  public async updateWorkflow(workflowId: string, params: any): Promise<Workgroup> {
+  public async updateWorkflow(workflowId: string, params: any): Promise<Workflow> {
     return ApiClient.handleResponse(await this.client.put(`workflows/${workflowId}`, params));
   }
 
@@ -88,11 +88,11 @@ export class Baseline {
     return ApiClient.handleResponse(await this.client.get(`workflows`, params));
   }
 
-  public async fetchWorkflowDetails(workflowId: string, params?: any): Promise<Workflow[]> {
+  public async fetchWorkflowDetails(workflowId: string, params?: any): Promise<Workflow> {
     return ApiClient.handleResponse(await this.client.get(`workflows/${workflowId}`, params));
   }
 
-  public async createWorkstep(workflowId: string, params: any): Promise<Workgroup> {
+  public async createWorkstep(workflowId: string, params: any): Promise<Workstep> {
     return ApiClient.handleResponse(await this.client.post(`workflows/${workflowId}/worksteps`, params));
   }
 
@@ -100,7 +100,7 @@ export class Baseline {
     return ApiClient.handleResponse(await this.client.post(`workflows/${workflowId}/worksteps/${workstepId}/execute`, params));
   }
 
-  public async updateWorkstep(workflowId: string, workstepId: string, params: any): Promise<Workgroup> {
+  public async updateWorkstep(workflowId: string, workstepId: string, params: any): Promise<Workstep> {
     return ApiClient.handleResponse(await this.client.put(`workflows/${workflowId}/worksteps/${workstepId}`, params));
   }
 
@@ -108,7 +108,7 @@ export class Baseline {
     return ApiClient.handleResponse(await this.client.get(`workflows/${workflowId}/worksteps`, params));
   }
 
-  public async fetchWorkstepDetails(workflowId: string, workstepId: string, params?: any | undefined): Promise<Workstep[]> {
+  public async fetchWorkstepDetails(workflowId: string, workstepId: string, params?: any | undefined): Promise<Workstep> {
     return ApiClient.handleResponse(await this.client.get(`workflows/${workflowId}/worksteps/${workstepId}`, params));
   }
 
