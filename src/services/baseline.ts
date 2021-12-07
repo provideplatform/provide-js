@@ -116,6 +116,10 @@ export class Baseline {
     return ApiClient.handleResponse(await this.client.delete(`workflows/${workflowId}/worksteps/${workstepId}`))
   }
 
+  public async deleteWorkflow(workflowId: string): Promise<void> {
+    return ApiClient.handleResponse(await this.client.delete(`workflows/${workflowId}`))
+  }
+
   public async status(): Promise<number> {
     const resp = await baselineClientFactory('', undefined, undefined, '/').client.get('status', {});
     return resp.status;
