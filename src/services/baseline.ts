@@ -84,6 +84,10 @@ export class Baseline {
     return ApiClient.handleResponse(await this.client.post(`workflows/${workflowId}/deploy`, params));
   }
 
+  public async versionWorkflow(workflowId: string, params: any): Promise<Workflow> {
+    return ApiClient.handleResponse(await this.client.post(`workflows/${workflowId}/version`, params));
+  }
+
   public async fetchWorkflows(params?: any): Promise<Workflow[]> {
     return ApiClient.handleResponse(await this.client.get(`workflows`, params));
   }
