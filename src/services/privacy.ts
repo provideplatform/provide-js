@@ -1,9 +1,9 @@
 import { ApiClient } from '../clients';
-import { Circuit, ProveResponse, VerifyResponse } from '@provide/types';
+import { Prover, ProveResponse, VerifyResponse } from '@provide/types';
 
 /*
  * Privacy microservice; provides access to protocol-agnostic functionality
- * exposed by the Provide Privacy API and its underlying circuit registry.
+ * exposed by the Provide Privacy API and its underlying prover/circuit registry.
  */
 export class Privacy {
 
@@ -26,24 +26,24 @@ export class Privacy {
     return new Privacy(token, _scheme, _host, _path);
   }
 
-  public async fetchCircuits(params?: object): Promise<Circuit[]> {
-    return ApiClient.handleResponse(await this.client.get('circuits', params || {}));
+  public async fetchProvers(params?: object): Promise<Prover[]> {
+    return ApiClient.handleResponse(await this.client.get('provers', params || {}));
   }
 
-  public async fetchCircuitDetails(circuitId: string, params?: object): Promise<Circuit> {
-    return ApiClient.handleResponse(await this.client.get(`circuits/${circuitId}`, params || {}));
+  public async fetchProverDetails(proverId: string, params?: object): Promise<Prover> {
+    return ApiClient.handleResponse(await this.client.get(`provers/${proverId}`, params || {}));
   }
 
-  public async deployCircuit(params: object): Promise<Circuit> {
-    return ApiClient.handleResponse(await this.client.post('circuits', params));
+  public async deployProver(params: object): Promise<Prover> {
+    return ApiClient.handleResponse(await this.client.post('provers', params));
   }
 
-  public async prove(circuitId: string, params: object): Promise<ProveResponse> {
-    return ApiClient.handleResponse(await this.client.post(`circuits/${circuitId}/prove`, params));
+  public async prove(proverId: string, params: object): Promise<ProveResponse> {
+    return ApiClient.handleResponse(await this.client.post(`provers/${proverId}/prove`, params));
   }
 
-  public async verify(circuitId: string, params: object): Promise<VerifyResponse> {
-    return ApiClient.handleResponse(await this.client.post(`circuits/${circuitId}/verify`, params));
+  public async verify(proverId: string, params: object): Promise<VerifyResponse> {
+    return ApiClient.handleResponse(await this.client.post(`provers/${proverId}/verify`, params));
   }
 }
 
