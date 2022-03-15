@@ -1,5 +1,5 @@
 import { ApiClient } from '../clients';
-import { BaselineResponse, Mapping, ProtocolMessage, ProtocolMessagePayload, Workflow, Workgroup, Workstep } from '@provide/types';
+import { BaselineResponse, Mapping, ProtocolMessage, ProtocolMessagePayload, Workflow, Workgroup, Workstep, Participant } from '@provide/types';
 
 /*
  * Baseline proxy microservice.
@@ -82,6 +82,18 @@ export class Baseline {
 
   public async deployWorkflow(workflowId: string, params: any): Promise<Workflow> {
     return ApiClient.handleResponse(await this.client.post(`workflows/${workflowId}/deploy`, params));
+  }
+
+  public async fetchWorkstepParticipants(workflowId: string, workstepId: String, params?: any): Promise<Participant[]> {
+    return ApiClient.handleResponse(await this.client.get(`/workflows/${workflowId}/worksteps/${workstepId}/participants`, params))
+  }
+
+  public async createWorkstepParticipant(workflowId: string, workstepId: String, address: String): Promise<void> {
+    return ApiClient.handleResponse(await this.client.post(`/workflows/${workflowId}/worksteps/${workstepId}/participants`, { address }))
+  }
+
+  public async deleteWorkstepParticipant(workflowId: string, workstepId: String, address: String): Promise<void> {
+    return ApiClient.handleResponse(await this.client.delete(`/workflows/${workflowId}/worksteps/${workstepId}/participants/${address}`))
   }
 
   public async versionWorkflow(workflowId: string, params: any): Promise<Workflow> {
