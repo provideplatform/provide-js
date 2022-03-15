@@ -1,5 +1,5 @@
 import { ApiClient } from '../clients';
-import { BaselineResponse, Mapping, ProtocolMessage, ProtocolMessagePayload, Workflow, Workgroup, Workstep, Participant } from '@provide/types';
+import { BaselineResponse, Mapping, Participant, ProtocolMessage, ProtocolMessagePayload, Workflow, Workgroup, Workstep } from '@provide/types';
 
 /*
  * Baseline proxy microservice.
