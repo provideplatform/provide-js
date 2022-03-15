@@ -84,15 +84,15 @@ export class Baseline {
     return ApiClient.handleResponse(await this.client.post(`workflows/${workflowId}/deploy`, params));
   }
 
-  public async fetchWorkstepParticipants(workflowId: string, workstepId: String, params?: any): Promise<Participant[]> {
+  public async fetchWorkstepParticipants(workflowId: string, workstepId: string, params?: any): Promise<Participant[]> {
     return ApiClient.handleResponse(await this.client.get(`/workflows/${workflowId}/worksteps/${workstepId}/participants`, params))
   }
 
-  public async createWorkstepParticipant(workflowId: string, workstepId: String, address: String): Promise<void> {
+  public async createWorkstepParticipant(workflowId: string, workstepId: string, address: string): Promise<void> {
     return ApiClient.handleResponse(await this.client.post(`/workflows/${workflowId}/worksteps/${workstepId}/participants`, { address }))
   }
 
-  public async deleteWorkstepParticipant(workflowId: string, workstepId: String, address: String): Promise<void> {
+  public async deleteWorkstepParticipant(workflowId: string, workstepId: string, address: string): Promise<void> {
     return ApiClient.handleResponse(await this.client.delete(`/workflows/${workflowId}/worksteps/${workstepId}/participants/${address}`))
   }
 
