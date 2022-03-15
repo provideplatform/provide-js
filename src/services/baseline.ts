@@ -85,15 +85,15 @@ export class Baseline {
   }
 
   public async fetchWorkstepParticipants(workflowId: string, workstepId: string, params?: any): Promise<Participant[]> {
-    return ApiClient.handleResponse(await this.client.get(`/workflows/${workflowId}/worksteps/${workstepId}/participants`, params))
+    return ApiClient.handleResponse(await this.client.get(`workflows/${workflowId}/worksteps/${workstepId}/participants`, params))
   }
 
   public async createWorkstepParticipant(workflowId: string, workstepId: string, address: string): Promise<void> {
-    return ApiClient.handleResponse(await this.client.post(`/workflows/${workflowId}/worksteps/${workstepId}/participants`, { address }))
+    return ApiClient.handleResponse(await this.client.post(`workflows/${workflowId}/worksteps/${workstepId}/participants`, { address }))
   }
 
   public async deleteWorkstepParticipant(workflowId: string, workstepId: string, address: string): Promise<void> {
-    return ApiClient.handleResponse(await this.client.delete(`/workflows/${workflowId}/worksteps/${workstepId}/participants/${address}`))
+    return ApiClient.handleResponse(await this.client.delete(`workflows/${workflowId}/worksteps/${workstepId}/participants/${address}`))
   }
 
   public async versionWorkflow(workflowId: string, params: any): Promise<Workflow> {
