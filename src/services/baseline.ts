@@ -1,5 +1,5 @@
 import { ApiClient } from '../clients';
-import { BaselineResponse, Mapping, Participant, ProtocolMessage, ProtocolMessagePayload, Workflow, Workgroup, Workstep } from '@provide/types';
+import { BaselineResponse, Mapping, Participant, ProtocolMessage, ProtocolMessagePayload, SubjectAccount, Workflow, Workgroup, Workstep } from '@provide/types';
 
 /*
  * Baseline proxy microservice.
@@ -38,6 +38,10 @@ export class Baseline {
 
   public async configure(params: any): Promise<void> {
     return ApiClient.handleResponse(await this.client.put('config', params));
+  }
+
+  public async createSubjectAccount(subjectId: string, params: any): Promise<SubjectAccount> {
+    return ApiClient.handleResponse(await this.client.post(`subjects/${subjectId}/accounts`, params))
   }
 
   public async fetchMappings(params?: any): Promise<Mapping[]> {
