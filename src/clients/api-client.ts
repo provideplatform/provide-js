@@ -38,7 +38,7 @@ export class ApiClient {
   }
 
   static handleResponse(resp: AxiosResponse<any>): ApiClientResponse<Model> {
-    if (['PATCH', 'UPDATE', 'DELETE'].indexOf(resp.request?.method) !== -1 || resp.headers['content-length'] === 0) {
+    if (['PATCH', 'UPDATE', 'DELETE'].indexOf(resp.request?.method) !== -1 || resp.headers['content-length'] as unknown as number === 0) {
       if (resp.status >= 400) {
         return Promise.reject(`failed with ${resp.status} status`);
       }
