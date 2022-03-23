@@ -49,23 +49,23 @@ export class Bookie {
   }
 
   public async deleteBillingAccount(billingAccountId: string): Promise<void> {
-    return ApiClient.handleResponse(await this.client.delete(`kyc_applicatons/${billingAccountId}`));
+    return ApiClient.handleResponse(await this.client.delete(`kyc_applications/${billingAccountId}`));
   }
 
   public async fetchKycApplications(params?: any): Promise<PaginatedResponse<KycApplication>> {
-    return ApiClient.handleResponse(await this.client.get(`kyc_applicatons`, params || {})) as PaginatedResponse<KycApplication>;
+    return ApiClient.handleResponse(await this.client.get(`kyc_applications`, params || {})) as PaginatedResponse<KycApplication>;
   }
 
   public async fetchKycApplicationDetails(kycApplicationId: string, params?: any): Promise<KycApplication> {
-    return ApiClient.handleResponse(await this.client.get(`kyc_applicatons/${kycApplicationId}`, params || {})) as KycApplication;
+    return ApiClient.handleResponse(await this.client.get(`kyc_applications/${kycApplicationId}`, params || {})) as KycApplication;
   }
 
   public async createKycApplication(params: KycApplicationParams): Promise<KycApplication> {
-    return ApiClient.handleResponse(await this.client.post('kyc_applicatons', params)) as KycApplication;
+    return ApiClient.handleResponse(await this.client.post('kyc_applications', params)) as KycApplication;
   }
 
   public async updateKycApplication(kycApplicationId: string, params: Partial<KycApplicationParams>): Promise<void> {
-    return ApiClient.handleResponse(await this.client.put(`kyc_applicatons/${kycApplicationId}`, params));
+    return ApiClient.handleResponse(await this.client.put(`kyc_applications/${kycApplicationId}`, params));
   }
 
   public async createPayment(params: any): Promise<Payment> {
@@ -73,7 +73,7 @@ export class Bookie {
   }
 
   public async createFacility(params: any): Promise<Facility> {
-    return ApiClient.handleResponse(await this.client.post('facilities', params)) as Facility;  
+    return ApiClient.handleResponse(await this.client.post('facilities', params)) as Facility;
   }
 
   public async fetchFacilities(params?: any): Promise<PaginatedResponse<Facility>> {
@@ -85,11 +85,11 @@ export class Bookie {
   }
 
   public async createAgreement(facilityId: string, params: any): Promise<Agreement> {
-    return ApiClient.handleResponse(await this.client.post(`facilities/${facilityId}/agreements`, params)) as Agreement;  
+    return ApiClient.handleResponse(await this.client.post(`facilities/${facilityId}/agreements`, params)) as Agreement;
   }
 
   public async fetchAgreements(facilityId: string, params?: any): Promise<PaginatedResponse<Agreement>> {
-    return ApiClient.handleResponse(await this.client.get(`facilities/${facilityId}/agreements`, params || {})) as PaginatedResponse<Agreement>;  
+    return ApiClient.handleResponse(await this.client.get(`facilities/${facilityId}/agreements`, params || {})) as PaginatedResponse<Agreement>;
   }
 
   public async fetchAgreementDetails(facilityId: string, agreementId: string, params?: any): Promise<Agreement> {
@@ -97,7 +97,7 @@ export class Bookie {
   }
 
   public async createTokenizationPolicy(params: any): Promise<TokenizationPolicy> {
-    return ApiClient.handleResponse(await this.client.post('tokenization_policies', params)) as TokenizationPolicy;  
+    return ApiClient.handleResponse(await this.client.post('tokenization_policies', params)) as TokenizationPolicy;
   }
 
   public async fetchTokenizationPolicies(params?: any): Promise<PaginatedResponse<TokenizationPolicy>> {
@@ -107,9 +107,9 @@ export class Bookie {
   public async fetchTokenizationPolicyDetails(tokenizationPolicyId: string, params?: any): Promise<TokenizationPolicy> {
     return ApiClient.handleResponse(await this.client.get(`tokenization_policies/${tokenizationPolicyId}`, params || {})) as TokenizationPolicy;
   }
-  
+
   public async createBillingAccountTransaction(billingAccountId: string, params: any): Promise<Transaction> {
-    return ApiClient.handleResponse(await this.client.post(`billing_accounts/${billingAccountId}/transactions`, params)) as Transaction;  
+    return ApiClient.handleResponse(await this.client.post(`billing_accounts/${billingAccountId}/transactions`, params)) as Transaction;
   }
 
   public async fetchBillingAccountTransactions(billingAccountId: string, params?: any): Promise<PaginatedResponse<Transaction>> {
