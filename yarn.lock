@@ -865,10 +865,10 @@
   resolved "https://registry.yarnpkg.com/@provide/nats.ws/-/nats.ws-1.0.6.tgz#0f4cd9fb892beebf0786b6a6451564dcccd60cb6"
   integrity sha512-gUn7rBuCCmQlPGDK9hee6Pp0NRRAr2tsBOHN6YIv30L/ytZ2VHiCo1BtbQgoBesaMu3qK3/+GBhmpr2dd+YcXA==
 
-"@provide/types@^1.4.2":
-  version "1.4.2"
-  resolved "https://registry.yarnpkg.com/@provide/types/-/types-1.4.2.tgz#bae151a1482d4299836c6f6fdae8cc79cc149051"
-  integrity sha512-qE7YZqD3mFPHicll1teqeK7u6UcAKDG3QLLpJAG6nzJOHP7mkyimkWazPNwMhTwB7t8Vl/71fSmuvXG3/S4mnQ==
+"@provide/types@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@provide/types/-/types-1.5.0.tgz#bc1ab69fd102e62f50d305ef5150250502f60813"
+  integrity sha512-ac3f3iCzglIgv+zznRGlfza9rufP9XuqDV6XQaOGt0g+XqD0KYaeJpPosVtYoG6IIgZjiIFCK1LdLtzTEz7log==
   dependencies:
     ethers "^5.6.1"
 
@@ -991,7 +991,12 @@
   dependencies:
     "@types/node" "*"
 
-"@types/node@*", "@types/node@^17.0.23":
+"@types/node@*":
+  version "14.0.14"
+  resolved "https://registry.npmjs.org/@types/node/-/node-14.0.14.tgz"
+  integrity sha512-syUgf67ZQpaJj01/tRTknkMNoBBLWJOBODF0Zm4NrXmiSuxjymFrxnTu1QVYRubhVkRcZLYZG8STTwJRdVm/WQ==
+
+"@types/node@^17.0.23":
   version "17.0.23"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.23.tgz#3b41a6e643589ac6442bdbd7a4a3ded62f33f7da"
   integrity sha512-UxDxWn7dl97rKVeVS61vErvw086aCYhDLyvRQZ5Rk65rZKepaFdm53GeqXaKBuOhED4e9uWq34IC3TdSdJJ2Gw==
