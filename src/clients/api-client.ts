@@ -1,15 +1,45 @@
-import axios, { AxiosResponse, Method } from 'axios';
-import { ApiClientResponse, Model, PaginatedResponse } from '@provide/types';
+import axios, { AxiosResponse, Method } from "axios";
+import {
+  ApiClientResponse,
+  Model,
+  PaginatedResponse,
+  ApiClientOptions
+} from "@provide/types";
 
+function toCamelCase(str: string): string {
+  return str.replace(/([-_][a-z])/gi, $1 => {
+    return $1
+      .toUpperCase()
+      .replace("-", "")
+      .replace("_", "");
+  });
+}
+
+function toSnakeCase(str: string): string {
+  return str.replace(/[A-Z]/g, $1 => {
+    return `_${$1.toLowerCase()}`;
+  });
+}
+
+function unmarshal(obj: object): object {
+  const unmarshalledObj = {};
+  for (const [key, value] of Object.entries(obj)) {
+    unmarshalledObj[toCamelCase(key)] = value;
+  }
+  return unmarshalledObj;
+}
 export class ApiClient {
-
-  public static readonly DEFAULT_SCHEME = 'https';
-  public static readonly DEFAULT_HOST = 'provide.services';
-  public static readonly DEFAULT_PATH = 'api/v1';
+  public static readonly DEFAULT_SCHEME = "https";
+  public static readonly DEFAULT_HOST = "provide.services";
+  public static readonly DEFAULT_PATH = "api/v1";
+  public static readonly DEFAULT_OPTIONS = {
+    preventAutoCase: false
+  };
 
   private readonly token?: string | undefined;
   private readonly baseUrl: string;
 
+  public readonly options?: ApiClientOptions;
   /**
    * Initialize the API client.
    *
@@ -19,26 +49,36 @@ export class ApiClient {
    * @param scheme Either 'http' or 'https'
    * @param host The domain name or ip address and port of the service
    * @param path The base path, e.g. 'api/v1'
+   * @param options The api client configuration options
    */
   constructor(
     token?: string,
     scheme = ApiClient.DEFAULT_SCHEME,
     host = ApiClient.DEFAULT_HOST,
     path = ApiClient.DEFAULT_PATH,
+    options = ApiClient.DEFAULT_OPTIONS
   ) {
     this.token = token;
 
     this.baseUrl = `${scheme}://${host}`;
-    if (path && path !== '/') {
+    if (path && path !== "/") {
       this.baseUrl = `${this.baseUrl}/${path}/`;
     } else {
       this.baseUrl = `${this.baseUrl}/`;
     }
-    this.baseUrl = `${this.baseUrl.replace(/\/+$/, '')}/`;
+    this.baseUrl = `${this.baseUrl.replace(/\/+$/, "")}/`;
+
+    this.options = options;
   }
 
-  static handleResponse(resp: AxiosResponse<any>): ApiClientResponse<Model> {
-    if (['PATCH', 'UPDATE', 'DELETE'].indexOf(resp.request?.method) !== -1 || resp.headers['content-length'] as unknown as number === 0) {
+  static handleResponse(
+    resp: AxiosResponse<any>,
+    options?: ApiClientOptions
+  ): ApiClientResponse<Model> {
+    if (
+      ["PATCH", "UPDATE", "DELETE"].includes(resp.request?.method) ||
+      resp.headers["content-length"] === "0"
+    ) {
       if (resp.status >= 400) {
         return Promise.reject(`failed with ${resp.status} status`);
       }
@@ -47,24 +87,22 @@ export class ApiClient {
 
     try {
       if (resp.data instanceof Array) {
-        const arr = [];
-        (resp.data as any[]).forEach((item: any) => {
-          const inst = new Model();
-          inst.unmarshal(JSON.stringify(item));
-          (arr as any[]).push(inst);
-        });
+        let arr = resp.data;
+        if (!options?.preventAutoCase) {
+          arr = [];
+          resp.data.forEach((item: any) => {
+            unmarshal(item);
+          });
+        }
         return {
           results: arr,
           totalResultsCount: +resp.headers["x-total-results-count"]
         } as PaginatedResponse<Model>;
       }
 
-      const instance = new Model();
-      const json = JSON.stringify(resp.data); // HACK!!
-      instance.unmarshal(json);
-      return instance;
+      return options?.preventAutoCase ? resp.data : unmarshal(resp.data);
     } catch (err) {
-      return Promise.reject('failed to parse response as JSON');
+      return Promise.reject("failed to handle api client response");
     }
   }
 
@@ -77,52 +115,56 @@ export class ApiClient {
         if (param instanceof Array) {
           // tslint:disable-next-line: forin
           for (const i in param) {
-            paramList.push(encodeURIComponent(p) + '=' + encodeURIComponent(param[i]));
+            paramList.push(
+              encodeURIComponent(p) + "=" + encodeURIComponent(param[i])
+            );
           }
         } else {
-          paramList.push(encodeURIComponent(p) + '=' + encodeURIComponent(params[p]));
+          paramList.push(
+            encodeURIComponent(p) + "=" + encodeURIComponent(params[p])
+          );
         }
       }
     }
 
     if (paramList.length > 0) {
-      return paramList.join('&');
+      return paramList.join("&");
     }
 
-    return '';
+    return "";
   }
 
-  async get(uri: string, params: object): Promise<AxiosResponse<any>> {
-    return await this.sendRequest('GET', uri, params);
+  async get(uri: string, params?: object): Promise<AxiosResponse<any>> {
+    return await this.sendRequest("GET", uri, params);
   }
 
-  async patch(uri: string, params: object): Promise<AxiosResponse<any>> {
-    return await this.sendRequest('PATCH', uri, params);
+  async patch(uri: string, params?: object): Promise<AxiosResponse<any>> {
+    return await this.sendRequest("PATCH", uri, params);
   }
 
-  async post(uri: string, params: object): Promise<AxiosResponse<any>> {
-    return await this.sendRequest('POST', uri, params);
+  async post(uri: string, params?: object): Promise<AxiosResponse<any>> {
+    return await this.sendRequest("POST", uri, params);
   }
 
   async put(uri: string, params: object): Promise<AxiosResponse<any>> {
-    return await this.sendRequest('PUT', uri, params);
+    return await this.sendRequest("PUT", uri, params);
   }
 
   async delete(uri: string): Promise<AxiosResponse<any>> {
-    return await this.sendRequest('DELETE', uri, null);
+    return await this.sendRequest("DELETE", uri);
   }
 
   private async sendRequest(
     method: string,
     uri: string,
-    params: any = null,
+    params: any = null // TODO-- use generic instead of any
   ): Promise<AxiosResponse<any>> {
-    let query = '';
+    let query = "";
     let requestBody: any;
 
     if (params === null) {
       requestBody = undefined;
-    } else if (method === 'GET' && Object.keys(params).length > 0) {
+    } else if (method === "GET" && Object.keys(params).length > 0) {
       query = `?${ApiClient.toQuery(params)}`;
     } else {
       requestBody = JSON.stringify(params);
@@ -130,21 +172,21 @@ export class ApiClient {
 
     const requestHeaders = {};
     if (this.token) {
-      requestHeaders['Authorization'] = `bearer ${this.token}`;
+      requestHeaders["Authorization"] = `bearer ${this.token}`;
     }
 
-    if (['POST', 'PUT'].indexOf(method) !== -1) {
-      requestHeaders['Content-Type'] = 'application/json';
+    if (["POST", "PUT"].indexOf(method) !== -1) {
+      requestHeaders["Content-Type"] = "application/json";
     }
 
     const cfg = {
-      url: (this.baseUrl + uri).replace(/\/+$/, '') + query,
+      url: (this.baseUrl + uri).replace(/\/+$/, "") + query,
       method: method as Method,
       headers: requestHeaders,
-      data: null,
+      data: null
     };
 
-    if (['POST', 'PUT'].indexOf(method) !== -1) {
+    if (["POST", "PUT"].indexOf(method) !== -1) {
       cfg.data = requestBody;
     }
 

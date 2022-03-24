@@ -1,6 +1,6 @@
 {
   "name": "provide-js",
-  "version": "1.7.7",
+  "version": "1.8.0",
   "description": "Provide typescript client library",
   "license": "MIT",
   "main": "./dist/cjs/index.js",
@@ -34,6 +34,10 @@
     {
       "name": "Kyle Thomas",
       "email": "kyle@provide.services"
+    },
+    {
+      "name": "Alex Dunne",
+      "email": "alex@provide.services"
     }
   ],
   "keywords": [
@@ -46,7 +50,7 @@
   },
   "homepage": "https://github.com/provideservices/provide-js#readme",
   "dependencies": {
-    "@provide/types": "^1.4.2",
+    "@provide/types": "^1.5.0",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/node": "^17.0.23",
     "axios": "^0.26.1",
