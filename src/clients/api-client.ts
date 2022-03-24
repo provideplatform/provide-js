@@ -91,7 +91,7 @@ export class ApiClient {
         if (!options?.preventAutoCase) {
           arr = [];
           resp.data.forEach((item: any) => {
-            unmarshal(item);
+            arr.push(unmarshal(item));
           });
         }
         return {
