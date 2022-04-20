@@ -55,8 +55,12 @@ export class Vault {
     return ApiClient.handleResponse(await this.client.post(`vaults/${vaultId}/keys/${keyId}/decrypt`, { message: msg }), this.client.options);
   }
 
-  public async signMessage(vaultId: string, keyId: string, msg: string): Promise<any> {
-    return ApiClient.handleResponse(await this.client.post(`vaults/${vaultId}/keys/${keyId}/sign`, { message: msg }), this.client.options);
+  public async signMessage(vaultId: string, keyId: string, msg: string, opts?: object): Promise<any> {
+    const params = { message: msg }
+    if (opts) {
+      params['opts'] = opts;
+    }
+    return ApiClient.handleResponse(await this.client.post(`vaults/${vaultId}/keys/${keyId}/sign`, params), this.client.options);
   }
 
   public async verifySignature(vaultId: string, keyId: string, msg: string, sig: string): Promise<any> {
