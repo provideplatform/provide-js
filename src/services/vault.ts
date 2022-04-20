@@ -58,7 +58,7 @@ export class Vault {
   public async signMessage(vaultId: string, keyId: string, msg: string, opts?: object): Promise<any> {
     const params = { message: msg }
     if (opts) {
-      params['opts'] = opts;
+      params['options'] = opts;
     }
     return ApiClient.handleResponse(await this.client.post(`vaults/${vaultId}/keys/${keyId}/sign`, params), this.client.options);
   }
