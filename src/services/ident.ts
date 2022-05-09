@@ -52,7 +52,7 @@ export class Ident {
   }
 
   public static async fetchOAuthApplicationDetails(clientId: string, scheme?: string, host?: string, path?: string, options?: ApiClientOptions): Promise<AuthenticationResponse> {
-    return ApiClient.handleResponse(await Ident.unauthenticatedClientFactory(undefined, scheme, host, path, options).post(`oauth/applications/${clientId}`, {}));
+    return ApiClient.handleResponse(await Ident.unauthenticatedClientFactory(undefined, scheme, host, path, options).get(`oauth/applications/${clientId}`, {}));
   }
 
   public static async fetchPrivacyPolicy(scheme?: string, host?: string, path?: string, options?: ApiClientOptions): Promise<any> {
