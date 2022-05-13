@@ -1,3 +1,19 @@
+/*
+ * Copyright 2017-2022 Provide Technologies Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { ApiClient } from '../clients';
 import {
   ApiClientOptions,
@@ -37,7 +53,7 @@ export class Ident {
     const _path = path ? path : (process.env['IDENT_API_PATH'] || ApiClient.DEFAULT_PATH);
     return new Ident(token, _scheme, _host, _path, options);
   }
-  
+
   // FIXME-- this is unnecessary
   private static unauthenticatedClientFactory(token?: string | undefined, scheme?: string, host?: string, path?: string, options?: ApiClientOptions): ApiClient {
     const _scheme = scheme ? scheme : (process.env['IDENT_API_SCHEME'] || 'https');
