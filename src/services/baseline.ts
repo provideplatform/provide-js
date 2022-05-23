@@ -68,11 +68,11 @@ export class Baseline {
     return ApiClient.handleResponse(await this.client.put(`objects/${id}`, params), this.client.options) as BaselineResponse;
   }
 
-  public async listSchemas(params: any): Promise<Workflow> {
+  public async listSchemas(params: any): Promise<Mapping[]> {
     return ApiClient.handleResponse(await this.client.get(`schemas`, params), this.client.options);
   }
 
-  public async fetchSchemaDetails(schemaId: string): Promise<Workflow> {
+  public async fetchSchemaDetails(schemaId: string): Promise<Mapping> {
     return ApiClient.handleResponse(await this.client.get(`schemas/${schemaId}`), this.client.options);
   }
 
