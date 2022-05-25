@@ -64,6 +64,18 @@ export class Baseline {
     return ApiClient.handleResponse(await this.client.post('objects', params), this.client.options) as BaselineResponse;
   }
 
+  public async updateObject(id: string, params: any): Promise<BaselineResponse> {
+    return ApiClient.handleResponse(await this.client.put(`objects/${id}`, params), this.client.options) as BaselineResponse;
+  }
+
+  public async fetchSchemas(workgroupId: string, params: any): Promise<Mapping[]> {
+    return ApiClient.handleResponse(await this.client.get(`workgroups/${workgroupId}/schemas`, params), this.client.options);
+  }
+
+  public async fetchSchemaDetails(workgroupId: string, schemaId: string): Promise<Mapping> {
+    return ApiClient.handleResponse(await this.client.get(`workgroups/${workgroupId}/schemas/${schemaId}`), this.client.options);
+  }
+
   public async createWorkgroup(params: any): Promise<Workgroup> {
     return ApiClient.handleResponse(await this.client.post('workgroups', params), this.client.options);
   }
@@ -147,10 +159,6 @@ export class Baseline {
   public async status(): Promise<number> {
     const resp = await baselineClientFactory('', undefined, undefined, '/').client.get('status');
     return resp.status;
-  }
-
-  public async updateObject(id: string, params: any): Promise<BaselineResponse> {
-    return ApiClient.handleResponse(await this.client.put(`objects/${id}`, params), this.client.options) as BaselineResponse;
   }
 }
 
