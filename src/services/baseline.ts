@@ -104,6 +104,10 @@ export class Baseline {
     return ApiClient.handleResponse(await this.client.get(`workgroups/${workgroupId}`), this.client.options);
   }
 
+  public async updateWorkgroup(workgroupId: string, params: any): Promise<void> {
+    return ApiClient.handleResponse(await this.client.put(`workgroups/${workgroupId}`, params), this.client.options);
+  }
+
   public async createWorkflow(params: any): Promise<Workflow> {
     return ApiClient.handleResponse(await this.client.post(`workflows`, params), this.client.options);
   }
