@@ -76,12 +76,8 @@ export class Baseline {
     return ApiClient.handleResponse(await this.client.delete(`mappings/${mappingId}`), this.client.options);
   }
 
-  public async createObject(params: any): Promise<BaselineResponse> {
-    return ApiClient.handleResponse(await this.client.post('objects', params), this.client.options) as BaselineResponse;
-  }
-
-  public async updateObject(id: string, params: any): Promise<BaselineResponse> {
-    return ApiClient.handleResponse(await this.client.put(`objects/${id}`, params), this.client.options) as BaselineResponse;
+  public async sendProtocolMessage(params: any): Promise<any> {
+    return ApiClient.handleResponse(await this.client.post('protocol_messages', params), this.client.options)
   }
 
   public async fetchSchemas(workgroupId: string, params: any): Promise<Mapping[]> {
