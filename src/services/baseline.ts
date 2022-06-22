@@ -76,7 +76,7 @@ export class Baseline {
     return ApiClient.handleResponse(await this.client.delete(`mappings/${mappingId}`), this.client.options);
   }
 
-  public async sendProtocolMessage(params: any): Promise<any> {
+  public async sendProtocolMessage(params: any): Promise<BaselineResponse> {
     return ApiClient.handleResponse(await this.client.post('protocol_messages', params), this.client.options)
   }
 
