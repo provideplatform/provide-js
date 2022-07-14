@@ -60,6 +60,10 @@ export class Baseline {
     return ApiClient.handleResponse(await this.client.post(`subjects/${subjectId}/accounts`, params), this.client.options)
   }
 
+  public async systemReachability(params: any): Promise<void> {
+    return ApiClient.handleResponse(await this.client.post(`systems/reachability`, params), this.client.options)
+  }
+
   public async fetchMappings(params?: any): Promise<Mapping[]> {
     return ApiClient.handleResponse(await this.client.get(`mappings`, params), this.client.options);
   }
