@@ -14,48 +14,45 @@
  * limitations under the License.
  */
 
-import axios, { AxiosResponse, Method } from "axios";
+import axios, { AxiosResponse, Method } from 'axios'
 import {
   ApiClientResponse,
   Model,
   PaginatedResponse,
-  ApiClientOptions
-} from "@provide/types";
+  ApiClientOptions,
+} from '@provide/types'
 
 function toCamelCase(str: string): string {
-  return str.replace(/([-_][a-z])/gi, $1 => {
-    return $1
-      .toUpperCase()
-      .replace("-", "")
-      .replace("_", "");
-  });
+  return str.replace(/([-_][a-z])/gi, ($1) => {
+    return $1.toUpperCase().replace('-', '').replace('_', '')
+  })
 }
 
 function toSnakeCase(str: string): string {
-  return str.replace(/[A-Z]/g, $1 => {
-    return `_${$1.toLowerCase()}`;
-  });
+  return str.replace(/[A-Z]/g, ($1) => {
+    return `_${$1.toLowerCase()}`
+  })
 }
 
 function unmarshal(obj: object): object {
-  const unmarshalledObj = {};
+  const unmarshalledObj = {}
   for (const [key, value] of Object.entries(obj)) {
-    unmarshalledObj[toCamelCase(key)] = value;
+    unmarshalledObj[toCamelCase(key)] = value
   }
-  return unmarshalledObj;
+  return unmarshalledObj
 }
 export class ApiClient {
-  public static readonly DEFAULT_SCHEME = "https";
-  public static readonly DEFAULT_HOST = "provide.services";
-  public static readonly DEFAULT_PATH = "api/v1";
+  public static readonly DEFAULT_SCHEME = 'https'
+  public static readonly DEFAULT_HOST = 'provide.services'
+  public static readonly DEFAULT_PATH = 'api/v1'
   public static readonly DEFAULT_OPTIONS = {
-    preventAutoCase: false
-  };
+    preventAutoCase: false,
+  }
 
-  private readonly token?: string | undefined;
-  private readonly baseUrl: string;
+  private readonly token?: string | undefined
+  private readonly baseUrl: string
 
-  public readonly options?: ApiClientOptions;
+  public readonly options?: ApiClientOptions
   /**
    * Initialize the API client.
    *
@@ -74,17 +71,17 @@ export class ApiClient {
     path = ApiClient.DEFAULT_PATH,
     options = ApiClient.DEFAULT_OPTIONS
   ) {
-    this.token = token;
+    this.token = token
 
-    this.baseUrl = `${scheme}://${host}`;
-    if (path && path !== "/") {
-      this.baseUrl = `${this.baseUrl}/${path}/`;
+    this.baseUrl = `${scheme}://${host}`
+    if (path && path !== '/') {
+      this.baseUrl = `${this.baseUrl}/${path}/`
     } else {
-      this.baseUrl = `${this.baseUrl}/`;
+      this.baseUrl = `${this.baseUrl}/`
     }
-    this.baseUrl = `${this.baseUrl.replace(/\/+$/, "")}/`;
+    this.baseUrl = `${this.baseUrl.replace(/\/+$/, '')}/`
 
-    this.options = options;
+    this.options = options
   }
 
   static handleResponse(
@@ -92,82 +89,82 @@ export class ApiClient {
     options?: ApiClientOptions
   ): ApiClientResponse<Model> {
     if (
-      ["PATCH", "UPDATE", "DELETE"].includes(resp.request?.method) ||
-      resp.headers["content-length"] === "0"
+      ['PATCH', 'UPDATE', 'DELETE'].includes(resp.request?.method) ||
+      resp.headers['content-length'] === '0'
     ) {
       if (resp.status >= 400) {
-        return Promise.reject(`failed with ${resp.status} status`);
+        return Promise.reject(`failed with ${resp.status} status`)
       }
-      return Promise.resolve();
+      return Promise.resolve()
     }
 
     try {
       if (resp.data instanceof Array) {
-        let arr = resp.data;
+        let arr = resp.data
         if (!options?.preventAutoCase) {
-          arr = [];
+          arr = []
           resp.data.forEach((item: any) => {
-            arr.push(unmarshal(item));
-          });
+            arr.push(unmarshal(item))
+          })
         }
         return {
           results: arr,
-          totalResultsCount: +resp.headers["x-total-results-count"]
-        } as PaginatedResponse<Model>;
+          totalResultsCount: +resp.headers['x-total-results-count'],
+        } as PaginatedResponse<Model>
       }
 
-      return options?.preventAutoCase ? resp.data : unmarshal(resp.data);
+      return options?.preventAutoCase ? resp.data : unmarshal(resp.data)
     } catch (err) {
-      return Promise.reject("failed to handle api client response");
+      return Promise.reject('failed to handle api client response')
     }
   }
 
   private static toQuery(params: object): string {
-    const paramList: string[] = [];
+    const paramList: string[] = []
 
     for (const p in params) {
       if (params.hasOwnProperty(p)) {
-        const param = params[p];
+        const param = params[p]
         if (param instanceof Array) {
           // tslint:disable-next-line: forin
           for (const i in param) {
             paramList.push(
-              encodeURIComponent(p) + "=" + encodeURIComponent(param[i])
-            );
+              encodeURIComponent(p) + '=' + encodeURIComponent(param[i])
+            )
           }
         } else {
           paramList.push(
-            encodeURIComponent(p) + "=" + encodeURIComponent(params[p])
-          );
+            encodeURIComponent(p) + '=' + encodeURIComponent(params[p])
+          )
         }
       }
     }
 
     if (paramList.length > 0) {
-      return paramList.join("&");
+      return paramList.join('&')
     }
 
-    return "";
+    return ''
   }
 
   async get(uri: string, params?: object): Promise<AxiosResponse<any>> {
-    return await this.sendRequest("GET", uri, params);
+    return await this.sendRequest('GET', uri, params)
   }
 
   async patch(uri: string, params?: object): Promise<AxiosResponse<any>> {
-    return await this.sendRequest("PATCH", uri, params);
+    return await this.sendRequest('PATCH', uri, params)
   }
 
   async post(uri: string, params?: object): Promise<AxiosResponse<any>> {
-    return await this.sendRequest("POST", uri, params);
+    return await this.sendRequest('POST', uri, params)
   }
 
   async put(uri: string, params: object): Promise<AxiosResponse<any>> {
-    return await this.sendRequest("PUT", uri, params);
+    return await this.sendRequest('PUT', uri, params)
   }
 
   async delete(uri: string): Promise<AxiosResponse<any>> {
-    return await this.sendRequest("DELETE", uri);
+    return await this.sendRequest('DELETE', uri)
   }
 
   private async sendRequest(
@@ -175,41 +172,41 @@ export class ApiClient {
     uri: string,
     params: any = null // TODO-- use generic instead of any
   ): Promise<AxiosResponse<any>> {
-    let query = "";
-    let requestBody: any;
+    let query = ''
+    let requestBody: any
 
     if (params === null) {
-      requestBody = undefined;
-    } else if (method === "GET" && Object.keys(params).length > 0) {
-      query = `?${ApiClient.toQuery(params)}`;
+      requestBody = undefined
+    } else if (method === 'GET' && Object.keys(params).length > 0) {
+      query = `?${ApiClient.toQuery(params)}`
     } else {
-      requestBody = JSON.stringify(params);
+      requestBody = JSON.stringify(params)
     }
 
-    const requestHeaders = {};
+    const requestHeaders = {}
     if (this.token) {
-      requestHeaders["Authorization"] = `bearer ${this.token}`;
+      requestHeaders['Authorization'] = `bearer ${this.token}`
     }
 
-    if (["POST", "PUT"].indexOf(method) !== -1) {
-      requestHeaders["Content-Type"] = "application/json";
+    if (['POST', 'PUT'].indexOf(method) !== -1) {
+      requestHeaders['Content-Type'] = 'application/json'
     }
 
     const cfg = {
-      url: (this.baseUrl + uri).replace(/\/+$/, "") + query,
+      url: (this.baseUrl + uri).replace(/\/+$/, '') + query,
       method: method as Method,
       headers: requestHeaders,
-      data: null
-    };
+      data: null,
+    }
 
-    if (["POST", "PUT"].indexOf(method) !== -1) {
-      cfg.data = requestBody;
+    if (['POST', 'PUT'].indexOf(method) !== -1) {
+      cfg.data = requestBody
     }
 
     try {
-      return axios.request(cfg);
+      return axios.request(cfg)
     } catch (err) {
-      return Promise.reject(err);
+      return Promise.reject(err)
     }
   }
 }

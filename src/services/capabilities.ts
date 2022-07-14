@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import axios from 'axios';
+import axios from 'axios'
 
 /*
  * Capabilities utility. Manage public capabilities manifest provided by Provide.
@@ -22,41 +22,41 @@ import axios from 'axios';
  * exists to assist in managing it.
  */
 export class Capabilities {
+  private static readonly capabilitiesManifestUrl =
+    'https://s3.amazonaws.com/static.provide.services/capabilities/provide-capabilities-manifest.json'
 
-  private static readonly capabilitiesManifestUrl = 'https://s3.amazonaws.com/static.provide.services/capabilities/provide-capabilities-manifest.json';
-
-  private capabilities: any;
-  private manifestUrl: string;
+  private capabilities: any
+  private manifestUrl: string
 
   constructor(manifestUrl?: string) {
-    this.manifestUrl = manifestUrl || Capabilities.capabilitiesManifestUrl;
+    this.manifestUrl = manifestUrl || Capabilities.capabilitiesManifestUrl
   }
 
   async fetch() {
     return axios.get(this.manifestUrl).then((response) => {
       if (response.status === 200) {
-        this.capabilities = response.data;
+        this.capabilities = response.data
       }
-    });
+    })
   }
 
   getBaselineRegistryContracts(): any {
     if (this.capabilities) {
-      return this.capabilities.baseline?.contracts;
+      return this.capabilities.baseline?.contracts
     }
-    return undefined;
+    return undefined
   }
 
   getRegistryContracts(): any {
     if (this.capabilities) {
-      return this.capabilities.message_bus?.registry_contracts;
+      return this.capabilities.message_bus?.registry_contracts
     }
-    return undefined;
+    return undefined
   }
 }
 
 export const capabilitiesFactory = (): Capabilities => {
-  const capabilities = new Capabilities();
-  capabilities.fetch();
-  return capabilities;
-};
+  const capabilities = new Capabilities()
+  capabilities.fetch()
+  return capabilities
+}

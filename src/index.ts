@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 
-export * from './clients';
-export * from './services';
+export * from './clients'
+export * from './services'

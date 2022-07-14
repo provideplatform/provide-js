@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-import { AxiosResponse } from 'axios';
-import IpfsHttpClient from 'ipfs-http-client';
-import { lookup as mimelookup } from 'mime-types';
+import { AxiosResponse } from 'axios'
+import IpfsHttpClient from 'ipfs-http-client'
+import { lookup as mimelookup } from 'mime-types'
 
-import { ApiClient } from './api-client';
+import { ApiClient } from './api-client'
 
 export class IpfsClient {
+  public static readonly DEFAULT_SCHEME = 'http'
+  public static readonly DEFAULT_HOST = 'ipfs.provide.services'
+  public static readonly DEFAULT_PORT = 5001
+  public static readonly DEFAULT_PATH = '/api/v0/'
+  public static readonly DEFAULT_GATEWAY_PORT = 8080
+  public static readonly DEFAULT_GATEWAY_PATH = '/ipfs/'
 
-  public static readonly DEFAULT_SCHEME = 'http';
-  public static readonly DEFAULT_HOST = 'ipfs.provide.services';
-  public static readonly DEFAULT_PORT = 5001;
-  public static readonly DEFAULT_PATH = '/api/v0/';
-  public static readonly DEFAULT_GATEWAY_PORT = 8080;
-  public static readonly DEFAULT_GATEWAY_PATH = '/ipfs/';
-
-  private apiClient: ApiClient;
-  private ipfs: IpfsHttpClient;
+  private apiClient: ApiClient
+  private ipfs: IpfsHttpClient
 
   /**
    * Initialize a wrapped IPFS client.
@@ -46,14 +45,14 @@ export class IpfsClient {
     scheme = IpfsClient.DEFAULT_SCHEME,
     host = IpfsClient.DEFAULT_HOST,
     port = IpfsClient.DEFAULT_PORT,
-    path = IpfsClient.DEFAULT_PATH,
+    path = IpfsClient.DEFAULT_PATH
   ) {
-    this.apiClient = new ApiClient(undefined, scheme, host, path);
+    this.apiClient = new ApiClient(undefined, scheme, host, path)
 
-    let sanitizedHost = host;
-    const portSuffix = `:${port}`;
+    let sanitizedHost = host
+    const portSuffix = `:${port}`
     if (host.lastIndexOf(portSuffix) === host.length - portSuffix.length) {
-      sanitizedHost = host.substr(0, host.length - portSuffix.length);
+      sanitizedHost = host.substr(0, host.length - portSuffix.length)
     }
 
     this.ipfs = new IpfsHttpClient({
@@ -61,7 +60,7 @@ export class IpfsClient {
       host: sanitizedHost,
       port: port,
       'api-path': path,
-    });
+    })
   }
 
   /**
@@ -73,31 +72,37 @@ export class IpfsClient {
    *
    * @return A Promise with the hash if resolved or an Error if rejected
    */
-  public add(path: string, content: any, options: any = null): Promise<any[] | Error> {
-    const files = [{
-      path: path,
-      content: content,
-    }];
+  public add(
+    path: string,
+    content: any,
+    options: any = null
+  ): Promise<any[] | Error> {
+    const files = [
+      {
+        path: path,
+        content: content,
+      },
+    ]
 
     return new Promise(async (resolve, reject) => {
-      const retvals: any[] = [];
-      const gen = this.ipfs.add(files, options);
-      let result = await gen.next();
+      const retvals: any[] = []
+      const gen = this.ipfs.add(files, options)
+      let result = await gen.next()
       if (!result) {
-        reject(`failed to add ${content.byteLength}-byte object to IPFS`);
-        return;
+        reject(`failed to add ${content.byteLength}-byte object to IPFS`)
+        return
       }
       if (result && typeof result.value !== 'undefined') {
-        retvals.push(result.value);
+        retvals.push(result.value)
       }
       while (!result.done) {
-        result = await gen.next();
+        result = await gen.next()
         if (result && typeof result.value !== 'undefined') {
-          retvals.push(result.value);
+          retvals.push(result.value)
         }
       }
-      resolve(retvals);
-    });
+      resolve(retvals)
+    })
   }
 
   /**
@@ -109,20 +114,20 @@ export class IpfsClient {
    */
   public cat(hash: string): Promise<any | Error> {
     return new Promise(async (resolve, reject) => {
-      let retval;
-      const gen = this.ipfs.cat(hash);
-      let result = await gen.next();
+      let retval
+      const gen = this.ipfs.cat(hash)
+      let result = await gen.next()
       if (!result) {
-        reject(`failed to cat IPFS object: ${hash}`);
-        return;
+        reject(`failed to cat IPFS object: ${hash}`)
+        return
       }
-      retval = result.value;
+      retval = result.value
       while (!result.done) {
-        result = await gen.next();
+        result = await gen.next()
       }
 
-      resolve(retval);
-    });
+      resolve(retval)
+    })
   }
 
   /**
@@ -134,24 +139,27 @@ export class IpfsClient {
    */
   public ls(hashes: string[]): Promise<any | Error> {
     return new Promise((resolve, reject) => {
-      this.apiClient.get('ls', {arg: hashes}).then((response: AxiosResponse<any>) => {
-        const links: any[] = [];
-        response.data['Objects'].forEach((ipfsObject: object[]) => {
-          ipfsObject['Links'].forEach((lnk: object) => {
-            links.push({
-              hash: lnk['Hash'],
-              mime: lnk['Name'] === '' ? null : mimelookup(lnk['Name']),
-              name: lnk['Name'],
-              size: lnk['Size'],
-              target: lnk['Target'] === '' ? null : lnk['Target'],
-              type: lnk['Type'],
-            });
-          });
-        });
-        resolve(links);
-      }).catch((error: Error) => {
-        reject(error);
-      });
-    });
+      this.apiClient
+        .get('ls', { arg: hashes })
+        .then((response: AxiosResponse<any>) => {
+          const links: any[] = []
+          response.data['Objects'].forEach((ipfsObject: object[]) => {
+            ipfsObject['Links'].forEach((lnk: object) => {
+              links.push({
+                hash: lnk['Hash'],
+                mime: lnk['Name'] === '' ? null : mimelookup(lnk['Name']),
+                name: lnk['Name'],
+                size: lnk['Size'],
+                target: lnk['Target'] === '' ? null : lnk['Target'],
+                type: lnk['Type'],
+              })
+            })
+          })
+          resolve(links)
+        })
+        .catch((error: Error) => {
+          reject(error)
+        })
+    })
   }
 }

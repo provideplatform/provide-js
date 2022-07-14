@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-import * as natsutil from 'ts-natsutil';
+import * as natsutil from 'ts-natsutil'
 
 export class NatsClientFacade {
+  public static readonly DEFAULT_SCHEME = 'wss'
+  public static readonly DEFAULT_HOST = 'websocket.provide.services'
+  public static readonly DEFAULT_PATH = ''
 
-  public static readonly DEFAULT_SCHEME = 'wss';
-  public static readonly DEFAULT_HOST = 'websocket.provide.services';
-  public static readonly DEFAULT_PATH = '';
+  private readonly bearerToken?: string
+  private readonly natsUrl: string
 
-  private readonly bearerToken?: string;
-  private readonly natsUrl: string;
-
-  private service?: natsutil.INatsService;
+  private service?: natsutil.INatsService
 
   /**
    * Initialize a convenience wrapper to manage NATS websocket connections.
@@ -41,52 +40,58 @@ export class NatsClientFacade {
     bearerToken?: string,
     scheme = NatsClientFacade.DEFAULT_SCHEME,
     host = NatsClientFacade.DEFAULT_HOST,
-    path?: string,
+    path?: string
   ) {
-    this.bearerToken = bearerToken;
-    this.natsUrl = `${scheme}://${host}/${path ? `${path}/` : ''}`;
+    this.bearerToken = bearerToken
+    this.natsUrl = `${scheme}://${host}/${path ? `${path}/` : ''}`
   }
 
   public connect(): Promise<any> {
     const service = natsutil.natsServiceFactory({
       bearerToken: this.bearerToken,
       servers: [this.natsUrl],
-    });
+    })
     return service.connect().then(() => {
-      console.log(`NATS connection established to endpoint: ${this.natsUrl}`);
-      this.service = service;
-    });
+      console.log(`NATS connection established to endpoint: ${this.natsUrl}`)
+      this.service = service
+    })
   }
 
   public close() {
-    this.service?.disconnect();
+    this.service?.disconnect()
   }
 
-  public publish({subject, payload, reply}): Promise<any> {
+  public publish({ subject, payload, reply }): Promise<any> {
     if (!this.service) {
-      return Promise.reject(`no NATS service available to publish message on subject: ${subject}`);
+      return Promise.reject(
+        `no NATS service available to publish message on subject: ${subject}`
+      )
     }
-    return this.service?.publish(subject, payload, reply);
+    return this.service?.publish(subject, payload, reply)
   }
 
   public subscribe({ subject, onMessage }): Promise<any> {
     if (!this.service) {
-      return Promise.reject(`no NATS service available to subscribe to subject: ${subject}`);
+      return Promise.reject(
+        `no NATS service available to subscribe to subject: ${subject}`
+      )
     }
-    return this.service.subscribe(subject, onMessage);
+    return this.service.subscribe(subject, onMessage)
   }
 
   public unsubscribe(subject: string): void {
     if (!this.service) {
-      return;
+      return
     }
-    this.service.unsubscribe(subject);
+    this.service.unsubscribe(subject)
   }
 
-  public request({subject, timeout, payload}): Promise<any> {
+  public request({ subject, timeout, payload }): Promise<any> {
     if (!this.service) {
-      return Promise.reject(`no NATS service available to send request on subject: ${subject}`);
+      return Promise.reject(
+        `no NATS service available to send request on subject: ${subject}`
+      )
     }
-    return this.service.request(subject, timeout, payload);
+    return this.service.request(subject, timeout, payload)
   }
 }
