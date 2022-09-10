@@ -93,7 +93,7 @@ export class ApiClient {
       resp.headers['content-length'] === '0'
     ) {
       if (resp.status >= 400) {
-        return Promise.reject(`failed with ${resp.status} status`)
+        return Promise.reject({ status: resp.status, payload: resp.data })
       }
       return Promise.resolve()
     }
@@ -115,7 +115,14 @@ export class ApiClient {
 
       return options?.preventAutoCase ? resp.data : unmarshal(resp.data)
     } catch (err) {
-      return Promise.reject('failed to handle api client response')
+      return Promise.reject({
+        status: 0,
+        payload: {
+          message: `failed to handle api client response; ${JSON.stringify(
+            err
+          )}`,
+        },
+      })
     }
   }
 
@@ -204,7 +211,12 @@ export class ApiClient {
     }
 
     try {
-      return axios.request(cfg)
+      const res = await axios.request(cfg)
+      if (res.status >= 400) {
+        return Promise.reject({ status: res.status, payload: res.data })
+      }
+
+      return Promise.resolve(res)
     } catch (err) {
       return Promise.reject(err)
     }

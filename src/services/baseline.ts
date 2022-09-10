@@ -365,7 +365,7 @@ export class Baseline {
 
   public async fetchWorksteps(
     workflowId: string,
-    params?: any | undefined
+    params?: any
   ): Promise<Workstep[]> {
     return ApiClient.handleResponse(
       await this.client.get(`workflows/${workflowId}/worksteps`, params),
@@ -376,7 +376,7 @@ export class Baseline {
   public async fetchWorkstepDetails(
     workflowId: string,
     workstepId: string,
-    params?: any | undefined
+    params?: any
   ): Promise<Workstep> {
     return ApiClient.handleResponse(
       await this.client.get(
@@ -402,6 +402,52 @@ export class Baseline {
   public async deleteWorkflow(workflowId: string): Promise<void> {
     return ApiClient.handleResponse(
       await this.client.delete(`workflows/${workflowId}`),
+      this.client.options
+    )
+  }
+
+  public async listSystems(workgroupId: string, params?: any): Promise<any> {
+    return ApiClient.handleResponse(
+      await this.client.get(`workgroups/${workgroupId}/systems`, params),
+      this.client.options
+    )
+  }
+
+  public async getSystemDetails(
+    workgroupId: string,
+    systemId: string,
+    params?: any
+  ): Promise<any> {
+    return ApiClient.handleResponse(
+      await this.client.get(`/${workgroupId}/systems/${systemId}`, params),
+      this.client.options
+    )
+  }
+
+  public async createSystem(workgroupId: string, params: any): Promise<any> {
+    return ApiClient.handleResponse(
+      await this.client.post(`/${workgroupId}/systems`, params),
+      this.client.options
+    )
+  }
+
+  public async updateSystem(
+    workgroupId: string,
+    systemId: string,
+    params: any
+  ): Promise<any> {
+    return ApiClient.handleResponse(
+      await this.client.put(`/${workgroupId}/systems/${systemId}`, params),
+      this.client.options
+    )
+  }
+
+  public async deleteSystem(
+    workgroupId: string,
+    systemId: string
+  ): Promise<void> {
+    return ApiClient.handleResponse(
+      await this.client.delete(`/${workgroupId}/systems/${systemId}`, params),
       this.client.options
     )
   }
