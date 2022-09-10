@@ -27,6 +27,7 @@ import {
   Workgroup,
   WorkgroupAnyliticsAPIResponse,
   Workstep,
+  System,
 } from '@provide/types'
 
 /*
@@ -406,7 +407,10 @@ export class Baseline {
     )
   }
 
-  public async listSystems(workgroupId: string, params?: any): Promise<any> {
+  public async listSystems(
+    workgroupId: string,
+    params?: any
+  ): Promise<System[]> {
     return ApiClient.handleResponse(
       await this.client.get(`workgroups/${workgroupId}/systems`, params),
       this.client.options
@@ -417,14 +421,14 @@ export class Baseline {
     workgroupId: string,
     systemId: string,
     params?: any
-  ): Promise<any> {
+  ): Promise<System> {
     return ApiClient.handleResponse(
       await this.client.get(`/${workgroupId}/systems/${systemId}`, params),
       this.client.options
     )
   }
 
-  public async createSystem(workgroupId: string, params: any): Promise<any> {
+  public async createSystem(workgroupId: string, params: any): Promise<System> {
     return ApiClient.handleResponse(
       await this.client.post(`/${workgroupId}/systems`, params),
       this.client.options
@@ -435,7 +439,7 @@ export class Baseline {
     workgroupId: string,
     systemId: string,
     params: any
-  ): Promise<any> {
+  ): Promise<void> {
     return ApiClient.handleResponse(
       await this.client.put(`/${workgroupId}/systems/${systemId}`, params),
       this.client.options

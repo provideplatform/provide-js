@@ -52,7 +52,7 @@
   },
   "homepage": "https://github.com/provideservices/provide-js#readme",
   "dependencies": {
-    "@provide/types": "^1.7.2",
+    "@provide/types": "^1.7.6",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/node": "^17.0.23",
     "axios": "^0.26.1",
