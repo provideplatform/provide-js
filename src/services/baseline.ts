@@ -27,6 +27,7 @@ import {
   Workgroup,
   WorkgroupAnyliticsAPIResponse,
   Workstep,
+  System,
 } from '@provide/types'
 
 /*
@@ -365,7 +366,7 @@ export class Baseline {
 
   public async fetchWorksteps(
     workflowId: string,
-    params?: any | undefined
+    params?: any
   ): Promise<Workstep[]> {
     return ApiClient.handleResponse(
       await this.client.get(`workflows/${workflowId}/worksteps`, params),
@@ -376,7 +377,7 @@ export class Baseline {
   public async fetchWorkstepDetails(
     workflowId: string,
     workstepId: string,
-    params?: any | undefined
+    params?: any
   ): Promise<Workstep> {
     return ApiClient.handleResponse(
       await this.client.get(
@@ -402,6 +403,64 @@ export class Baseline {
   public async deleteWorkflow(workflowId: string): Promise<void> {
     return ApiClient.handleResponse(
       await this.client.delete(`workflows/${workflowId}`),
+      this.client.options
+    )
+  }
+
+  public async listSystems(
+    workgroupId: string,
+    params?: any
+  ): Promise<System[]> {
+    return ApiClient.handleResponse(
+      await this.client.get(`workgroups/${workgroupId}/systems`, params),
+      this.client.options
+    )
+  }
+
+  public async getSystemDetails(
+    workgroupId: string,
+    systemId: string,
+    params?: any
+  ): Promise<System> {
+    return ApiClient.handleResponse(
+      await this.client.get(
+        `workgroups/${workgroupId}/systems/${systemId}`,
+        params
+      ),
+      this.client.options
+    )
+  }
+
+  public async createSystem(workgroupId: string, params: any): Promise<System> {
+    return ApiClient.handleResponse(
+      await this.client.post(`workgroups/${workgroupId}/systems`, params),
+      this.client.options
+    )
+  }
+
+  public async updateSystem(
+    workgroupId: string,
+    systemId: string,
+    params: any
+  ): Promise<void> {
+    return ApiClient.handleResponse(
+      await this.client.put(
+        `workgroups/${workgroupId}/systems/${systemId}`,
+        params
+      ),
+      this.client.options
+    )
+  }
+
+  public async deleteSystem(
+    workgroupId: string,
+    systemId: string
+  ): Promise<void> {
+    return ApiClient.handleResponse(
+      await this.client.delete(
+        `workgroups/${workgroupId}/systems/${systemId}`,
+        params
+      ),
       this.client.options
     )
   }
