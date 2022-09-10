@@ -423,14 +423,17 @@ export class Baseline {
     params?: any
   ): Promise<System> {
     return ApiClient.handleResponse(
-      await this.client.get(`/${workgroupId}/systems/${systemId}`, params),
+      await this.client.get(
+        `workgroups/${workgroupId}/systems/${systemId}`,
+        params
+      ),
       this.client.options
     )
   }
 
   public async createSystem(workgroupId: string, params: any): Promise<System> {
     return ApiClient.handleResponse(
-      await this.client.post(`/${workgroupId}/systems`, params),
+      await this.client.post(`workgroups/${workgroupId}/systems`, params),
       this.client.options
     )
   }
@@ -441,7 +444,10 @@ export class Baseline {
     params: any
   ): Promise<void> {
     return ApiClient.handleResponse(
-      await this.client.put(`/${workgroupId}/systems/${systemId}`, params),
+      await this.client.put(
+        `workgroups/${workgroupId}/systems/${systemId}`,
+        params
+      ),
       this.client.options
     )
   }
@@ -451,7 +457,10 @@ export class Baseline {
     systemId: string
   ): Promise<void> {
     return ApiClient.handleResponse(
-      await this.client.delete(`/${workgroupId}/systems/${systemId}`, params),
+      await this.client.delete(
+        `workgroups/${workgroupId}/systems/${systemId}`,
+        params
+      ),
       this.client.options
     )
   }
