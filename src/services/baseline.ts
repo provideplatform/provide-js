@@ -25,7 +25,7 @@ import {
   SubjectAccount,
   Workflow,
   Workgroup,
-  WorkgroupAnyliticsAPIResponse,
+  WorkgroupAnalyticsAPIResponse,
   Workstep,
   System,
 } from '@provide/types'
@@ -214,7 +214,7 @@ export class Baseline {
   public async fetchWorkgroupAnalytics(
     workgroupId: string,
     params: any
-  ): Promise<WorkgroupAnyliticsAPIResponse> {
+  ): Promise<WorkgroupAnalyticsAPIResponse> {
     return ApiClient.handleResponse(
       await this.client.get(`workgroups/${workgroupId}/analytics`, params),
       this.client.options
@@ -457,10 +457,7 @@ export class Baseline {
     systemId: string
   ): Promise<void> {
     return ApiClient.handleResponse(
-      await this.client.delete(
-        `workgroups/${workgroupId}/systems/${systemId}`,
-        params
-      ),
+      await this.client.delete(`workgroups/${workgroupId}/systems/${systemId}`),
       this.client.options
     )
   }
