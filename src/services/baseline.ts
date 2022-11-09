@@ -457,7 +457,9 @@ export class Baseline {
     constraintId: string
   ): Promise<void> {
     return ApiClient.handleResponse(
-      `workflows/${workflowId}/worksteps/${workstepId}/constraints/${constraintId}`,
+      await this.client.delete(
+        `workflows/${workflowId}/worksteps/${workstepId}/constraints/${constraintId}`
+      ),
       this.client.options
     )
   }
