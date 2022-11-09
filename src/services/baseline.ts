@@ -18,6 +18,7 @@ import { ApiClient } from '../clients'
 import {
   ApiClientOptions,
   BaselineResponse,
+  Constraint,
   Mapping,
   Participant,
   ProtocolMessage,
@@ -403,6 +404,60 @@ export class Baseline {
   public async deleteWorkflow(workflowId: string): Promise<void> {
     return ApiClient.handleResponse(
       await this.client.delete(`workflows/${workflowId}`),
+      this.client.options
+    )
+  }
+
+  public async listWorkstepConstraints(
+    workflowId: string,
+    workstepId: string,
+    params?: any
+  ): Promise<Constraint[]> {
+    return ApiClient.handleResponse(
+      await this.client.get(
+        `workflows/${workflowId}/worksteps/${workstepId}/constraints`,
+        params
+      ),
+      this.client.options
+    )
+  }
+
+  public async createWorkstepConstraint(
+    workflowId: string,
+    workstepId: string,
+    params: any
+  ): Promise<Constraint> {
+    return ApiClient.handleResponse(
+      await this.client.post(
+        `workflows/${workflowId}/worksteps/${workstepId}/constraints`,
+        params
+      ),
+      this.client.options
+    )
+  }
+
+  public async updateWorkstepConstraint(
+    workflowId: string,
+    workstepId: string,
+    constraintId: string,
+    params: any
+  ): Promise<void> {
+    return ApiClient.handleResponse(
+      await this.client.put(
+        `workflows/${workflowId}/worksteps/${workstepId}/constraints/${constraintId}`,
+        params
+      ),
+      this.client.options
+    )
+  }
+
+  public async deleteWorkstepConstraint(
+    workflowId: string,
+    workstepId: string,
+    constraintId: string
+  ): Promise<void> {
+    return ApiClient.handleResponse(
+      `workflows/${workflowId}/worksteps/${workstepId}/constraints/${constraintId}`,
       this.client.options
     )
   }

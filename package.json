@@ -1,6 +1,6 @@
 {
   "name": "provide-js",
-  "version": "1.9.5",
+  "version": "1.9.6",
   "description": "Provide typescript client library",
   "license": "MIT",
   "main": "./dist/cjs/index.js",
@@ -52,7 +52,7 @@
   },
   "homepage": "https://github.com/provideservices/provide-js#readme",
   "dependencies": {
-    "@provide/types": "^1.7.6",
+    "@provide/types": "1.7.7",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/node": "^17.0.23",
     "axios": "^0.26.1",

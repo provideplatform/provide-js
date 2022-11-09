@@ -915,10 +915,10 @@
   resolved "https://registry.yarnpkg.com/@provide/nats.ws/-/nats.ws-1.0.6.tgz#0f4cd9fb892beebf0786b6a6451564dcccd60cb6"
   integrity sha512-gUn7rBuCCmQlPGDK9hee6Pp0NRRAr2tsBOHN6YIv30L/ytZ2VHiCo1BtbQgoBesaMu3qK3/+GBhmpr2dd+YcXA==
 
-"@provide/types@^1.7.6":
-  version "1.7.6"
-  resolved "https://registry.yarnpkg.com/@provide/types/-/types-1.7.6.tgz#8ae23ac9ba62574d9aa25a7c44d09babc89f7e5c"
-  integrity sha512-U03TwqgGn5FH/B6++ns0I1YBwVPRGwBwSIwB9vZl15VkNYmXqss3kmhxNKp4/ZXUXMRWG/hT0vd23yOO7E3Tjg==
+"@provide/types@1.7.7":
+  version "1.7.7"
+  resolved "https://registry.yarnpkg.com/@provide/types/-/types-1.7.7.tgz#48ac2b516390e6eb567958bc43124275775985a6"
+  integrity sha512-XSW/T/MecxEKTqZwjNbwqGGRsVkwYnDzLtuAW21eQ7Wa6H+BRGNhmFyKNEhWjSq6ZrADst1a/XCrnFSLVuxRhg==
   dependencies:
     ethers "^5.6.1"
 
