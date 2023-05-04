@@ -40,9 +40,9 @@ export class Capabilities {
     })
   }
 
-  getBaselineRegistryContracts(): any {
+  getAxiomRegistryContracts(): any {
     if (this.capabilities) {
-      return this.capabilities.baseline?.contracts
+      return this.capabilities.axiom?.contracts
     }
     return undefined
   }

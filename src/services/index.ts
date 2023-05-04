@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-export { Baseline, baselineClientFactory } from './baseline'
+export { Axiom, axiomClientFactory } from './axiom'
 export { Bookie, bookieClientFactory } from './bookie'
 export { Capabilities, capabilitiesFactory } from './capabilities'
 export { Ident, identClientFactory } from './ident'

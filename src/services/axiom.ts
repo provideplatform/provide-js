@@ -17,7 +17,7 @@
 import { ApiClient } from '../clients'
 import {
   ApiClientOptions,
-  BaselineResponse,
+  AxiomResponse,
   Constraint,
   Mapping,
   Participant,
@@ -32,10 +32,10 @@ import {
 } from '@provide/types'
 
 /*
- * Baseline proxy microservice.
+ * Axiom proxy microservice.
  */
-export class Baseline {
-  private static readonly DEFAULT_HOST = 'baseline.provide.services'
+export class Axiom {
+  private static readonly DEFAULT_HOST = 'axiom.provide.services'
 
   private readonly client: ApiClient
 
@@ -47,7 +47,7 @@ export class Baseline {
     options?: ApiClientOptions
   ) {
     if (!host) {
-      host = Baseline.DEFAULT_HOST
+      host = Axiom.DEFAULT_HOST
     }
 
     this.client = new ApiClient(token, scheme, host, path, options)
@@ -59,17 +59,17 @@ export class Baseline {
     host?: string,
     path?: string,
     options?: ApiClientOptions
-  ): Baseline {
+  ): Axiom {
     const _scheme = scheme
       ? scheme
-      : process.env['BASELINE_API_SCHEME'] || 'https'
+      : process.env['AXIOM_API_SCHEME'] || 'https'
     const _host = host
       ? host
-      : process.env['BASELINE_API_HOST'] || Baseline.DEFAULT_HOST
+      : process.env['AXIOM_API_HOST'] || Axiom.DEFAULT_HOST
     const _path = path
       ? path
-      : process.env['BASELINE_API_PATH'] || ApiClient.DEFAULT_PATH
-    return new Baseline(token, _scheme, _host, _path, options)
+      : process.env['AXIOM_API_PATH'] || ApiClient.DEFAULT_PATH
+    return new Axiom(token, _scheme, _host, _path, options)
   }
 
   public static unauthenticatedClientFactory(
@@ -81,13 +81,13 @@ export class Baseline {
   ): ApiClient {
     const _scheme = scheme
       ? scheme
-      : process.env['BASELINE_API_SCHEME'] || 'https'
+      : process.env['AXIOM_API_SCHEME'] || 'https'
     const _host = host
       ? host
-      : process.env['BASELINE_API_HOST'] || Baseline.DEFAULT_HOST
+      : process.env['AXIOM_API_HOST'] || Axiom.DEFAULT_HOST
     const _path = path
       ? path
-      : process.env['BASELINE_API_PATH'] || ApiClient.DEFAULT_PATH
+      : process.env['AXIOM_API_PATH'] || ApiClient.DEFAULT_PATH
     return new ApiClient(token, _scheme, _host, _path, options)
   }
 
@@ -96,7 +96,7 @@ export class Baseline {
     host?: string
   ): Promise<any> {
     return ApiClient.handleResponse(
-      await Baseline.unauthenticatedClientFactory('', scheme, host, '/').get(
+      await Axiom.unauthenticatedClientFactory('', scheme, host, '/').get(
         'status'
       )
     )
@@ -154,7 +154,7 @@ export class Baseline {
     )
   }
 
-  public async sendProtocolMessage(params: any): Promise<BaselineResponse> {
+  public async sendProtocolMessage(params: any): Promise<AxiomResponse> {
     return ApiClient.handleResponse(
       await this.client.post('protocol_messages', params),
       this.client.options
@@ -520,7 +520,7 @@ export class Baseline {
   }
 
   public async status(): Promise<number> {
-    const resp = await baselineClientFactory(
+    const resp = await axiomClientFactory(
       '',
       undefined,
       undefined,
@@ -530,12 +530,12 @@ export class Baseline {
   }
 }
 
-export const baselineClientFactory = (
+export const axiomClientFactory = (
   token: string,
   scheme?: string,
   host?: string,
   path?: string,
   options?: ApiClientOptions
-): Baseline => {
-  return Baseline.clientFactory(token, scheme, host, path, options)
+): Axiom => {
+  return Axiom.clientFactory(token, scheme, host, path, options)
 }
